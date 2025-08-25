@@ -1,0 +1,237 @@
+// Internship Management System Database Schema
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  INTERN
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum ApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REQUIRES_CHANGES
+}
+
+enum TaskContentType {
+  TEXT
+  VIDEO
+  BUILDER
+}
+
+enum FormFieldType {
+  TEXT
+  TEXTAREA
+  SELECT
+  MULTISELECT
+  RADIO
+  CHECKBOX
+  NUMBER
+  EMAIL
+  URL
+  DATE
+  FILE
+}
+
+// User model for interns, admins, and super admins
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  clerkId   String   @unique  // Clerk user ID
+  name      String?
+  role      UserRole @default(INTERN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Intern-specific fields
+  phone             String?
+  bio               String?
+  linkedinUrl       String?  // LinkedIn profile URL
+  profilePictureUrl String?  // Profile picture from Cloudinary
+  cvUrl             String?
+  education         String?
+  university        String?
+  degree            String?
+  graduationYear    Int?
+  major             String?
+  skills            String[] // Array of skills
+  interests         String[] // Array of interests
+  lookingFor        String?  // internship, full-time, etc.
+  preferredFields   String[] // Array of preferred industry fields
+  availabilityType  String?  // full-time, part-time, flexible
+  preferredDuration String?  // 1-3 months, 3-6 months, etc.
+  remotePreference  String?  // on-site, remote, hybrid, no-preference
+  profileComplete   Boolean @default(false)
+
+  // Relations
+  applications Application[]
+  submissions  Submission[]
+
+  @@map("users")
+}
+
+// Internship offers created by admins
+model Internship {
+  id          String           @id @default(cuid())
+  title       String
+  description String
+  duration    Int              // Duration in weeks
+  capacity    Int              // Maximum number of interns
+  location    String?          // Remote, On-site, Hybrid, or specific location
+  field       String?          // Technology, Marketing, Design, etc.
+  startDate   DateTime?
+  endDate     DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  // Relations
+  learningPath   LearningPath? @relation(fields: [learningPathId], references: [id])
+  learningPathId String?
+  applications   Application[]
+  applicationForm ApplicationForm?
+
+  @@map("internships")
+}
+
+// Learning paths with sequential tasks
+model LearningPath {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  tasks       Task[]
+  internships Internship[]
+
+  @@map("learning_paths")
+}
+
+// Individual tasks within a learning path
+model Task {
+  id             String          @id @default(cuid())
+  title          String
+  description    String
+  content        String?         // Text content or video URL
+  contentType    TaskContentType @default(TEXT)
+  order          Int             // Order in the learning path
+  deadlineOffset Int             // Days from start of internship
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  // Relations
+  learningPath   LearningPath @relation(fields: [learningPathId], references: [id], onDelete: Cascade)
+  learningPathId String
+  submissions    Submission[]
+
+  @@map("tasks")
+}
+
+// Applications from interns to internships
+model Application {
+  id         String            @id @default(cuid())
+  status     ApplicationStatus @default(PENDING)
+  appliedAt  DateTime          @default(now())
+  reviewedAt DateTime?
+  feedback   String?
+
+  // Relations
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  internship   Internship @relation(fields: [internshipId], references: [id], onDelete: Cascade)
+  internshipId String
+  responses    ApplicationResponse[]
+
+  @@unique([userId, internshipId])
+  @@map("applications")
+}
+
+// Task submissions from interns
+model Submission {
+  id           String           @id @default(cuid())
+  githubUrl    String           // GitHub repo link
+  status       SubmissionStatus @default(PENDING)
+  submittedAt  DateTime         @default(now())
+  reviewedAt   DateTime?
+  feedback     String?          // Admin feedback
+  adminComment String?
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId String
+
+  @@unique([userId, taskId])
+  @@map("submissions")
+}
+
+// Custom application forms for internships
+model ApplicationForm {
+  id          String   @id @default(cuid())
+  title       String   @default("Application Form")
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  internship   Internship  @relation(fields: [internshipId], references: [id], onDelete: Cascade)
+  internshipId String      @unique
+  fields       FormField[]
+
+  @@map("application_forms")
+}
+
+// Individual form fields
+model FormField {
+  id          String        @id @default(cuid())
+  label       String
+  type        FormFieldType
+  placeholder String?
+  helpText    String?
+  required    Boolean       @default(false)
+  options     String[]      // For select, radio, checkbox fields
+  order       Int           // Display order
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations
+  form      ApplicationForm       @relation(fields: [formId], references: [id], onDelete: Cascade)
+  formId    String
+  responses ApplicationResponse[]
+
+  @@map("form_fields")
+}
+
+// User responses to application forms
+model ApplicationResponse {
+  id        String   @id @default(cuid())
+  value     String   // JSON string for complex responses
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId String
+  field         FormField   @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  fieldId       String
+
+  @@unique([applicationId, fieldId])
+  @@map("application_responses")
+}
