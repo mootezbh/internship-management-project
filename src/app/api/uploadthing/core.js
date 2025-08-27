@@ -12,7 +12,7 @@ export const fileRouter = {
     })
     .onUploadComplete(async ({ file, metadata }) => {
       // You can update Clerk profile here if needed
-      return { url: file.url, userId: metadata.userId };
+      return { url: file.ufsUrl, userId: metadata.userId };
     }),
   generalFile: f({ blob: { maxFileSize: '8MB', maxFileCount: 1 } })
     .middleware(async ({ req }) => {
@@ -21,7 +21,7 @@ export const fileRouter = {
       return { userId };
     })
     .onUploadComplete(async ({ file, metadata }) => {
-      return { url: file.url, userId: metadata.userId };
+      return { url: file.ufsUrl, userId: metadata.userId };
     }),
 };
 

@@ -9,7 +9,12 @@ export default function FileUpload({ onUploadComplete, fileType = "general" }) {
       <UploadButton
         endpoint={fileType === "profile" ? "profileImage" : "generalFile"}
         onClientUploadComplete={res => {
-          onUploadComplete?.(res?.[0]);
+          // Use ufsUrl for future compatibility
+          if (res?.[0]?.ufsUrl) {
+            onUploadComplete?.({ ...res[0], url: res[0].ufsUrl });
+          } else {
+            onUploadComplete?.(res?.[0]);
+          }
         }}
         onUploadError={err => setError(err.message)}
       />
