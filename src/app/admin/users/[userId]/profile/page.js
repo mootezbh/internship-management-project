@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { ArrowLeft, Mail, Phone, GraduationCap, MapPin, Calendar, User, Building, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,6 +12,7 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 export default function UserProfilePage() {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const userId = params.userId;
 
   const [user, setUser] = useState(null);
@@ -87,7 +88,8 @@ export default function UserProfilePage() {
 
   // Back button logic
   const handleBack = () => {
-    if (document.referrer.includes('/admin/applications')) {
+    const from = searchParams.get('from');
+    if (from === 'admin-applications') {
       router.push('/admin/applications');
     } else {
       router.push('/admin/users');

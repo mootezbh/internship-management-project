@@ -273,8 +273,8 @@ function ProfileContent() {
             className="ml-auto"
             onClick={() => {
               const from = searchParams.get('from')
-              if (from === 'admin-applications') {
-                router.push('/admin/applications')
+              if (from) {
+                router.push(from)
               } else {
                 router.push('/dashboard')
               }
