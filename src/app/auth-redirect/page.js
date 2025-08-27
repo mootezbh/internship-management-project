@@ -22,26 +22,20 @@ export default function AuthRedirect() {
       try {
         // Fetch user profile to get role
         const response = await fetch('/api/profile')
-        
         if (response.ok) {
           const userData = await response.json()
-          
-          // Redirect based on role - admins don't need completed profiles
           if (userData.role === 'ADMIN') {
             router.push('/admin')
             return
-          }
-          
-          // Check if regular user has completed onboarding
-          if (!userData.profileComplete) {
+          } else if (!userData.profileComplete) {
             router.push('/onboarding')
             return
+          } else {
+            router.push('/dashboard')
+            return
           }
-          
-          // Regular user with completed profile
-          router.push('/dashboard')
         } else {
-          // If profile doesn't exist, send to onboarding
+          // Default to onboarding if profile not found
           router.push('/onboarding')
         }
       } catch (error) {
@@ -51,7 +45,6 @@ export default function AuthRedirect() {
         setIsChecking(false)
       }
     }
-
     checkUserRoleAndRedirect()
   }, [user, isLoaded, router])
 

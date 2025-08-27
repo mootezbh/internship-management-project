@@ -3,23 +3,26 @@ import { NextResponse } from 'next/server';
 
 const isPublicRoute = createRouteMatcher([
   '/',
-  '/api/webhooks/clerk(.*)',
-  '/api/auth/redirect'
+  '/sign-in',
+  '/sign-up',
+  '/onboarding',
+  '/auth-redirect',
+  '/api/webhooks/clerk(.*)'
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
   const { userId } = await auth();
   const url = req.nextUrl.clone();
-  
-  // If user is signed in and visits root path, redirect to auth-redirect page
+
+  // Only redirect to /auth-redirect after login/signup, not on every visit to /
   if (userId && url.pathname === '/') {
-    url.pathname = '/auth-redirect';
+    url.pathname = '/dashboard';
     return NextResponse.redirect(url);
   }
 
   // Protect private routes
   if (!isPublicRoute(req) && !userId) {
-    url.pathname = '/';
+    url.pathname = '/sign-in';
     return NextResponse.redirect(url);
   }
 });
