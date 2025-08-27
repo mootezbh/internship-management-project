@@ -7,7 +7,9 @@ const nextConfig = {
       'images.clerk.dev',
       'images.clerk.com',
       'clerk.dev',
-      'www.gravatar.com'
+      'www.gravatar.com',
+      'utfs.io',
+      'ufs.sh'
     ],
   },
   serverExternalPackages: ['cloudinary'],
