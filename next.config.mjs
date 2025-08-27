@@ -1,15 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      'res.cloudinary.com', 
-      'img.clerk.com',
-      'images.clerk.dev',
-      'images.clerk.com',
-      'clerk.dev',
-      'www.gravatar.com',
-      'utfs.io',
-      'ufs.sh'
+    remotePatterns: [
+      { protocol: 'https', hostname: '**.ufs.sh' },
+      { protocol: 'https', hostname: 'utfs.io' },
+      { protocol: 'https', hostname: 'res.cloudinary.com' },
+      { protocol: 'https', hostname: 'img.clerk.com' },
+      { protocol: 'https', hostname: 'images.clerk.dev' },
+      { protocol: 'https', hostname: 'images.clerk.com' },
+      { protocol: 'https', hostname: 'clerk.dev' },
+      { protocol: 'https', hostname: 'www.gravatar.com' }
     ],
   },
   serverExternalPackages: ['cloudinary'],
