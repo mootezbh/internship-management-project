@@ -111,7 +111,7 @@ export default function ApplyPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ responses: {} }),
+        body: JSON.stringify({ answers: [] }),
       });
 
       if (response.ok) {
