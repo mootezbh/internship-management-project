@@ -9,7 +9,7 @@ import LoadingSpinner from '@/components/ui/loading-spinner';
 export default function ApplyPage() {
   const router = useRouter();
   const params = useParams();
-  const internshipId = params.internshipId;
+  const internshipId = params.id;
   
   const [internship, setInternship] = useState(null);
   const [applicationForm, setApplicationForm] = useState(null);

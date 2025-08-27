@@ -11,9 +11,9 @@ export default clerkMiddleware(async (auth, req) => {
   const { userId } = await auth();
   const url = req.nextUrl.clone();
   
-  // If user is signed in and visits root path, redirect to their dashboard
+  // If user is signed in and visits root path, redirect to auth-redirect page
   if (userId && url.pathname === '/') {
-    url.pathname = '/api/auth/redirect';
+    url.pathname = '/auth-redirect';
     return NextResponse.redirect(url);
   }
 

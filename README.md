@@ -20,36 +20,51 @@ A modern web application for managing internships, learning paths, applications,
 - **Backend:** Next.js API routes, Prisma ORM
 - **Auth:** Clerk
 - **Database:** PostgreSQL (or your preferred provider)
+- **File Uploads:** Uploadthing (replaces Cloudinary)
 - **Deployment:** Vercel
 
 ## Getting Started
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/your-org/internship-management.git
    cd internship-management
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
 
 3. **Configure environment variables:**
-   - Copy `.env.example` to `.env.local` and fill in your database and Clerk credentials.
+
+   - Copy `.env.example` to `.env.local` and fill in your database, Clerk, and Uploadthing credentials.
 
 4. **Run database migrations:**
+
    ```bash
    npx prisma migrate dev
    ```
 
 5. **Start the development server:**
+
    ```bash
    npm run dev
    ```
 
 6. **Access the app:**
+
    - Visit [http://localhost:3000](http://localhost:3000) in your browser.
+
+## File Uploads (Uploadthing)
+
+This project uses [Uploadthing](https://uploadthing.com/) for file uploads (profile images, CVs, etc). Cloudinary is no longer used.
+
+- Configure your Uploadthing API keys in `.env.local`.
+- Upload endpoints are defined in `src/app/api/uploadthing/core.js` and exposed via `src/app/api/uploadthing/route.js`.
+- The frontend uses Uploadthing's React components (see `src/components/FileUpload.js`).
 
 ## Folder Structure
 
