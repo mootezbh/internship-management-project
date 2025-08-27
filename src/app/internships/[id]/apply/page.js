@@ -71,12 +71,14 @@ export default function ApplyPage() {
   const handleSubmit = async (responses) => {
     setIsSubmitting(true);
     try {
+      // Convert responses to answers array if needed
+      let answers = Array.isArray(responses) ? responses : [];
       const response = await fetch(`/api/internships/${internshipId}/apply`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ responses }),
+        body: JSON.stringify({ answers }),
       });
 
       if (response.ok) {
