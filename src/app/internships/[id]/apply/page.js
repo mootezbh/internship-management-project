@@ -41,7 +41,20 @@ export default function ApplyPage() {
       const applicationResponse = await fetch(`/api/internships/${internshipId}/apply`);
       if (applicationResponse.ok) {
         const applicationData = await applicationResponse.json();
-        setExistingApplication(applicationData);
+        // If applied, set application object, else set null
+        if (applicationData.applied) {
+          setExistingApplication({
+            application: {
+              status: applicationData.status,
+              appliedAt: applicationData.application?.appliedAt || new Date().toISOString(),
+              reviewedAt: applicationData.application?.reviewedAt,
+              feedback: applicationData.application?.feedback,
+            },
+            responses: applicationData.responses || [],
+          });
+        } else {
+          setExistingApplication(null);
+        }
       }
 
     } catch (error) {
@@ -70,11 +83,14 @@ export default function ApplyPage() {
         const result = await response.json();
         setSubmitStatus('success');
         setExistingApplication({
-          application: { 
-            id: result.applicationId, 
-            status: 'PENDING',
-            appliedAt: new Date().toISOString()
-          }
+          application: {
+            id: result.application?.id || result.applicationId,
+            status: result.application?.status || 'PENDING',
+            appliedAt: result.application?.appliedAt || new Date().toISOString(),
+            reviewedAt: result.application?.reviewedAt,
+            feedback: result.application?.feedback,
+          },
+          responses: result.responses || [],
         });
       } else {
         const error = await response.json();
@@ -102,11 +118,14 @@ export default function ApplyPage() {
         const result = await response.json();
         setSubmitStatus('success');
         setExistingApplication({
-          application: { 
-            id: result.applicationId, 
-            status: 'PENDING',
-            appliedAt: new Date().toISOString()
-          }
+          application: {
+            id: result.application?.id || result.applicationId,
+            status: result.application?.status || 'PENDING',
+            appliedAt: result.application?.appliedAt || new Date().toISOString(),
+            reviewedAt: result.application?.reviewedAt,
+            feedback: result.application?.feedback,
+          },
+          responses: result.responses || [],
         });
       } else {
         const error = await response.json();
@@ -174,7 +193,7 @@ export default function ApplyPage() {
 
       {/* Content */}
       <div className="max-w-4xl mx-auto p-6">
-        {existingApplication ? (
+  {existingApplication && existingApplication.application && existingApplication.application.status ? (
           /* Already Applied */
           <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
             <div className="flex items-center space-x-3 mb-4">
