@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { SignedIn, SignedOut, RedirectToSignIn, useUser } from '@clerk/nextjs'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { PageLoading } from '@/components/ui/loading-spinner'
 import { User, FileText } from 'lucide-react'
 import { toast } from 'sonner'
@@ -12,6 +12,7 @@ import { toast } from 'sonner'
 function ProfileContent() {
   const { user } = useUser()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [isLoading, setIsLoading] = useState(true)
   const [profileData, setProfileData] = useState(null)
 
@@ -266,6 +267,20 @@ function ProfileContent() {
           </Button>
           <Button variant="outline" className="border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60">
             Export Data
+          </Button>
+          <Button
+            variant="secondary"
+            className="ml-auto"
+            onClick={() => {
+              const from = searchParams.get('from')
+              if (from === 'admin-applications') {
+                router.push('/admin/applications')
+              } else {
+                router.push('/dashboard')
+              }
+            }}
+          >
+            Back
           </Button>
         </div>
       </div>
