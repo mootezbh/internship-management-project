@@ -44,9 +44,14 @@ export async function POST(request, { params }) {
     return NextResponse.json({ error: 'Internship ID required' }, { status: 400 })
   }
   // Validate user using Clerk
-  const { userId } = await auth()
-  if (!userId) {
+  const { userId: clerkUserId } = await auth()
+  if (!clerkUserId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+  // Find the user in the DB
+  const user = await prisma.user.findUnique({ where: { clerkId: clerkUserId } })
+  if (!user) {
+    return NextResponse.json({ error: 'User not found' }, { status: 404 })
   }
   const body = await request.json()
   // answers should be an array of { fieldId, value }
@@ -57,7 +62,7 @@ export async function POST(request, { params }) {
   // Save application to DB
   const application = await prisma.application.create({
     data: {
-      userId,
+      userId: user.id,
       internshipId,
       status: 'PENDING',
     }
