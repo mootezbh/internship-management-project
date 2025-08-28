@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Edit2, AlertCircle } from 'lucide-react';
 import { CVSchema } from '@/lib/validations/cv';
 
-export default function CVReview({ initialCV, onSave, isSaving }) {
+export default function CVReview({ initialCV, onSave, isSaving, hideButtons = false }) {
   const [cv, setCV] = useState(initialCV);
   const [errors, setErrors] = useState({});
 
@@ -235,11 +235,13 @@ export default function CVReview({ initialCV, onSave, isSaving }) {
       </Card>
 
       {/* Save Button */}
-      <div className="flex justify-end mt-8">
-        <Button onClick={handleSave} disabled={isSaving} className="bg-blue-600 hover:bg-blue-700">
-          {isSaving ? 'Saving...' : 'Save & Continue'}
-        </Button>
-      </div>
+      {!hideButtons && (
+        <div className="flex justify-end mt-8">
+          <Button onClick={handleSave} disabled={isSaving} className="bg-blue-600 hover:bg-blue-700">
+            {isSaving ? 'Saving...' : 'Save & Continue'}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

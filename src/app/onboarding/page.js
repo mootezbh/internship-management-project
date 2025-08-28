@@ -29,13 +29,16 @@ const steps = [
 ]
 
 const defaultValues = {
-  // Step 1: Personal Information
+  // Personal Information
+  name: '',
+  email: '',
   phone: '',
+  location: '',
   bio: '',
   linkedinUrl: '',
   profilePictureUrl: '',
   
-  // Step 2: Education
+  // Education
   education: '',
   university: '',
   degree: '',
@@ -43,11 +46,11 @@ const defaultValues = {
   major: '',
   cvUrl: '',
   
-  // Step 3: Experience & Skills
+  // Experience & Skills
   skills: [],
   interests: [],
   
-  // Step 4: Preferences
+  // Preferences
   lookingFor: '',
   preferredFields: [],
   availabilityType: '',
@@ -120,47 +123,15 @@ export default function OnboardingPage() {
 
   const validateCurrentStep = async () => {
     const currentStepSchema = steps[currentStep - 1].schema
+    if (!currentStepSchema) return true
     const currentStepFields = Object.keys(currentStepSchema.shape)
     
     const isValid = await trigger(currentStepFields)
     return isValid
   }
 
-  const nextStep = async () => {
-    const isValid = await validateCurrentStep()
-    if (isValid) {
-      setCurrentStep(prev => Math.min(prev + 1, steps.length))
-    }
-  }
-
   const prevStep = () => {
     setCurrentStep(prev => Math.max(prev - 1, 1))
-  }
-
-  const onSubmit = async (data) => {
-    setIsSubmitting(true)
-    
-    try {
-      const response = await fetch('/api/profile', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-
-      const responseData = await response.json()
-
-      if (response.ok) {
-        router.push('/dashboard')
-      } else {
-        alert(`Failed to save profile: ${responseData.error || 'Unknown error'}`)
-      }
-    } catch (error) {
-      alert(`Error saving profile: ${error.message}`)
-    } finally {
-      setIsSubmitting(false)
-    }
   }
 
   const handleSkillToggle = (skill) => {
@@ -210,6 +181,8 @@ export default function OnboardingPage() {
         const parsed = CVSchema.safeParse(result.cvParsed)
         if (parsed.success) {
           setCVParsed(parsed.data)
+          // Store CV URL for later saving
+          setValue('cvUrl', cvUrl, { shouldValidate: true })
         } else {
           // Show Zod errors
           alert('CV parsing failed: ' + parsed.error.errors.map(e => e.message).join(', '))
@@ -224,22 +197,104 @@ export default function OnboardingPage() {
     }
   }
 
-  // Handler for saving reviewed CV
-  const handleSaveCVReview = async (cvData) => {
-    setIsSavingCV(true)
+  // Auto-fill form from parsed CV data
+  const autoFillFromCV = () => {
+    if (!cvParsed) return
+
+    // Auto-fill personal information
+    if (cvParsed.name) setValue('name', cvParsed.name, { shouldValidate: true })
+    if (cvParsed.email) setValue('email', cvParsed.email, { shouldValidate: true })
+    if (cvParsed.phone) setValue('phone', cvParsed.phone, { shouldValidate: true })
+    if (cvParsed.location) setValue('location', cvParsed.location, { shouldValidate: true })
+    if (cvParsed.summary) setValue('bio', cvParsed.summary, { shouldValidate: true })
+
+    // Auto-fill education (use the first education entry if available)
+    if (cvParsed.education && cvParsed.education.length > 0) {
+      const edu = cvParsed.education[0]
+      if (edu.degree) setValue('degree', edu.degree, { shouldValidate: true })
+      if (edu.institution) setValue('university', edu.institution, { shouldValidate: true })
+      if (edu.graduationYear) setValue('graduationYear', edu.graduationYear.toString(), { shouldValidate: true })
+      if (edu.fieldOfStudy) setValue('major', edu.fieldOfStudy, { shouldValidate: true })
+      
+      // Set education level based on degree
+      const degree = edu.degree.toLowerCase()
+      if (degree.includes('bachelor')) setValue('education', "Bachelor's Degree", { shouldValidate: true })
+      else if (degree.includes('master')) setValue('education', "Master's Degree", { shouldValidate: true })
+      else if (degree.includes('phd') || degree.includes('doctorate')) setValue('education', 'PhD', { shouldValidate: true })
+      else setValue('education', 'Other', { shouldValidate: true })
+    }
+
+    // Auto-fill skills
+    if (cvParsed.skills && cvParsed.skills.length > 0) {
+      setValue('skills', cvParsed.skills, { shouldValidate: true })
+    }
+
+    // Set some default interests based on skills (basic mapping)
+    const techSkills = ['JavaScript', 'Python', 'React', 'Node.js', 'AWS', 'Docker']
+    const hasTekhSkills = cvParsed.skills?.some(skill => 
+      techSkills.some(techSkill => skill.toLowerCase().includes(techSkill.toLowerCase()))
+    )
+    if (hasTekhSkills) {
+      setValue('interests', ['Technology'], { shouldValidate: true })
+    }
+  }
+
+  // Modified nextStep to handle CV auto-fill
+  const nextStep = async () => {
+    // Special handling for CV upload step
+    if (currentStep === 1) {
+      if (cvParsed) {
+        autoFillFromCV()
+        setCurrentStep(2)
+      } else {
+        alert('Please upload and parse your CV first')
+      }
+      return
+    }
+
+    // Regular validation for other steps
+    const currentStepSchema = steps[currentStep - 1].schema
+    if (currentStepSchema) {
+      const currentStepFields = Object.keys(currentStepSchema.shape)
+      const isValid = await trigger(currentStepFields)
+      if (isValid) {
+        setCurrentStep(prev => Math.min(prev + 1, steps.length))
+      }
+    } else {
+      setCurrentStep(prev => Math.min(prev + 1, steps.length))
+    }
+  }
+
+  // Modified onSubmit to include CV data
+  const onSubmit = async (data) => {
+    setIsSubmitting(true)
+    
     try {
-      // Save to backend (update user)
-      await fetch('/api/profile', {
+      // Include parsed CV data in submission
+      const submissionData = {
+        ...data,
+        cvParsed: cvParsed
+      }
+
+      const response = await fetch('/api/profile', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cvParsed: cvData })
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submissionData),
       })
-      setCVParsed(cvData)
-      setCurrentStep(2)
-    } catch (err) {
-      alert('Failed to save CV review: ' + err.message)
+
+      const responseData = await response.json()
+
+      if (response.ok) {
+        router.push('/dashboard')
+      } else {
+        alert(`Failed to save profile: ${responseData.error || 'Unknown error'}`)
+      }
+    } catch (error) {
+      alert(`Error saving profile: ${error.message}`)
     } finally {
-      setIsSavingCV(false)
+      setIsSubmitting(false)
     }
   }
 
@@ -247,44 +302,82 @@ export default function OnboardingPage() {
     switch (currentStep) {
       case 1:
         return (
-          <div className="space-y-6">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          <div className="space-y-8">
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Upload Your CV
               </h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                Upload your CV/Resume (PDF) to auto-fill your profile and experience.
+              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                Upload your CV/Resume (PDF) and we'll automatically extract your information to speed up the process.
               </p>
             </div>
-            {!cvParsed ? (
-              <FileUpload
-                accept=".pdf,application/pdf"
-                maxSize="8MB"
-                fileType="cv"
-                onUploadComplete={async (result) => {
-                  await handleCVUploadAndParse(result.url)
-                }}
-              />
-            ) : (
-              <CVReview
-                initialCV={cvParsed}
-                onSave={handleSaveCVReview}
-                isSaving={isSavingCV}
-              />
-            )}
-            {isParsing && <LoadingSpinner />}
+
+            <div className="max-w-2xl mx-auto">
+              {!cvParsed ? (
+                <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-400 dark:hover:border-blue-500 transition-colors">
+                  <FileUpload
+                    accept=".pdf,application/pdf"
+                    maxSize="8MB"
+                    fileType="cv"
+                    onUploadComplete={async (result) => {
+                      await handleCVUploadAndParse(result.ufsUrl)
+                    }}
+                  />
+                  <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+                    We'll parse your CV and auto-fill the next steps for you to review and edit.
+                  </p>
+                </div>
+              ) : (
+                <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-2xl p-8 border border-green-200 dark:border-green-800 text-center">
+                  <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Check className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                    CV Parsed Successfully!
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400 mb-4">
+                    We've extracted your information from your CV. Click "Continue" to review and edit the auto-filled data.
+                  </p>
+                  <div className="bg-white dark:bg-gray-800 rounded-xl p-4 text-left">
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Extracted Information:</h4>
+                    <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                      {cvParsed.name && <li>• Name: {cvParsed.name}</li>}
+                      {cvParsed.email && <li>• Email: {cvParsed.email}</li>}
+                      {cvParsed.skills?.length > 0 && <li>• Skills: {cvParsed.skills.slice(0, 3).join(', ')}{cvParsed.skills.length > 3 ? '...' : ''}</li>}
+                      {cvParsed.education?.length > 0 && <li>• Education: {cvParsed.education[0].degree} from {cvParsed.education[0].institution}</li>}
+                    </ul>
+                  </div>
+                </div>
+              )}
+              {isParsing && (
+                <div className="mt-6 flex items-center justify-center">
+                  <LoadingSpinner />
+                  <span className="ml-3 text-gray-600 dark:text-gray-400">Parsing your CV...</span>
+                </div>
+              )}
+            </div>
           </div>
         )
 
       case 2:
         return (
-          <div className="space-y-6">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          <div className="space-y-8">
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-600 rounded-full flex items-center justify-center mx-auto">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </div>
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Personal Information
               </h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                Tell us about yourself to create your profile
+              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                Tell us about yourself to create your professional profile
               </p>
             </div>
 
@@ -345,6 +438,34 @@ export default function OnboardingPage() {
             </div>
 
             <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Full Name *
+                  </label>
+                  <input
+                    {...register('name')}
+                    type="text"
+                    placeholder="Your full name"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  />
+                  <ErrorMessage name="name" />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Email Address *
+                  </label>
+                  <input
+                    {...register('email')}
+                    type="email"
+                    placeholder="your.email@example.com"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  />
+                  <ErrorMessage name="email" />
+                </div>
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Phone Number *
@@ -395,13 +516,18 @@ export default function OnboardingPage() {
 
       case 3:
         return (
-          <div className="space-y-6">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          <div className="space-y-8">
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+              </div>
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Education Background
               </h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                Share your educational journey
+              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                Share your educational journey and academic achievements
               </p>
             </div>
 
@@ -736,76 +862,91 @@ export default function OnboardingPage() {
       <div className="max-w-3xl mx-auto">
         {/* Progress Steps */}
         <div className="mb-8">
-          <div className="flex items-center justify-between">
-            {steps.map((step, index) => (
-              <div key={step.id} className="flex items-center">
-                <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                    currentStep > step.id
-                      ? 'bg-green-500 text-white'
-                      : currentStep === step.id
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-300'
-                  }`}
-                >
-                  {currentStep > step.id ? <Check className="w-4 h-4" /> : step.id}
+          <div className="flex items-center justify-center">
+            <div className="flex items-center space-x-4">
+              {steps.map((step, index) => (
+                <div key={step.id} className="flex items-center">
+                  <div className="flex flex-col items-center">
+                    <div
+                      className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300 ${
+                        currentStep > step.id
+                          ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg'
+                          : currentStep === step.id
+                          ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg ring-4 ring-blue-200 dark:ring-blue-800'
+                          : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                      }`}
+                    >
+                      {currentStep > step.id ? <Check className="w-5 h-5" /> : step.id}
+                    </div>
+                    <span className={`mt-2 text-sm font-medium transition-colors ${
+                      currentStep >= step.id 
+                        ? 'text-gray-900 dark:text-white' 
+                        : 'text-gray-500 dark:text-gray-400'
+                    }`}>
+                      {step.title}
+                    </span>
+                  </div>
+                  {index < steps.length - 1 && (
+                    <div className={`w-16 h-1 mx-6 rounded-full transition-colors ${
+                      currentStep > step.id 
+                        ? 'bg-gradient-to-r from-green-500 to-green-600' 
+                        : 'bg-gray-300 dark:bg-gray-600'
+                    }`} />
+                  )}
                 </div>
-                <span className={`ml-2 text-sm ${
-                  currentStep >= step.id 
-                    ? 'text-gray-900 dark:text-white font-medium' 
-                    : 'text-gray-500 dark:text-gray-400'
-                }`}>
-                  {step.title}
-                </span>
-                {index < steps.length - 1 && (
-                  <div className={`w-12 h-0.5 mx-4 ${
-                    currentStep > step.id ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'
-                  }`} />
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Form Content */}
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="p-8 md:p-12">
             {renderStepContent()}
+          </div>
 
-            {/* Navigation Buttons */}
-            <div className="flex justify-between pt-8 mt-8 border-t border-gray-200 dark:border-gray-700">
+          {/* Navigation Buttons */}
+          <div className="px-8 md:px-12 py-6 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex justify-between items-center">
               <button
                 type="button"
                 onClick={prevStep}
                 disabled={currentStep === 1}
-                className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
               >
-                <ChevronLeft className="w-4 h-4 mr-1" />
+                <ChevronLeft className="w-4 h-4 mr-2" />
                 Previous
               </button>
+
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Step {currentStep} of {steps.length}
+                </span>
+              </div>
 
               {currentStep < steps.length ? (
                 <button
                   type="button"
                   onClick={nextStep}
-                  className="flex items-center px-6 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 rounded-xl focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-sm"
                 >
-                  Next
-                  <ChevronRight className="w-4 h-4 ml-1" />
+                  Continue
+                  <ChevronRight className="w-4 h-4 ml-2" />
                 </button>
               ) : (
                 <button
                   type="button"
                   onClick={handleFormSubmit}
                   disabled={isSubmitting}
-                  className="flex items-center px-6 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 rounded-xl focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
                 >
-                  {isSubmitting ? 'Saving...' : 'Complete Setup'}
+                  {isSubmitting ? 'Completing...' : 'Complete Setup'}
+                  {!isSubmitting && <Check className="w-4 h-4 ml-2" />}
                 </button>
               )}
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   )
