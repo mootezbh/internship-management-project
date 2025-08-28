@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import { ChevronLeft, ChevronRight, Check } from 'lucide-react'
 import FileUpload from '@/components/FileUpload'
+import CVReview from '@/components/onboarding/CVReview'
 import { SKILLS_CATEGORIES as skillCategories, CAREER_OPPORTUNITIES as careerOpportunities } from '@/lib/data/categories'
 import { 
   personalInfoSchema, 
@@ -16,13 +17,15 @@ import {
   preferencesSchema,
   completeOnboardingSchema 
 } from '@/lib/validations/onboarding'
+import { CVSchema } from '@/lib/validations/cv'
 import LoadingSpinner from '@/components/ui/loading-spinner'
 
 const steps = [
-  { id: 1, title: 'Personal Information', schema: personalInfoSchema },
-  { id: 2, title: 'Education', schema: educationSchema },
-  { id: 3, title: 'Experience & Skills', schema: experienceSchema },
-  { id: 4, title: 'Preferences', schema: preferencesSchema }
+  { id: 1, title: 'CV Upload', schema: null },
+  { id: 2, title: 'Personal Information', schema: personalInfoSchema },
+  { id: 3, title: 'Education', schema: educationSchema },
+  { id: 4, title: 'Experience & Skills', schema: experienceSchema },
+  { id: 5, title: 'Preferences', schema: preferencesSchema }
 ]
 
 const defaultValues = {
@@ -58,6 +61,9 @@ export default function OnboardingPage() {
   const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [selectedSkillCategory, setSelectedSkillCategory] = useState('')
+  const [cvParsed, setCVParsed] = useState(null)
+  const [isParsing, setIsParsing] = useState(false)
+  const [isSavingCV, setIsSavingCV] = useState(false)
 
   const form = useForm({
     resolver: zodResolver(completeOnboardingSchema),
@@ -188,6 +194,55 @@ export default function OnboardingPage() {
     ) : null
   }
 
+  // Handler for CV upload and parsing
+  const handleCVUploadAndParse = async (cvUrl) => {
+    setIsParsing(true)
+    try {
+      // Call backend API to parse CV
+      const response = await fetch('/api/parse-cv', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cvUrl })
+      })
+      const result = await response.json()
+      if (response.ok && result.cvParsed) {
+        // Validate with Zod
+        const parsed = CVSchema.safeParse(result.cvParsed)
+        if (parsed.success) {
+          setCVParsed(parsed.data)
+        } else {
+          // Show Zod errors
+          alert('CV parsing failed: ' + parsed.error.errors.map(e => e.message).join(', '))
+        }
+      } else {
+        alert('CV parsing failed: ' + (result.error || 'Unknown error'))
+      }
+    } catch (err) {
+      alert('CV parsing error: ' + err.message)
+    } finally {
+      setIsParsing(false)
+    }
+  }
+
+  // Handler for saving reviewed CV
+  const handleSaveCVReview = async (cvData) => {
+    setIsSavingCV(true)
+    try {
+      // Save to backend (update user)
+      await fetch('/api/profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cvParsed: cvData })
+      })
+      setCVParsed(cvData)
+      setCurrentStep(2)
+    } catch (err) {
+      alert('Failed to save CV review: ' + err.message)
+    } finally {
+      setIsSavingCV(false)
+    }
+  }
+
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
@@ -195,7 +250,38 @@ export default function OnboardingPage() {
           <div className="space-y-6">
             <div className="text-center">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                Let&apos;s get to know you
+                Upload Your CV
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400">
+                Upload your CV/Resume (PDF) to auto-fill your profile and experience.
+              </p>
+            </div>
+            {!cvParsed ? (
+              <FileUpload
+                accept=".pdf,application/pdf"
+                maxSize="8MB"
+                fileType="cv"
+                onUploadComplete={async (result) => {
+                  await handleCVUploadAndParse(result.url)
+                }}
+              />
+            ) : (
+              <CVReview
+                initialCV={cvParsed}
+                onSave={handleSaveCVReview}
+                isSaving={isSavingCV}
+              />
+            )}
+            {isParsing && <LoadingSpinner />}
+          </div>
+        )
+
+      case 2:
+        return (
+          <div className="space-y-6">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                Personal Information
               </h2>
               <p className="text-gray-600 dark:text-gray-400">
                 Tell us about yourself to create your profile
@@ -307,7 +393,7 @@ export default function OnboardingPage() {
           </div>
         )
 
-      case 2:
+      case 3:
         return (
           <div className="space-y-6">
             <div className="text-center">
@@ -431,7 +517,7 @@ export default function OnboardingPage() {
           </div>
         )
 
-      case 3:
+      case 4:
         return (
           <div className="space-y-6">
             <div className="text-center">
@@ -522,7 +608,7 @@ export default function OnboardingPage() {
           </div>
         )
 
-      case 4:
+      case 5:
         const filteredCareerOpportunities = watchedValues.lookingFor 
           ? careerOpportunities[watchedValues.lookingFor] || []
           : []

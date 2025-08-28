@@ -64,6 +64,7 @@ model User {
   linkedinUrl       String?  // LinkedIn profile URL
   profilePictureUrl String?  // Profile picture from Cloudinary
   cvUrl             String?
+  cvParsed          Json?
   education         String?
   university        String?
   degree            String?

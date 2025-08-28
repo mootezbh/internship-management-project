@@ -489,7 +489,7 @@ function AdminApplicationsContent() {
                           </Button>
                         )}
                         <Button
-                          onClick={() => router.push(`/admin/users/${application.user.id}/profile`)}
+                          onClick={() => router.push(`/admin/users/${application.user.id}/profile?from=/admin/applications`)}
                           variant="outline"
                           size="sm"
                           className="border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
