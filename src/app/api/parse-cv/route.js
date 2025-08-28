@@ -17,37 +17,33 @@ export async function POST(request) {
       return NextResponse.json({ error: 'CV URL required' }, { status: 400 })
     }
 
-    // Convert PDF to base64 and pass to AI model
-    let pdfBase64;
+    // Validate PDF URL is accessible
     try {
-      console.log('Fetching PDF from:', cvUrl);
-      const response = await fetch(cvUrl);
+      console.log('Validating PDF URL:', cvUrl);
+      const response = await fetch(cvUrl, { method: 'HEAD' });
       if (!response.ok) {
-        throw new Error(`Failed to fetch PDF: ${response.status}`);
+        throw new Error(`PDF not accessible: ${response.status}`);
       }
-      
-      const arrayBuffer = await response.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-      pdfBase64 = buffer.toString('base64');
-      console.log('PDF converted to base64, length:', pdfBase64.length);
+      console.log('PDF URL is accessible, content-type:', response.headers.get('content-type'));
     } catch (err) {
-      console.error('PDF fetch error:', err);
-      return NextResponse.json({ error: 'Failed to fetch PDF', details: err.message }, { status: 500 })
+      console.error('PDF validation error:', err);
+      return NextResponse.json({ error: 'Failed to access PDF', details: err.message }, { status: 500 })
     }
 
-    // Call AI SDK with Azure provider to parse CV from base64
+    // Call AI SDK with Azure provider using direct URL approach
     let aiResult;
     try {
-      // Try using the files parameter instead of embedding in prompt
+      // Try direct URL approach first
       aiResult = await generateObject({
         model: azure(process.env.AZURE_DEPLOYMENT_NAME),
-        system: `You are a CV parser. You will receive a PDF document. Analyze the PDF content carefully and extract all relevant information including personal details, education, experience, skills, and projects. Return a JSON object that matches the provided schema exactly. Be thorough and accurate in extracting all available information. DO NOT use placeholder or example data - only extract actual information from the provided document.`,
-        prompt: `Please analyze the attached CV PDF and extract all relevant information. Make sure to use the actual data from the document, not placeholder values.`,
-        files: [{
-          name: 'cv.pdf',
-          data: Buffer.from(pdfBase64, 'base64'),
-          mimeType: 'application/pdf'
-        }],
+        system: `You are a CV parser. You will receive a URL to a PDF document. Access and analyze the PDF content carefully and extract all relevant information including personal details, education, experience, skills, and projects. Return a JSON object that matches the provided schema exactly. Be thorough and accurate in extracting all available information. DO NOT use placeholder or example data - only extract actual information from the provided document.`,
+        prompt: `Please download and analyze the CV PDF from this URL and extract all relevant information: ${cvUrl}
+
+Make sure to:
+1. Actually download and read the PDF content
+2. Extract real data from the document
+3. Do not use placeholder values like "John Doe" 
+4. Return accurate information based on what you find in the PDF`,
         schema: CVSchema
       })
     } catch (err) {
