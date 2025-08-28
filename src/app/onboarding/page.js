@@ -485,7 +485,7 @@ export default function OnboardingPage() {
                 accept=".pdf,application/pdf"
                 maxSize="8MB"
                 fileType="cv"
-                onUploadComplete={(result) => setValue('cvUrl', result.url, { shouldValidate: true })}
+                onUploadComplete={(result) => setValue('cvUrl', result.ufsUrl, { shouldValidate: true })}
               />
               {watchedValues.cvUrl && (
                 <div className="mt-2 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
