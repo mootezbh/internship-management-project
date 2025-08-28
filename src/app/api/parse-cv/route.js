@@ -3,6 +3,9 @@ import { generateObject } from 'ai'
 import { createAzure } from '@ai-sdk/azure'
 import { CVSchema } from '@/lib/validations/cv'
 
+// Import pdf-parse dynamically to avoid build issues
+const pdf = require('pdf-parse')
+
 const azure = createAzure({
   apiKey: process.env.AZURE_API_KEY,
   baseURL: process.env.AZURE_API_ENDPOINT
@@ -17,13 +20,32 @@ export async function POST(request) {
       return NextResponse.json({ error: 'CV URL required' }, { status: 400 })
     }
 
+    // Fetch and parse PDF to extract text
+    let pdfText;
+    try {
+      console.log('Fetching PDF from:', cvUrl);
+      const response = await fetch(cvUrl);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch PDF: ${response.status}`);
+      }
+      const arrayBuffer = await response.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      const data = await pdf(buffer);
+      pdfText = data.text;
+      console.log('Extracted PDF text length:', pdfText.length);
+      console.log('PDF text preview:', pdfText.substring(0, 500));
+    } catch (err) {
+      console.error('PDF parsing error:', err);
+      return NextResponse.json({ error: 'Failed to parse PDF', details: err.message }, { status: 500 })
+    }
+
     // Call AI SDK with Azure provider to parse CV directly from URL
     let aiResult;
     try {
       aiResult = await generateObject({
         model: azure(process.env.AZURE_DEPLOYMENT_NAME),
-        system: `You are a CV parser. You will receive a PDF document URL. Download and analyze the CV content, then extract all relevant information and return a JSON object that matches the provided schema exactly. Be thorough and accurate in extracting personal information, education, experience, and skills.`,
-        prompt: `Please analyze the CV document at this URL and extract all relevant information: ${cvUrl}`,
+        system: `You are a CV parser. You will receive CV text content. Analyze the text carefully and extract all relevant information including personal details, education, experience, skills, and projects. Return a JSON object that matches the provided schema exactly. Be thorough and accurate in extracting all available information.`,
+        prompt: `Please analyze this CV text and extract all relevant information:\n\n${pdfText}`,
         schema: CVSchema
       })
     } catch (err) {
