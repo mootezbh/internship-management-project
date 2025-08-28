@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { generateObject } from 'ai'
 import { createAzure } from '@ai-sdk/azure'
 import { CVSchema } from '@/lib/validations/cv'
-import pdf from 'pdf-parse'
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.js'
 
 const azure = createAzure({
   resourceName: process.env.AZURE_RESOURCE_NAME,
@@ -28,9 +28,21 @@ export async function POST(request) {
         throw new Error(`Failed to fetch PDF: ${response.status}`);
       }
       const arrayBuffer = await response.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-      const data = await pdf(buffer);
-      pdfText = data.text;
+      const uint8Array = new Uint8Array(arrayBuffer);
+      
+      // Load PDF document
+      const pdfDocument = await pdfjsLib.getDocument(uint8Array).promise;
+      let text = '';
+      
+      // Extract text from all pages
+      for (let pageNum = 1; pageNum <= pdfDocument.numPages; pageNum++) {
+        const page = await pdfDocument.getPage(pageNum);
+        const textContent = await page.getTextContent();
+        const pageText = textContent.items.map(item => item.str).join(' ');
+        text += pageText + '\n';
+      }
+      
+      pdfText = text.trim();
       console.log('Extracted PDF text length:', pdfText.length);
     } catch (err) {
       console.error('PDF parsing error:', err);
