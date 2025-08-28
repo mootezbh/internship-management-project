@@ -20,12 +20,19 @@ export async function POST(request) {
     }
 
     // Call AI SDK with Azure provider to parse CV
-    const aiResult = await generateObject({
-      model: azure(process.env.AZURE_DEPLOYMENT_NAME),
-      prompt: `Parse the following CV PDF and return a JSON object matching this schema: ${CVSchema.toString()}`,
-      files: [cvUrl],
-      schema: CVSchema
-    })
+    let aiResult;
+    try {
+      aiResult = await generateObject({
+        model: azure(process.env.AZURE_DEPLOYMENT_NAME),
+        prompt: `Parse the following CV PDF and return a JSON object matching this schema: ${CVSchema.toString()}`,
+        files: [cvUrl],
+        schema: CVSchema
+      })
+    } catch (err) {
+      console.error('AI SDK error:', err);
+      return NextResponse.json({ error: 'AI SDK error', details: err?.message || err }, { status: 500 })
+    }
+    console.log('AI SDK result:', aiResult);
 
     if (!aiResult.success) {
       return NextResponse.json({ error: aiResult.error || 'Failed to parse CV' }, { status: 500 })
