@@ -38,10 +38,16 @@ export async function POST(request) {
     // Call AI SDK with Azure provider to parse CV from base64
     let aiResult;
     try {
+      // Try using the files parameter instead of embedding in prompt
       aiResult = await generateObject({
         model: azure(process.env.AZURE_DEPLOYMENT_NAME),
-        system: `You are a CV parser. You will receive a PDF document in base64 format. Analyze the PDF content carefully and extract all relevant information including personal details, education, experience, skills, and projects. Return a JSON object that matches the provided schema exactly. Be thorough and accurate in extracting all available information.`,
-        prompt: `Please analyze this CV PDF (base64) and extract all relevant information:\n\ndata:application/pdf;base64,${pdfBase64}`,
+        system: `You are a CV parser. You will receive a PDF document. Analyze the PDF content carefully and extract all relevant information including personal details, education, experience, skills, and projects. Return a JSON object that matches the provided schema exactly. Be thorough and accurate in extracting all available information. DO NOT use placeholder or example data - only extract actual information from the provided document.`,
+        prompt: `Please analyze the attached CV PDF and extract all relevant information. Make sure to use the actual data from the document, not placeholder values.`,
+        files: [{
+          name: 'cv.pdf',
+          data: Buffer.from(pdfBase64, 'base64'),
+          mimeType: 'application/pdf'
+        }],
         schema: CVSchema
       })
     } catch (err) {
