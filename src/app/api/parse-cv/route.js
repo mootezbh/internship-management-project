@@ -7,7 +7,7 @@ const azure = createAzure({
   resourceName: process.env.AZURE_RESOURCE_NAME,
   apiKey: process.env.AZURE_API_KEY,
   apiVersion: process.env.AZURE_API_VERSION,
-  baseURL: process.env.AZURE_API_ENDPOINT
+  baseURL: `${process.env.AZURE_API_ENDPOINT}/openai/deployments`,
 })
 
 // POST /api/parse-cv
