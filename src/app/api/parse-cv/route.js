@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server'
 import { generateObject } from 'ai'
 import { createAzure } from '@ai-sdk/azure'
 import { CVSchema } from '@/lib/validations/cv'
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.js'
 
 const azure = createAzure({
   resourceName: process.env.AZURE_RESOURCE_NAME,
@@ -20,42 +19,13 @@ export async function POST(request) {
       return NextResponse.json({ error: 'CV URL required' }, { status: 400 })
     }
 
-    // Fetch and parse PDF to extract text
-    let pdfText;
-    try {
-      const response = await fetch(cvUrl);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch PDF: ${response.status}`);
-      }
-      const arrayBuffer = await response.arrayBuffer();
-      const uint8Array = new Uint8Array(arrayBuffer);
-      
-      // Load PDF document
-      const pdfDocument = await pdfjsLib.getDocument(uint8Array).promise;
-      let text = '';
-      
-      // Extract text from all pages
-      for (let pageNum = 1; pageNum <= pdfDocument.numPages; pageNum++) {
-        const page = await pdfDocument.getPage(pageNum);
-        const textContent = await page.getTextContent();
-        const pageText = textContent.items.map(item => item.str).join(' ');
-        text += pageText + '\n';
-      }
-      
-      pdfText = text.trim();
-      console.log('Extracted PDF text length:', pdfText.length);
-    } catch (err) {
-      console.error('PDF parsing error:', err);
-      return NextResponse.json({ error: 'Failed to parse PDF', details: err.message }, { status: 500 })
-    }
-
-    // Call AI SDK with Azure provider to parse CV text
+    // Call AI SDK with Azure provider to parse CV directly from URL
     let aiResult;
     try {
       aiResult = await generateObject({
         model: azure(process.env.AZURE_DEPLOYMENT_NAME),
-        system: `You are a CV parser. Extract information from the provided CV text and return a JSON object that matches the provided schema exactly. Be thorough and accurate.`,
-        prompt: `Parse the following CV text and extract all relevant information:\n\n${pdfText}`,
+        system: `You are a CV parser. You will receive a PDF document URL. Download and analyze the CV content, then extract all relevant information and return a JSON object that matches the provided schema exactly. Be thorough and accurate in extracting personal information, education, experience, and skills.`,
+        prompt: `Please analyze the CV document at this URL and extract all relevant information: ${cvUrl}`,
         schema: CVSchema
       })
     } catch (err) {
