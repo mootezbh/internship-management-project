@@ -4,10 +4,8 @@ import { createAzure } from '@ai-sdk/azure'
 import { CVSchema } from '@/lib/validations/cv'
 
 const azure = createAzure({
-  resourceName: process.env.AZURE_RESOURCE_NAME,
   apiKey: process.env.AZURE_API_KEY,
-  apiVersion: process.env.AZURE_API_VERSION,
-  baseURL: `${process.env.AZURE_API_ENDPOINT}/deployments`,
+  baseURL: process.env.AZURE_API_ENDPOINT
 })
 
 // POST /api/parse-cv
