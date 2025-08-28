@@ -3,9 +3,6 @@ import { generateObject } from 'ai'
 import { createAzure } from '@ai-sdk/azure'
 import { CVSchema } from '@/lib/validations/cv'
 
-// Import pdf-parse dynamically to avoid build issues
-const pdf = require('pdf-parse')
-
 const azure = createAzure({
   apiKey: process.env.AZURE_API_KEY,
   baseURL: process.env.AZURE_API_ENDPOINT
@@ -28,6 +25,9 @@ export async function POST(request) {
       if (!response.ok) {
         throw new Error(`Failed to fetch PDF: ${response.status}`);
       }
+      
+      // Dynamic import to avoid build issues
+      const pdf = await import('pdf-parse').then(mod => mod.default);
       const arrayBuffer = await response.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
       const data = await pdf(buffer);
