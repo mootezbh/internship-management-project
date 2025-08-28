@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { generateObject } from 'ai'
 import { createAzure } from '@ai-sdk/azure'
 import { CVSchema } from '@/lib/validations/cv'
+import pdf from 'pdf-parse'
 
 const azure = createAzure({
   apiKey: process.env.AZURE_API_KEY,
@@ -17,33 +18,33 @@ export async function POST(request) {
       return NextResponse.json({ error: 'CV URL required' }, { status: 400 })
     }
 
-    // Validate PDF URL is accessible
+    // Fetch and parse PDF to extract text
+    let pdfText;
     try {
-      console.log('Validating PDF URL:', cvUrl);
-      const response = await fetch(cvUrl, { method: 'HEAD' });
+      console.log('Fetching PDF from:', cvUrl);
+      const response = await fetch(cvUrl);
       if (!response.ok) {
-        throw new Error(`PDF not accessible: ${response.status}`);
+        throw new Error(`Failed to fetch PDF: ${response.status}`);
       }
-      console.log('PDF URL is accessible, content-type:', response.headers.get('content-type'));
+      
+      const arrayBuffer = await response.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      const data = await pdf(buffer);
+      pdfText = data.text;
+      console.log('Extracted PDF text length:', pdfText.length);
+      console.log('PDF text preview:', pdfText.substring(0, 500));
     } catch (err) {
-      console.error('PDF validation error:', err);
-      return NextResponse.json({ error: 'Failed to access PDF', details: err.message }, { status: 500 })
+      console.error('PDF parsing error:', err);
+      return NextResponse.json({ error: 'Failed to parse PDF', details: err.message }, { status: 500 })
     }
 
-    // Call AI SDK with Azure provider using direct URL approach
+    // Call AI SDK with Azure provider to parse CV text
     let aiResult;
     try {
-      // Try direct URL approach first
       aiResult = await generateObject({
         model: azure(process.env.AZURE_DEPLOYMENT_NAME),
-        system: `You are a CV parser. You will receive a URL to a PDF document. Access and analyze the PDF content carefully and extract all relevant information including personal details, education, experience, skills, and projects. Return a JSON object that matches the provided schema exactly. Be thorough and accurate in extracting all available information. DO NOT use placeholder or example data - only extract actual information from the provided document.`,
-        prompt: `Please download and analyze the CV PDF from this URL and extract all relevant information: ${cvUrl}
-
-Make sure to:
-1. Actually download and read the PDF content
-2. Extract real data from the document
-3. Do not use placeholder values like "John Doe" 
-4. Return accurate information based on what you find in the PDF`,
+        system: `You are a CV parser. You will receive CV text content extracted from a PDF. Analyze the text carefully and extract all relevant information including personal details, education, experience, skills, and projects. Return a JSON object that matches the provided schema exactly. Be thorough and accurate in extracting all available information. DO NOT use placeholder or example data - only extract actual information from the provided text.`,
+        prompt: `Please analyze the following CV text and extract all relevant information. Make sure to use the actual data from the text, not placeholder values:\n\n${pdfText}`,
         schema: CVSchema
       })
     } catch (err) {

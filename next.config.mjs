@@ -12,7 +12,7 @@ const nextConfig = {
       { protocol: 'https', hostname: 'www.gravatar.com' }
     ],
   },
-  serverExternalPackages: ['cloudinary'],
+  serverExternalPackages: ['pdf-parse'],
 };
 
 export default nextConfig;
