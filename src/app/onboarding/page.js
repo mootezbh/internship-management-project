@@ -313,7 +313,7 @@ export default function OnboardingPage() {
                 Upload Your CV
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                Upload your CV/Resume (PDF) and we'll automatically extract your information to speed up the process.
+                Upload your CV/Resume (PDF) and we&apos;ll automatically extract your information to speed up the process.
               </p>
             </div>
 
@@ -329,7 +329,7 @@ export default function OnboardingPage() {
                     }}
                   />
                   <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-                    We'll parse your CV and auto-fill the next steps for you to review and edit.
+                    We&apos;ll parse your CV and auto-fill the next steps for you to review and edit.
                   </p>
                 </div>
               ) : (
@@ -341,7 +341,7 @@ export default function OnboardingPage() {
                     CV Parsed Successfully!
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400 mb-4">
-                    We've extracted your information from your CV. Click "Continue" to review and edit the auto-filled data.
+                    We&apos;ve extracted your information from your CV. Click &ldquo;Continue&rdquo; to review and edit the auto-filled data.
                   </p>
                   <div className="bg-white dark:bg-gray-800 rounded-xl p-4 text-left">
                     <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Extracted Information:</h4>
