@@ -13,7 +13,8 @@ const azure = createAzure({
 // POST /api/parse-cv
 export async function POST(request) {
   try {
-    const { cvUrl } = await request.json()
+  const { cvUrl } = await request.json()
+  console.log('Received cvUrl:', cvUrl)
     if (!cvUrl) {
       return NextResponse.json({ error: 'CV URL required' }, { status: 400 })
     }
