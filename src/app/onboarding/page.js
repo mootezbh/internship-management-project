@@ -288,6 +288,28 @@ export default function OnboardingPage() {
       const responseData = await response.json()
 
       if (response.ok) {
+        // Update Clerk profile image if provided
+        if (submissionData.profilePictureUrl) {
+          try {
+            await fetch('/api/update-clerk-profile', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ profilePictureUrl: submissionData.profilePictureUrl }),
+            })
+            
+            // Force refresh the user data to update navbar
+            if (user) {
+              await user.reload()
+            }
+          } catch (clerkError) {
+            console.error('Failed to update Clerk profile:', clerkError)
+            // Don't block the flow if Clerk update fails
+          }
+        }
+        
+        // Navigate to dashboard
         router.push('/dashboard')
       } else {
         alert(`Failed to save profile: ${responseData.error || 'Unknown error'}`)
@@ -321,16 +343,10 @@ export default function OnboardingPage() {
             <div className="max-w-2xl mx-auto">
               {isParsing ? (
                 <div className="border-2 border-dashed border-blue-300 dark:border-blue-600 rounded-2xl p-8 text-center bg-blue-50 dark:bg-blue-900/20">
-                  <div className="flex flex-col items-center space-y-4">
+                  <div className="flex flex-col items-center">
                     <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center">
                       <LoadingSpinner />
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                      Parsing Your CV...
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      Please wait while we extract information from your CV. This may take a few moments.
-                    </p>
                   </div>
                 </div>
               ) : !cvParsed ? (
