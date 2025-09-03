@@ -898,35 +898,69 @@ export default function OnboardingPage() {
       <div className="max-w-3xl mx-auto">
         {/* Progress Steps */}
         <div className="mb-8">
-          <div className="flex items-center justify-center">
-            <div className="flex items-center space-x-2 sm:space-x-4">
+          {/* Progress Bar */}
+          <div className="relative">
+            <div className="flex items-center justify-between mb-4">
+              <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                Step {currentStep} of {steps.length}
+              </div>
+              <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                {Math.round((currentStep / steps.length) * 100)}% Complete
+              </div>
+            </div>
+            
+            {/* Progress Bar Track */}
+            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-4">
+              <div 
+                className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-300 ease-out"
+                style={{ width: `${(currentStep / steps.length) * 100}%` }}
+              ></div>
+            </div>
+            
+            {/* Current Step Info */}
+            <div className="flex items-center justify-center">
+              <div className="flex items-center space-x-3 bg-white dark:bg-gray-800 rounded-2xl px-6 py-4 shadow-lg border border-gray-200 dark:border-gray-700">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm ${
+                  currentStep === 1 ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white' :
+                  currentStep === 2 ? 'bg-gradient-to-r from-green-500 to-blue-600 text-white' :
+                  currentStep === 3 ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white' :
+                  currentStep === 4 ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white' :
+                  'bg-gradient-to-r from-emerald-500 to-teal-600 text-white'
+                }`}>
+                  {currentStep}
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 dark:text-white text-lg">
+                    {steps[currentStep - 1].title}
+                  </h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {currentStep === 1 && "Upload your CV to get started"}
+                    {currentStep === 2 && "Tell us about yourself"}
+                    {currentStep === 3 && "Share your educational background"}
+                    {currentStep === 4 && "Highlight your skills and interests"}
+                    {currentStep === 5 && "Set your internship preferences"}
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Mini Steps Indicator */}
+            <div className="flex items-center justify-center mt-6 space-x-2">
               {steps.map((step, index) => (
                 <div key={step.id} className="flex items-center">
-                  <div className="flex flex-col items-center">
-                    <div
-                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold transition-all duration-300 ${
-                        currentStep > step.id
-                          ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg'
-                          : currentStep === step.id
-                          ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg ring-4 ring-blue-200 dark:ring-blue-800'
-                          : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
-                      }`}
-                    >
-                      {currentStep > step.id ? <Check className="w-4 h-4 sm:w-5 sm:h-5" /> : step.id}
-                    </div>
-                    <span className={`mt-2 text-xs sm:text-sm font-medium transition-colors text-center max-w-20 sm:max-w-none ${
-                      currentStep >= step.id 
-                        ? 'text-gray-900 dark:text-white' 
-                        : 'text-gray-500 dark:text-gray-400'
-                    }`}>
-                      <span className="hidden sm:inline">{step.title}</span>
-                      <span className="sm:hidden">{step.title.split(' ')[0]}</span>
-                    </span>
-                  </div>
+                  <div
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      currentStep > step.id
+                        ? 'bg-green-500 scale-110'
+                        : currentStep === step.id
+                        ? 'bg-blue-500 scale-125 ring-2 ring-blue-200 dark:ring-blue-800'
+                        : 'bg-gray-300 dark:bg-gray-600'
+                    }`}
+                  />
                   {index < steps.length - 1 && (
-                    <div className={`w-8 sm:w-16 h-1 mx-2 sm:mx-6 rounded-full transition-colors ${
+                    <div className={`w-8 h-0.5 mx-1 transition-colors ${
                       currentStep > step.id 
-                        ? 'bg-gradient-to-r from-green-500 to-green-600' 
+                        ? 'bg-green-500' 
                         : 'bg-gray-300 dark:bg-gray-600'
                     }`} />
                   )}
@@ -956,8 +990,8 @@ export default function OnboardingPage() {
               </button>
 
               <div className="flex items-center space-x-2 order-first sm:order-none">
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  Step {currentStep} of {steps.length}
+                <span className="text-sm text-gray-500 dark:text-gray-400 px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full">
+                  {currentStep < steps.length ? `${steps.length - currentStep} steps remaining` : 'Ready to complete'}
                 </span>
               </div>
 

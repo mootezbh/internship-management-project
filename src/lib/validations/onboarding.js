@@ -38,8 +38,7 @@ export const educationSchema = z.object({
 // Step 3: Experience & Skills
 export const experienceSchema = z.object({
   skills: z.array(z.string())
-    .min(1, 'Please select at least 1 skill')
-    .max(15, 'Please select no more than 15 skills'),
+    .min(1, 'Please select at least 1 skill'),
   interests: z.array(z.string())
     .min(1, 'Please select at least 1 interest')
     .max(10, 'Please select no more than 10 interests')
