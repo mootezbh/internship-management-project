@@ -221,6 +221,7 @@ export default function OnboardingPage() {
       if (degree.includes('bachelor')) setValue('education', "Bachelor's Degree", { shouldValidate: true })
       else if (degree.includes('master')) setValue('education', "Master's Degree", { shouldValidate: true })
       else if (degree.includes('phd') || degree.includes('doctorate')) setValue('education', 'PhD', { shouldValidate: true })
+      else if (degree.includes('engineer') || degree.includes('engineering')) setValue('education', 'Engineering', { shouldValidate: true })
       else setValue('education', 'Other', { shouldValidate: true })
     }
 
@@ -318,7 +319,21 @@ export default function OnboardingPage() {
             </div>
 
             <div className="max-w-2xl mx-auto">
-              {!cvParsed ? (
+              {isParsing ? (
+                <div className="border-2 border-dashed border-blue-300 dark:border-blue-600 rounded-2xl p-8 text-center bg-blue-50 dark:bg-blue-900/20">
+                  <div className="flex flex-col items-center space-y-4">
+                    <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center">
+                      <LoadingSpinner />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                      Parsing Your CV...
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-400">
+                      Please wait while we extract information from your CV. This may take a few moments.
+                    </p>
+                  </div>
+                </div>
+              ) : !cvParsed ? (
                 <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-8 text-center hover:border-blue-400 dark:hover:border-blue-500 transition-colors">
                   <FileUpload
                     accept=".pdf,application/pdf"
@@ -333,31 +348,87 @@ export default function OnboardingPage() {
                   </p>
                 </div>
               ) : (
-                <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-2xl p-8 border border-green-200 dark:border-green-800 text-center">
-                  <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Check className="w-8 h-8 text-white" />
+                <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-2xl p-8 border border-green-200 dark:border-green-800">
+                  <div className="text-center mb-6">
+                    <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Check className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                      CV Parsed Successfully!
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-400 mb-6">
+                      We&apos;ve extracted your information from your CV. Click &ldquo;Continue&rdquo; to review and edit the auto-filled data.
+                    </p>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                    CV Parsed Successfully!
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-4">
-                    We&apos;ve extracted your information from your CV. Click &ldquo;Continue&rdquo; to review and edit the auto-filled data.
-                  </p>
-                  <div className="bg-white dark:bg-gray-800 rounded-xl p-4 text-left">
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Extracted Information:</h4>
-                    <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                      {cvParsed.name && <li>• Name: {cvParsed.name}</li>}
-                      {cvParsed.email && <li>• Email: {cvParsed.email}</li>}
-                      {cvParsed.skills?.length > 0 && <li>• Skills: {cvParsed.skills.slice(0, 3).join(', ')}{cvParsed.skills.length > 3 ? '...' : ''}</li>}
-                      {cvParsed.education?.length > 0 && <li>• Education: {cvParsed.education[0].degree} from {cvParsed.education[0].institution}</li>}
-                    </ul>
+                  
+                  <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-4 text-center">Extracted Information:</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      {cvParsed.name && (
+                        <div className="flex items-center space-x-2">
+                          <span className="text-green-500">•</span>
+                          <span className="text-gray-600 dark:text-gray-400">Name:</span>
+                          <span className="font-medium text-gray-900 dark:text-white">{cvParsed.name}</span>
+                        </div>
+                      )}
+                      {cvParsed.email && (
+                        <div className="flex items-center space-x-2">
+                          <span className="text-green-500">•</span>
+                          <span className="text-gray-600 dark:text-gray-400">Email:</span>
+                          <span className="font-medium text-gray-900 dark:text-white">{cvParsed.email}</span>
+                        </div>
+                      )}
+                      {cvParsed.phone && (
+                        <div className="flex items-center space-x-2">
+                          <span className="text-green-500">•</span>
+                          <span className="text-gray-600 dark:text-gray-400">Phone:</span>
+                          <span className="font-medium text-gray-900 dark:text-white">{cvParsed.phone}</span>
+                        </div>
+                      )}
+                      {cvParsed.education?.length > 0 && (
+                        <div className="flex items-center space-x-2">
+                          <span className="text-green-500">•</span>
+                          <span className="text-gray-600 dark:text-gray-400">Education:</span>
+                          <span className="font-medium text-gray-900 dark:text-white">{cvParsed.education[0].degree}</span>
+                        </div>
+                      )}
+                      {cvParsed.skills?.length > 0 && (
+                        <div className="md:col-span-2">
+                          <div className="flex items-start space-x-2">
+                            <span className="text-green-500 mt-1">•</span>
+                            <div>
+                              <span className="text-gray-600 dark:text-gray-400">Skills:</span>
+                              <div className="flex flex-wrap gap-1 mt-1">
+                                {cvParsed.skills.slice(0, 6).map((skill, idx) => (
+                                  <span key={idx} className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-full">
+                                    {skill}
+                                  </span>
+                                ))}
+                                {cvParsed.skills.length > 6 && (
+                                  <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 text-xs rounded-full">
+                                    +{cvParsed.skills.length - 6} more
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {watchedValues.cvUrl && (
+                      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 text-center">
+                        <a 
+                          href={watchedValues.cvUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-sm text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                        >
+                          📄 View Uploaded CV
+                        </a>
+                      </div>
+                    )}
                   </div>
-                </div>
-              )}
-              {isParsing && (
-                <div className="mt-6 flex items-center justify-center">
-                  <LoadingSpinner />
-                  <span className="ml-3 text-gray-600 dark:text-gray-400">Parsing your CV...</span>
                 </div>
               )}
             </div>
@@ -544,6 +615,7 @@ export default function OnboardingPage() {
                   <option value="High School">High School</option>
                   <option value="Bachelor's Degree">Bachelor&apos;s Degree</option>
                   <option value="Master's Degree">Master&apos;s Degree</option>
+                  <option value="Engineering">Engineering</option>
                   <option value="PhD">PhD</option>
                   <option value="Other">Other</option>
                 </select>
@@ -602,59 +674,23 @@ export default function OnboardingPage() {
               />
               <ErrorMessage name="major" />
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                CV/Resume (PDF)
-              </label>
-              <FileUpload
-                accept=".pdf,application/pdf"
-                maxSize="8MB"
-                fileType="cv"
-                onUploadComplete={(result) => {
-                  console.log('Uploadthing result:', result);
-                  setValue('cvUrl', result.ufsUrl, { shouldValidate: true });
-                }}
-              />
-              {watchedValues.cvUrl && (
-                <div className="mt-2 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-green-700 dark:text-green-300">
-                      ✓ CV uploaded successfully
-                    </span>
-                    <div className="flex gap-2">
-                      <a 
-                        href={watchedValues.cvUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
-                      >
-                        View CV
-                      </a>
-                      <button
-                        type="button"
-                        onClick={() => setValue('cvUrl', '', { shouldValidate: true })}
-                        className="text-sm text-red-600 dark:text-red-400 hover:underline"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
           </div>
         )
 
       case 4:
         return (
           <div className="space-y-6">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center mx-auto">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+              </div>
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Skills & Experience
               </h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                Upload your CV and select your skills and interests
+              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                Select your skills and interests to help us match you with the right opportunities
               </p>
             </div>
 
@@ -862,13 +898,13 @@ export default function OnboardingPage() {
       <div className="max-w-3xl mx-auto">
         {/* Progress Steps */}
         <div className="mb-8">
-          <div className="flex items-center justify-center">
-            <div className="flex items-center space-x-4">
+          <div className="flex items-center justify-center overflow-x-auto pb-4">
+            <div className="flex items-center space-x-2 sm:space-x-4 min-w-max">
               {steps.map((step, index) => (
                 <div key={step.id} className="flex items-center">
                   <div className="flex flex-col items-center">
                     <div
-                      className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300 ${
+                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold transition-all duration-300 ${
                         currentStep > step.id
                           ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg'
                           : currentStep === step.id
@@ -876,18 +912,19 @@ export default function OnboardingPage() {
                           : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
                       }`}
                     >
-                      {currentStep > step.id ? <Check className="w-5 h-5" /> : step.id}
+                      {currentStep > step.id ? <Check className="w-4 h-4 sm:w-5 sm:h-5" /> : step.id}
                     </div>
-                    <span className={`mt-2 text-sm font-medium transition-colors ${
+                    <span className={`mt-2 text-xs sm:text-sm font-medium transition-colors text-center max-w-20 sm:max-w-none ${
                       currentStep >= step.id 
                         ? 'text-gray-900 dark:text-white' 
                         : 'text-gray-500 dark:text-gray-400'
                     }`}>
-                      {step.title}
+                      <span className="hidden sm:inline">{step.title}</span>
+                      <span className="sm:hidden">{step.title.split(' ')[0]}</span>
                     </span>
                   </div>
                   {index < steps.length - 1 && (
-                    <div className={`w-16 h-1 mx-6 rounded-full transition-colors ${
+                    <div className={`w-8 sm:w-16 h-1 mx-2 sm:mx-6 rounded-full transition-colors ${
                       currentStep > step.id 
                         ? 'bg-gradient-to-r from-green-500 to-green-600' 
                         : 'bg-gray-300 dark:bg-gray-600'
@@ -901,24 +938,24 @@ export default function OnboardingPage() {
 
         {/* Form Content */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div className="p-8 md:p-12">
+          <div className="p-4 sm:p-8 md:p-12">
             {renderStepContent()}
           </div>
 
           {/* Navigation Buttons */}
-          <div className="px-8 md:px-12 py-6 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700">
-            <div className="flex justify-between items-center">
+          <div className="px-4 sm:px-8 md:px-12 py-6 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
               <button
                 type="button"
                 onClick={prevStep}
                 disabled={currentStep === 1}
-                className="flex items-center px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
+                className="w-full sm:w-auto flex items-center justify-center px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
               >
                 <ChevronLeft className="w-4 h-4 mr-2" />
                 Previous
               </button>
 
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 order-first sm:order-none">
                 <span className="text-sm text-gray-500 dark:text-gray-400">
                   Step {currentStep} of {steps.length}
                 </span>
@@ -928,7 +965,7 @@ export default function OnboardingPage() {
                 <button
                   type="button"
                   onClick={nextStep}
-                  className="flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 rounded-xl focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-sm"
+                  className="w-full sm:w-auto flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 rounded-xl focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-sm"
                 >
                   Continue
                   <ChevronRight className="w-4 h-4 ml-2" />
@@ -938,7 +975,7 @@ export default function OnboardingPage() {
                   type="button"
                   onClick={handleFormSubmit}
                   disabled={isSubmitting}
-                  className="flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 rounded-xl focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
+                  className="w-full sm:w-auto flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 rounded-xl focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
                 >
                   {isSubmitting ? 'Completing...' : 'Complete Setup'}
                   {!isSubmitting && <Check className="w-4 h-4 ml-2" />}
