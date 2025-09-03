@@ -898,8 +898,8 @@ export default function OnboardingPage() {
       <div className="max-w-3xl mx-auto">
         {/* Progress Steps */}
         <div className="mb-8">
-          <div className="flex items-center justify-center overflow-x-auto pb-4">
-            <div className="flex items-center space-x-2 sm:space-x-4 min-w-max">
+          <div className="flex items-center justify-center">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               {steps.map((step, index) => (
                 <div key={step.id} className="flex items-center">
                   <div className="flex flex-col items-center">
