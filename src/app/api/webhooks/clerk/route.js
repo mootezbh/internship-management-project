@@ -105,29 +105,6 @@ export async function POST(req) {
             ...updateData,
           },
         })
-
-        // If user has custom profile image URL in metadata, update Clerk profile
-        if (public_metadata?.customProfileImageUrl) {
-          try {
-            // Try multiple approaches to override the OAuth image
-            
-            // Direct profile image update
-            await clerkClient.users.updateUser(id, {
-              profileImageUrl: public_metadata.customProfileImageUrl
-            })
-            
-            // Set in private metadata as well
-            await clerkClient.users.updateUser(id, {
-              privateMetadata: { 
-                customProfileImageUrl: public_metadata.customProfileImageUrl,
-                overrideOAuthImage: true 
-              }
-            })
-            
-          } catch (clerkError) {
-            console.error('Failed to update Clerk profile image:', clerkError.message)
-          }
-        }
         
       } catch (error) {
         console.error('Webhook user.updated error:', error)

@@ -2,7 +2,7 @@
 
 import { UserButton, useClerk } from '@clerk/nextjs';
 import { useUser } from '@clerk/nextjs';
-import { ChevronDown, LogOut, Settings, User } from 'lucide-react';
+import { ChevronDown, LogOut, User } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -14,9 +14,8 @@ export function CustomUserButton() {
   const [imageError, setImageError] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Get custom profile image from public metadata
-  const customImageUrl = user?.publicMetadata?.customProfileImageUrl;
-  const profileImageUrl = customImageUrl || user?.imageUrl;
+  // Use only Clerk's default profile image
+  const profileImageUrl = user?.imageUrl;
 
   // Reset image error when user or profile image changes
   useEffect(() => {
@@ -92,15 +91,6 @@ export function CustomUserButton() {
             >
               <User className="w-4 h-4 mr-2" />
               Profile
-            </Link>
-            
-            <Link
-              href="/settings"
-              className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-              onClick={() => setIsOpen(false)}
-            >
-              <Settings className="w-4 h-4 mr-2" />
-              Settings
             </Link>
             
             <button

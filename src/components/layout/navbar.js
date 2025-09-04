@@ -10,7 +10,6 @@ import {
   Menu, 
   X, 
   Briefcase, 
-  Settings, 
   Users, 
   BookOpen, 
   FileText, 
