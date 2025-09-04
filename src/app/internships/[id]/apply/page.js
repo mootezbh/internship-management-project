@@ -72,8 +72,19 @@ export default function ApplyPage() {
   const handleSubmit = async (responses) => {
     setIsSubmitting(true);
     try {
-      // Convert responses to answers array if needed
-      let answers = Array.isArray(responses) ? responses : [];
+      // Convert responses object to answers array in the format expected by API
+      let answers = [];
+      if (responses && typeof responses === 'object' && !Array.isArray(responses)) {
+        // responses is an object like { fieldId1: "value1", fieldId2: "value2" }
+        answers = Object.entries(responses).map(([fieldId, value]) => ({
+          fieldId,
+          value
+        }));
+      } else if (Array.isArray(responses)) {
+        // If it's already an array, use it as is
+        answers = responses;
+      }
+
       const response = await fetch(`/api/internships/${internshipId}/apply`, {
         method: 'POST',
         headers: {
