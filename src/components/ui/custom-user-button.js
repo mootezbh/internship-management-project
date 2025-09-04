@@ -13,14 +13,14 @@ export function CustomUserButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [customProfileImage, setCustomProfileImage] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Start with loading true
+  const [profileImageReady, setProfileImageReady] = useState(false);
   const dropdownRef = useRef(null);
 
   // Fetch custom profile image from database
   const fetchCustomProfile = async () => {
-    if (!user?.id || isLoading) return;
+    if (!user?.id) return;
     
-    setIsLoading(true);
     try {
       const response = await fetch('/api/profile');
       if (response.ok) {
@@ -31,25 +31,35 @@ export function CustomUserButton() {
       console.error('Error fetching profile:', error);
     } finally {
       setIsLoading(false);
+      setProfileImageReady(true);
     }
   };
 
   useEffect(() => {
     if (isSignedIn && user) {
       fetchCustomProfile();
+    } else if (isSignedIn) {
+      // If signed in but no user data yet, set ready but keep loading
+      setIsLoading(false);
+      setProfileImageReady(true);
     }
   }, [user?.id, isSignedIn]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Expose refresh function globally for other components to call
   useEffect(() => {
-    window.refreshUserProfile = fetchCustomProfile;
+    window.refreshUserProfile = async () => {
+      setIsLoading(true);
+      setProfileImageReady(false);
+      await fetchCustomProfile();
+    };
     return () => {
       delete window.refreshUserProfile;
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Use custom profile image if available, otherwise fall back to Clerk's default
-  const profileImageUrl = customProfileImage || user?.imageUrl;
+  // Only show image once we've determined which one to use
+  const profileImageUrl = profileImageReady ? (customProfileImage || user?.imageUrl) : null;
 
   // Reset image error when user or profile image changes
   useEffect(() => {
@@ -84,7 +94,7 @@ export function CustomUserButton() {
       >
         {/* Custom Avatar Image */}
         <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-gray-200 dark:border-gray-600 hover:shadow-lg transition-shadow">
-          {!imageError && profileImageUrl ? (
+          {!isLoading && !imageError && profileImageUrl ? (
             <Image
               src={profileImageUrl}
               alt={`${user?.firstName || 'User'}'s profile`}
@@ -98,7 +108,11 @@ export function CustomUserButton() {
             />
           ) : (
             <div className="w-full h-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
-              <User className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+              {isLoading ? (
+                <div className="w-4 h-4 border border-gray-400 border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <User className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+              )}
             </div>
           )}
         </div>
