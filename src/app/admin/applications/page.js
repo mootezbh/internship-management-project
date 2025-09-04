@@ -57,11 +57,19 @@ function AdminApplicationsContent() {
   const [applications, setApplications] = useState([])
   const [filteredApplications, setFilteredApplications] = useState([])
   const [internships, setInternships] = useState([])
+  const [expandedResponses, setExpandedResponses] = useState({})
   
   // Filter states
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [internshipFilter, setInternshipFilter] = useState('all')
+
+  const toggleResponsesExpansion = (applicationId) => {
+    setExpandedResponses(prev => ({
+      ...prev,
+      [applicationId]: !prev[applicationId]
+    }))
+  }
 
   // Client-side mounting check
   useEffect(() => {
@@ -424,47 +432,82 @@ function AdminApplicationsContent() {
                           </div>
                         </div>
 
-                        {/* Application Form Responses */}
+                        {/* Application Form Responses - Enhanced with Collapsible */}
                         {application?.responses && application.responses.length > 0 && (
-                          <div className="bg-gray-50 dark:bg-slate-800/50 rounded-lg p-4">
-                            <h4 className="font-medium text-gray-900 dark:text-white mb-3">Application Form Responses:</h4>
-                            <div className="space-y-3">
-                              {application.responses.map((response) => (
-                                <div key={response.id} className="border-l-4 border-blue-200 dark:border-blue-600 pl-3">
-                                  <p className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                                    {response.field?.label || 'Unknown Field'}
-                                    {response.field?.required && <span className="text-red-500 ml-1">*</span>}
-                                  </p>
-                                  <div className="text-sm text-gray-600 dark:text-slate-400">
-                                    {response.field?.type === 'FILE' ? (
-                                      <div className="flex items-center">
-                                        <FileText className="h-4 w-4 mr-2" />
-                                        <a 
-                                          href={response.value} 
-                                          target="_blank" 
-                                          rel="noopener noreferrer"
-                                          className="text-blue-600 dark:text-blue-400 hover:underline"
-                                        >
-                                          View uploaded file
-                                        </a>
-                                      </div>
-                                    ) : response.field?.type === 'CHECKBOX' ? (
-                                      <div className="flex flex-wrap gap-1">
-                                        {JSON.parse(response.value || '[]').map((item, index) => (
-                                          <Badge key={index} variant="secondary" className="text-xs">
-                                            {item}
-                                          </Badge>
-                                        ))}
-                                      </div>
-                                    ) : response.field?.type === 'RADIO' || response.field?.type === 'SELECT' ? (
-                                      <Badge variant="default" className="text-xs">{response.value}</Badge>
-                                    ) : (
-                                      <p className="whitespace-pre-wrap">{response.value}</p>
-                                    )}
-                                  </div>
+                          <div className="mt-4">
+                            <button 
+                              onClick={() => toggleResponsesExpansion(application.id)}
+                              className="w-full flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                            >
+                              <div className="flex items-center">
+                                <FileText className="h-4 w-4 mr-2 text-blue-600 dark:text-blue-400" />
+                                <span className="font-medium text-blue-800 dark:text-blue-300">
+                                  Application Form Responses ({application.responses.length})
+                                </span>
+                              </div>
+                              <div className="flex items-center">
+                                <Badge variant="outline" className="mr-2 text-xs">
+                                  Click to {expandedResponses[application.id] ? 'hide' : 'view'}
+                                </Badge>
+                                <div className={`transform transition-transform ${expandedResponses[application.id] ? 'rotate-180' : ''}`}>
+                                  <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                  </svg>
                                 </div>
-                              ))}
-                            </div>
+                              </div>
+                            </button>
+                            
+                            {expandedResponses[application.id] && (
+                              <div className="mt-3 space-y-3 bg-white dark:bg-slate-800 rounded-lg p-4 border border-gray-200 dark:border-slate-600">
+                                {application.responses.map((response, index) => (
+                                  <div key={response.id} className="border-l-4 border-blue-400 dark:border-blue-500 pl-4 bg-gray-50 dark:bg-slate-700/50 rounded-r-md p-3">
+                                    <p className="text-sm font-semibold text-gray-800 dark:text-slate-200 mb-2">
+                                      {index + 1}. {response.field?.label || 'Unknown Field'}
+                                      {response.field?.required && <span className="text-red-500 ml-1">*</span>}
+                                      <Badge variant="outline" className="ml-2 text-xs">
+                                        {response.field?.type?.toLowerCase()}
+                                      </Badge>
+                                    </p>
+                                    
+                                    {response.field?.description && (
+                                      <p className="text-xs text-gray-600 dark:text-slate-400 mb-2 italic">
+                                        {response.field.description}
+                                      </p>
+                                    )}
+                                    
+                                    <div className="bg-white dark:bg-slate-800 rounded p-2 border border-gray-200 dark:border-slate-600">
+                                      {response.field?.type === 'FILE' ? (
+                                        <div className="flex items-center">
+                                          <FileText className="h-4 w-4 mr-2 text-blue-500" />
+                                          <a 
+                                            href={response.value} 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                                          >
+                                            View uploaded file →
+                                          </a>
+                                        </div>
+                                      ) : response.field?.type === 'CHECKBOX' ? (
+                                        <div className="flex flex-wrap gap-1">
+                                          {JSON.parse(response.value || '[]').map((item, idx) => (
+                                            <Badge key={idx} variant="secondary" className="text-xs">
+                                              {item}
+                                            </Badge>
+                                          ))}
+                                        </div>
+                                      ) : response.field?.type === 'RADIO' || response.field?.type === 'SELECT' ? (
+                                        <Badge variant="default" className="text-xs">{response.value}</Badge>
+                                      ) : (
+                                        <p className="text-sm text-gray-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed">
+                                          {response.value || <span className="text-gray-500 italic">No response provided</span>}
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         )}
 

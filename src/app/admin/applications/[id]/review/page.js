@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft, Save, AlertCircle, CheckCircle, XCircle } from 'lucide-react';
+import { ArrowLeft, Save, AlertCircle, CheckCircle, XCircle, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -185,35 +185,69 @@ export default function ApplicationReviewPage() {
               )}
             </div>
 
-            {/* Form Responses */}
-            {application.responses && application.responses.length > 0 && (
-              <div className="mt-6">
-                <Label className="text-gray-700 dark:text-gray-300 text-base font-medium">
-                  Application Form Responses
-                </Label>
-                <div className="mt-3 space-y-4">
-                  {application.responses.map((response) => (
-                    <div key={response.id} className="border-l-4 border-blue-200 dark:border-blue-600 pl-4">
-                      <Label className="text-gray-700 dark:text-gray-300 font-medium">
-                        {response.field?.label}
-                        {response.field?.required && <span className="text-red-500 ml-1">*</span>}
-                      </Label>
-                      <div className="mt-1 text-gray-900 dark:text-white">
-                        {response.field?.type === 'FILE' ? (
-                          <a
-                            href={response.value}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 dark:text-blue-400 hover:underline"
-                          >
-                            View uploaded file
-                          </a>
-                        ) : (
-                          <p className="whitespace-pre-wrap">{response.value}</p>
+            {/* Application Form Responses - Enhanced Display */}
+            {application.responses && application.responses.length > 0 ? (
+              <div className="mt-8">
+                <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-4">
+                  <Label className="text-blue-800 dark:text-blue-200 text-lg font-semibold flex items-center">
+                    <FileText className="w-5 h-5 mr-2" />
+                    Application Form Responses ({application.responses.length})
+                  </Label>
+                  <p className="text-blue-700 dark:text-blue-300 text-sm mt-1">
+                    Review the candidate&apos;s responses to the application form questions
+                  </p>
+                </div>
+                <div className="space-y-6">
+                  {application.responses.map((response, index) => (
+                    <Card key={response.id} className="border-l-4 border-blue-500 dark:border-blue-400">
+                      <CardContent className="pt-4">
+                        <div className="flex items-start justify-between mb-2">
+                          <Label className="text-gray-800 dark:text-gray-200 font-semibold text-base">
+                            {index + 1}. {response.field?.label}
+                            {response.field?.required && <span className="text-red-500 ml-1">*</span>}
+                          </Label>
+                          <Badge variant="outline" className="text-xs">
+                            {response.field?.type?.toLowerCase()}
+                          </Badge>
+                        </div>
+                        
+                        {response.field?.description && (
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 italic">
+                            {response.field.description}
+                          </p>
                         )}
-                      </div>
-                    </div>
+                        
+                        <div className="bg-gray-50 dark:bg-slate-800 rounded-md p-3">
+                          {response.field?.type === 'FILE' ? (
+                            <div className="flex items-center space-x-2">
+                              <FileText className="w-4 h-4 text-blue-500" />
+                              <a
+                                href={response.value}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                              >
+                                View uploaded file →
+                              </a>
+                            </div>
+                          ) : (
+                            <p className="text-gray-900 dark:text-white whitespace-pre-wrap leading-relaxed">
+                              {response.value || <span className="text-gray-500 italic">No response provided</span>}
+                            </p>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
                   ))}
+                </div>
+              </div>
+            ) : (
+              <div className="mt-6">
+                <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-6 text-center">
+                  <AlertCircle className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                  <p className="text-gray-600 dark:text-gray-400">
+                    No application form responses - This was a basic application
+                  </p>
                 </div>
               </div>
             )}
