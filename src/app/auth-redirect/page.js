@@ -22,9 +22,11 @@ export default function AuthRedirect() {
       try {
         // Fetch user profile to get role
         const response = await fetch('/api/profile')
+        
         if (response.ok) {
           const userData = await response.json()
-          if (userData.role === 'ADMIN') {
+          
+          if (userData.role === 'ADMIN' || userData.role === 'SUPER_ADMIN') {
             router.push('/admin')
             return
           } else if (!userData.profileComplete) {
