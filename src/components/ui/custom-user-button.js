@@ -1,6 +1,6 @@
 'use client';
 
-import { UserButton, useClerk } from '@clerk/nextjs';
+import { useClerk } from '@clerk/nextjs';
 import { useUser } from '@clerk/nextjs';
 import { ChevronDown, LogOut, User } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
@@ -12,10 +12,44 @@ export function CustomUserButton() {
   const { signOut } = useClerk();
   const [isOpen, setIsOpen] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [customProfileImage, setCustomProfileImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Use only Clerk's default profile image
-  const profileImageUrl = user?.imageUrl;
+  // Fetch custom profile image from database
+  const fetchCustomProfile = async () => {
+    if (!user?.id || isLoading) return;
+    
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/profile');
+      if (response.ok) {
+        const profileData = await response.json();
+        setCustomProfileImage(profileData.profilePictureUrl);
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isSignedIn && user) {
+      fetchCustomProfile();
+    }
+  }, [user?.id, isSignedIn]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Expose refresh function globally for other components to call
+  useEffect(() => {
+    window.refreshUserProfile = fetchCustomProfile;
+    return () => {
+      delete window.refreshUserProfile;
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Use custom profile image if available, otherwise fall back to Clerk's default
+  const profileImageUrl = customProfileImage || user?.imageUrl;
 
   // Reset image error when user or profile image changes
   useEffect(() => {

@@ -288,6 +288,11 @@ export default function OnboardingPage() {
       const responseData = await response.json()
 
       if (response.ok) {
+        // Refresh the user profile in the navbar
+        if (typeof window !== 'undefined' && window.refreshUserProfile) {
+          await window.refreshUserProfile();
+        }
+        
         // Small delay before navigation to allow state updates
         setTimeout(() => {
           router.push('/dashboard')

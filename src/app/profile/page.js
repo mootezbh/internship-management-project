@@ -85,6 +85,11 @@ function ProfileContent() {
         setIsEditing(false)
         setEditData({})
         toast.success('Profile updated successfully!')
+        
+        // Refresh the user profile in the navbar if profile image was updated
+        if (editData.profilePictureUrl && typeof window !== 'undefined' && window.refreshUserProfile) {
+          await window.refreshUserProfile();
+        }
       } else {
         const errorData = await response.json()
         toast.error(`Failed to update profile: ${errorData.error || 'Unknown error'}`)
