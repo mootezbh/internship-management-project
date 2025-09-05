@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 dark:bg-slate-950`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-50 dark:bg-slate-950`}
         >
           <ThemeProvider
             attribute="class"
@@ -36,7 +36,7 @@ export default function RootLayout({ children }) {
           >
             <QueryProvider>
               <Navbar />
-              <main className="min-h-screen bg-gray-50 dark:bg-slate-950">
+              <main className="min-h-screen bg-slate-50 dark:bg-slate-950">
                 {children}
               </main>
               <Toaster />

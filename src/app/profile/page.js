@@ -169,8 +169,8 @@ function ProfileContent() {
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Profile</h1>
-            <p className="text-gray-600 dark:text-slate-300">
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Profile</h1>
+            <p className="text-slate-600 dark:text-slate-300">
               {isEditing ? 'Edit your profile information' : 'View and manage your profile'}
             </p>
           </div>
@@ -219,11 +219,11 @@ function ProfileContent() {
                       alt="Profile" 
                       width={120}
                       height={120}
-                      className="w-30 h-30 rounded-full object-cover border-4 border-gray-200 dark:border-gray-700"
+                      className="w-30 h-30 rounded-full object-cover border-4 border-slate-200 dark:border-slate-700"
                     />
                   ) : (
-                    <div className="w-30 h-30 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                      <User className="w-12 h-12 text-gray-400" />
+                    <div className="w-30 h-30 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
+                      <User className="w-12 h-12 text-slate-400" />
                     </div>
                   )}
                 </div>
@@ -239,7 +239,7 @@ function ProfileContent() {
                         toast.success('Profile picture uploaded!')
                       }}
                     />
-                    <p className="text-xs text-gray-500">Upload a new profile picture (max 5MB)</p>
+                    <p className="text-xs text-slate-500">Upload a new profile picture (max 5MB)</p>
                   </div>
                 )}
               </CardContent>
@@ -294,26 +294,26 @@ function ProfileContent() {
                 ) : (
                   <>
                     <div>
-                      <label className="text-sm font-medium text-gray-700 dark:text-slate-300">Name</label>
-                      <p className="text-gray-900 dark:text-white">
+                      <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Name</label>
+                      <p className="text-slate-900 dark:text-white">
                         {displayData?.name || `${user.firstName} ${user.lastName}`}
                       </p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-700 dark:text-slate-300">Email</label>
-                      <p className="text-gray-900 dark:text-white">
+                      <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Email</label>
+                      <p className="text-slate-900 dark:text-white">
                         {displayData?.email || user.emailAddresses[0]?.emailAddress}
                       </p>
                     </div>
                     {displayData?.phone && (
                       <div>
-                        <label className="text-sm font-medium text-gray-700 dark:text-slate-300">Phone</label>
-                        <p className="text-gray-900 dark:text-white">{displayData.phone}</p>
+                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Phone</label>
+                        <p className="text-slate-900 dark:text-white">{displayData.phone}</p>
                       </div>
                     )}
                     {displayData?.linkedinUrl && (
                       <div>
-                        <label className="text-sm font-medium text-gray-700 dark:text-slate-300">LinkedIn</label>
+                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">LinkedIn</label>
                         <a 
                           href={displayData.linkedinUrl} 
                           target="_blank" 
@@ -325,8 +325,8 @@ function ProfileContent() {
                       </div>
                     )}
                     <div>
-                      <label className="text-sm font-medium text-gray-700 dark:text-slate-300">Member Since</label>
-                      <p className="text-gray-900 dark:text-white">
+                      <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Member Since</label>
+                      <p className="text-slate-900 dark:text-white">
                         {new Date(displayData?.createdAt || user.createdAt).toLocaleDateString()}
                       </p>
                     </div>
@@ -458,32 +458,32 @@ function ProfileContent() {
                   <>
                     {displayData?.education && (
                       <div>
-                        <label className="text-sm font-medium text-gray-700 dark:text-slate-300">Education Level</label>
-                        <p className="text-gray-900 dark:text-white">{displayData.education}</p>
+                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Education Level</label>
+                        <p className="text-slate-900 dark:text-white">{displayData.education}</p>
                       </div>
                     )}
                     {displayData?.university && (
                       <div>
-                        <label className="text-sm font-medium text-gray-700 dark:text-slate-300">University</label>
-                        <p className="text-gray-900 dark:text-white">{displayData.university}</p>
+                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">University</label>
+                        <p className="text-slate-900 dark:text-white">{displayData.university}</p>
                       </div>
                     )}
                     {displayData?.degree && (
                       <div>
-                        <label className="text-sm font-medium text-gray-700 dark:text-slate-300">Degree</label>
-                        <p className="text-gray-900 dark:text-white">{displayData.degree}</p>
+                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Degree</label>
+                        <p className="text-slate-900 dark:text-white">{displayData.degree}</p>
                       </div>
                     )}
                     {displayData?.major && (
                       <div>
-                        <label className="text-sm font-medium text-gray-700 dark:text-slate-300">Major</label>
-                        <p className="text-gray-900 dark:text-white">{displayData.major}</p>
+                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Major</label>
+                        <p className="text-slate-900 dark:text-white">{displayData.major}</p>
                       </div>
                     )}
                     {displayData?.graduationYear && (
                       <div>
-                        <label className="text-sm font-medium text-gray-700 dark:text-slate-300">Graduation Year</label>
-                        <p className="text-gray-900 dark:text-white">{displayData.graduationYear}</p>
+                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Graduation Year</label>
+                        <p className="text-slate-900 dark:text-white">{displayData.graduationYear}</p>
                       </div>
                     )}
                   </>
@@ -510,9 +510,9 @@ function ProfileContent() {
                   </div>
                 ) : (
                   displayData?.bio ? (
-                    <p className="text-gray-900 dark:text-white">{displayData.bio}</p>
+                    <p className="text-slate-900 dark:text-white">{displayData.bio}</p>
                   ) : (
-                    <p className="text-gray-500 dark:text-gray-400 italic">No bio added yet</p>
+                    <p className="text-slate-500 dark:text-slate-400 italic">No bio added yet</p>
                   )
                 )}
               </CardContent>
@@ -556,7 +556,7 @@ function ProfileContent() {
                             className={`px-3 py-2 rounded-lg border text-sm transition-colors ${
                               editData.skills?.includes(skill)
                                 ? 'bg-blue-500 text-white border-blue-500'
-                                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-blue-500'
+                                : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-600 hover:border-blue-500'
                             }`}
                           >
                             {skill}
@@ -594,7 +594,7 @@ function ProfileContent() {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-gray-500 dark:text-gray-400 italic">No skills added yet</p>
+                    <p className="text-slate-500 dark:text-slate-400 italic">No skills added yet</p>
                   )
                 )}
               </CardContent>
@@ -617,7 +617,7 @@ function ProfileContent() {
                           className={`px-3 py-2 rounded-lg border text-sm transition-colors ${
                             editData.interests?.includes(interest)
                               ? 'bg-green-500 text-white border-green-500'
-                              : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-green-500'
+                              : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-600 hover:border-green-500'
                           }`}
                         >
                           {interest}
@@ -638,7 +638,7 @@ function ProfileContent() {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-gray-500 dark:text-gray-400 italic">No interests added yet</p>
+                    <p className="text-slate-500 dark:text-slate-400 italic">No interests added yet</p>
                   )
                 )}
               </CardContent>
@@ -725,26 +725,26 @@ function ProfileContent() {
                   <>
                     {displayData?.lookingFor && (
                       <div>
-                        <label className="text-sm font-medium text-gray-700 dark:text-slate-300">Looking For</label>
-                        <p className="text-gray-900 dark:text-white capitalize">{displayData.lookingFor}</p>
+                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Looking For</label>
+                        <p className="text-slate-900 dark:text-white capitalize">{displayData.lookingFor}</p>
                       </div>
                     )}
                     {displayData?.availabilityType && (
                       <div>
-                        <label className="text-sm font-medium text-gray-700 dark:text-slate-300">Availability</label>
-                        <p className="text-gray-900 dark:text-white">{displayData.availabilityType}</p>
+                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Availability</label>
+                        <p className="text-slate-900 dark:text-white">{displayData.availabilityType}</p>
                       </div>
                     )}
                     {displayData?.preferredDuration && (
                       <div>
-                        <label className="text-sm font-medium text-gray-700 dark:text-slate-300">Duration</label>
-                        <p className="text-gray-900 dark:text-white">{displayData.preferredDuration}</p>
+                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Duration</label>
+                        <p className="text-slate-900 dark:text-white">{displayData.preferredDuration}</p>
                       </div>
                     )}
                     {displayData?.remotePreference && (
                       <div>
-                        <label className="text-sm font-medium text-gray-700 dark:text-slate-300">Remote Work</label>
-                        <p className="text-gray-900 dark:text-white">{displayData.remotePreference}</p>
+                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Remote Work</label>
+                        <p className="text-slate-900 dark:text-white">{displayData.remotePreference}</p>
                       </div>
                     )}
                   </>

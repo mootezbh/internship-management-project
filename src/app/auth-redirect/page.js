@@ -55,7 +55,7 @@ export default function AuthRedirect() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <LoadingSpinner />
-          <p className="mt-4 text-gray-600 dark:text-gray-400">
+          <p className="mt-4 text-slate-600 dark:text-slate-400">
             Checking your credentials...
           </p>
         </div>

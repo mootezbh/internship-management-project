@@ -74,7 +74,7 @@ export default function ViewInternshipPage() {
       case 'PENDING':
         return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
       default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400';
+        return 'bg-slate-100 text-slate-800 dark:bg-slate-900/30 dark:text-slate-400';
     }
   };
 
@@ -90,8 +90,8 @@ export default function ViewInternshipPage() {
     return (
       <div className="min-h-screen bg-white dark:bg-slate-950 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Internship Not Found</h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-4">The internship you&apos;re looking for doesn&apos;t exist.</p>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Internship Not Found</h2>
+          <p className="text-slate-600 dark:text-slate-300 mb-4">The internship you&apos;re looking for doesn&apos;t exist.</p>
           <Button onClick={() => router.push('/admin/internships')} variant="outline">
             Back to Internships
           </Button>
@@ -114,7 +114,7 @@ export default function ViewInternshipPage() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Internships
           </Button>
-          <span className="text-xl font-semibold text-gray-900 dark:text-white">Internship Details</span>
+          <span className="text-xl font-semibold text-slate-900 dark:text-white">Internship Details</span>
           <Button
             onClick={() => router.push(`/admin/internships/${internshipId}/edit`)}
             className="ml-auto bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-600 text-white"

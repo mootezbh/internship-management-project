@@ -35,7 +35,7 @@ const Badge = ({ children, variant = "default", className = "" }) => {
   const baseClasses = "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
   const variantClasses = {
     default: "bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300",
-    secondary: "bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-slate-300",
+    secondary: "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300",
     success: "bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300",
     warning: "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300",
     destructive: "bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300"
@@ -53,15 +53,15 @@ const Dialog = ({ open, onOpenChange, children }) => {
   if (!open) return null
   return (
     <div className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-slate-900 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto border border-gray-200 dark:border-slate-700 shadow-2xl">
+      <div className="bg-white dark:bg-slate-900 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto border border-slate-200 dark:border-slate-700 shadow-2xl">
         {children}
       </div>
     </div>
   )
 }
 
-const DialogHeader = ({ children }) => <div className="px-6 py-4 border-b border-gray-200 dark:border-slate-700">{children}</div>
-const DialogTitle = ({ children }) => <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{children}</h2>
+const DialogHeader = ({ children }) => <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700">{children}</div>
+const DialogTitle = ({ children }) => <h2 className="text-xl font-semibold text-slate-900 dark:text-white">{children}</h2>
 const DialogContent = ({ children }) => <div className="px-6 py-4">{children}</div>
 
 export default function AdminTaskReviewPage() {
@@ -264,7 +264,7 @@ export default function AdminTaskReviewPage() {
               <Button 
                 variant="outline" 
                 onClick={() => router.push('/admin')}
-                className="flex items-center space-x-2 border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                className="flex items-center space-x-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
               >
                 <ArrowLeft className="h-4 w-4" />
                 <span>Back to Admin Dashboard</span>
@@ -277,15 +277,15 @@ export default function AdminTaskReviewPage() {
                   disabled={isRefreshing}
                   variant="outline"
                   size="sm"
-                  className="flex items-center space-x-2 border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                  className="flex items-center space-x-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                 >
                   <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
                   <span>Refresh</span>
                 </Button>
               </div>
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Task Review</h1>
-            <p className="text-gray-600 dark:text-slate-300 mb-4">Review student task submissions and provide feedback</p>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Task Review</h1>
+            <p className="text-slate-600 dark:text-slate-300 mb-4">Review student task submissions and provide feedback</p>
             
             {/* Info Card */}
             <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700">
@@ -313,8 +313,8 @@ export default function AdminTaskReviewPage() {
                     <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{submissions.length}</p>
-                    <p className="text-gray-600 dark:text-slate-400">Total Submissions</p>
+                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{submissions.length}</p>
+                    <p className="text-slate-600 dark:text-slate-400">Total Submissions</p>
                   </div>
                 </div>
               </CardContent>
@@ -327,10 +327,10 @@ export default function AdminTaskReviewPage() {
                     <Clock className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    <p className="text-2xl font-bold text-slate-900 dark:text-white">
                       {submissions.filter(sub => sub.status === 'PENDING').length}
                     </p>
-                    <p className="text-gray-600 dark:text-slate-400">Pending Review</p>
+                    <p className="text-slate-600 dark:text-slate-400">Pending Review</p>
                   </div>
                 </div>
               </CardContent>
@@ -343,10 +343,10 @@ export default function AdminTaskReviewPage() {
                     <Check className="h-6 w-6 text-green-600 dark:text-green-400" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    <p className="text-2xl font-bold text-slate-900 dark:text-white">
                       {submissions.filter(sub => sub.status === 'APPROVED').length}
                     </p>
-                    <p className="text-gray-600 dark:text-slate-400">Approved</p>
+                    <p className="text-slate-600 dark:text-slate-400">Approved</p>
                   </div>
                 </div>
               </CardContent>
@@ -359,10 +359,10 @@ export default function AdminTaskReviewPage() {
                     <AlertCircle className="h-6 w-6 text-red-600 dark:text-red-400" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    <p className="text-2xl font-bold text-slate-900 dark:text-white">
                       {submissions.filter(sub => sub.status === 'REQUIRES_CHANGES').length}
                     </p>
-                    <p className="text-gray-600 dark:text-slate-400">Needs Changes</p>
+                    <p className="text-slate-600 dark:text-slate-400">Needs Changes</p>
                   </div>
                 </div>
               </CardContent>
@@ -370,17 +370,17 @@ export default function AdminTaskReviewPage() {
           </div>
 
           {/* Filters */}
-          <Card className="mb-6 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+          <Card className="mb-6 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
             <CardContent className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <Label htmlFor="search" className="text-gray-900 dark:text-white">Search Submissions</Label>
+                  <Label htmlFor="search" className="text-slate-900 dark:text-white">Search Submissions</Label>
                   <div className="relative">
-                    <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-slate-500" />
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400 dark:text-slate-500" />
                     <Input
                       id="search"
                       placeholder="Search by student, task, or learning path..."
-                      className="pl-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400"
+                      className="pl-10 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -388,10 +388,10 @@ export default function AdminTaskReviewPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="status-filter" className="text-gray-900 dark:text-white">Status</Label>
+                  <Label htmlFor="status-filter" className="text-slate-900 dark:text-white">Status</Label>
                   <select
                     id="status-filter"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                    className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
                   >
@@ -409,7 +409,7 @@ export default function AdminTaskReviewPage() {
                       setSearchTerm('')
                       setStatusFilter('all')
                     }}
-                    className="w-full border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                    className="w-full border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                   >
                     <Filter className="h-4 w-4 mr-2" />
                     Clear Filters
@@ -421,7 +421,7 @@ export default function AdminTaskReviewPage() {
 
           {/* Results Count */}
           <div className="mb-6">
-            <p className="text-gray-600 dark:text-slate-400">
+            <p className="text-slate-600 dark:text-slate-400">
               {filteredSubmissions.length} {filteredSubmissions.length === 1 ? 'submission' : 'submissions'} found
             </p>
           </div>
@@ -430,14 +430,14 @@ export default function AdminTaskReviewPage() {
           {filteredSubmissions.length > 0 ? (
             <div className="space-y-6">
               {filteredSubmissions.map((submission) => (
-                <Card key={submission.id} className="hover:shadow-lg dark:hover:shadow-slate-800/50 transition-shadow border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+                <Card key={submission.id} className="hover:shadow-lg dark:hover:shadow-slate-800/50 transition-shadow border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
                   <CardContent className="p-6">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex-1">
                         <div className="flex items-center space-x-4 mb-3">
                           <div>
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{submission.user?.name || 'Unknown User'}</h3>
-                            <p className="text-gray-600 dark:text-slate-300">{submission.user?.email || 'No email'}</p>
+                            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{submission.user?.name || 'Unknown User'}</h3>
+                            <p className="text-slate-600 dark:text-slate-300">{submission.user?.email || 'No email'}</p>
                           </div>
                           {getStatusBadge(submission.status)}
                           {submission.task?.deadlineOffset && getDaysOverdue(submission.submittedAt, submission.task.deadlineOffset) > 0 && (
@@ -449,16 +449,16 @@ export default function AdminTaskReviewPage() {
 
                         <div className="mb-4">
                           <div className="flex items-center space-x-2 mb-2">
-                            <Target className="h-4 w-4 text-gray-500 dark:text-slate-400" />
-                            <span className="font-medium text-gray-900 dark:text-white">{submission.task?.title || 'Unknown Task'}</span>
+                            <Target className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                            <span className="font-medium text-slate-900 dark:text-white">{submission.task?.title || 'Unknown Task'}</span>
                           </div>
-                          <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-slate-300">
+                          <div className="flex items-center space-x-2 text-sm text-slate-600 dark:text-slate-300">
                             <Building className="h-4 w-4" />
                             <span>{submission.task?.learningPath?.title || 'Unknown Learning Path'}</span>
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600 dark:text-slate-300 mb-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-600 dark:text-slate-300 mb-4">
                           <div className="flex items-center space-x-2">
                             <Calendar className="h-4 w-4" />
                             <span>Submitted {new Date(submission.submittedAt).toLocaleDateString()}</span>
@@ -471,12 +471,12 @@ export default function AdminTaskReviewPage() {
 
                         {submission.githubUrl && (
                           <div className="mb-4">
-                            <Label className="text-sm font-medium text-gray-900 dark:text-white">GitHub Repository:</Label>
+                            <Label className="text-sm font-medium text-slate-900 dark:text-white">GitHub Repository:</Label>
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => window.open(submission.githubUrl, '_blank')}
-                              className="ml-2 border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                              className="ml-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                             >
                               <ExternalLink className="h-3 w-3 mr-1" />
                               View Repository
@@ -485,12 +485,12 @@ export default function AdminTaskReviewPage() {
                         )}
 
                         {submission.feedback && (
-                          <div className="mt-4 p-3 bg-gray-50 dark:bg-slate-800/50 rounded-lg">
+                          <div className="mt-4 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
                             <div className="flex items-center space-x-2 mb-2">
-                              <MessageSquare className="h-4 w-4 text-gray-600 dark:text-slate-400" />
-                              <span className="text-sm font-medium text-gray-900 dark:text-white">Previous Feedback:</span>
+                              <MessageSquare className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+                              <span className="text-sm font-medium text-slate-900 dark:text-white">Previous Feedback:</span>
                             </div>
-                            <p className="text-sm text-gray-700 dark:text-slate-300">{submission.feedback}</p>
+                            <p className="text-sm text-slate-700 dark:text-slate-300">{submission.feedback}</p>
                           </div>
                         )}
                       </div>
@@ -500,7 +500,7 @@ export default function AdminTaskReviewPage() {
                           variant="outline"
                           size="sm"
                           onClick={() => handleReviewSubmission(submission)}
-                          className="border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                          className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                         >
                           <Eye className="h-4 w-4 mr-2" />
                           Review
@@ -533,11 +533,11 @@ export default function AdminTaskReviewPage() {
               ))}
             </div>
           ) : (
-            <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+            <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
               <CardContent className="p-12 text-center">
-                <FileText className="h-16 w-16 text-gray-400 dark:text-slate-500 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No Submissions Found</h3>
-                <p className="text-gray-600 dark:text-slate-400 mb-4">
+                <FileText className="h-16 w-16 text-slate-400 dark:text-slate-500 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">No Submissions Found</h3>
+                <p className="text-slate-600 dark:text-slate-400 mb-4">
                   {Array.isArray(submissions) && submissions.length === 0 
                     ? "No task submissions have been made yet. Students need to complete tasks and submit their GitHub repositories." 
                     : "No submissions match your current filters."}
@@ -556,30 +556,30 @@ export default function AdminTaskReviewPage() {
                 <div className="space-y-6">
                   {/* Submission Details */}
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Submission Details</h4>
+                    <h4 className="font-semibold text-slate-900 dark:text-white mb-3">Submission Details</h4>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <span className="text-gray-600 dark:text-slate-400">Student:</span>
-                        <p className="font-medium text-gray-900 dark:text-white">{selectedSubmission.user?.name || 'Unknown User'}</p>
+                        <span className="text-slate-600 dark:text-slate-400">Student:</span>
+                        <p className="font-medium text-slate-900 dark:text-white">{selectedSubmission.user?.name || 'Unknown User'}</p>
                       </div>
                       <div>
-                        <span className="text-gray-600 dark:text-slate-400">Task:</span>
-                        <p className="font-medium text-gray-900 dark:text-white">{selectedSubmission.task?.title || 'Unknown Task'}</p>
+                        <span className="text-slate-600 dark:text-slate-400">Task:</span>
+                        <p className="font-medium text-slate-900 dark:text-white">{selectedSubmission.task?.title || 'Unknown Task'}</p>
                       </div>
                       <div>
-                        <span className="text-gray-600 dark:text-slate-400">Learning Path:</span>
-                        <p className="font-medium text-gray-900 dark:text-white">{selectedSubmission.task?.learningPath?.title || 'Unknown Path'}</p>
+                        <span className="text-slate-600 dark:text-slate-400">Learning Path:</span>
+                        <p className="font-medium text-slate-900 dark:text-white">{selectedSubmission.task?.learningPath?.title || 'Unknown Path'}</p>
                       </div>
                       <div>
-                        <span className="text-gray-600 dark:text-slate-400">Submitted:</span>
-                        <p className="font-medium text-gray-900 dark:text-white">{new Date(selectedSubmission.submittedAt).toLocaleDateString()}</p>
+                        <span className="text-slate-600 dark:text-slate-400">Submitted:</span>
+                        <p className="font-medium text-slate-900 dark:text-white">{new Date(selectedSubmission.submittedAt).toLocaleDateString()}</p>
                       </div>
                       <div>
-                        <span className="text-gray-600 dark:text-slate-400">Deadline:</span>
-                        <p className="font-medium text-gray-900 dark:text-white">{selectedSubmission.task?.deadlineOffset || 'Unknown'} days from task start</p>
+                        <span className="text-slate-600 dark:text-slate-400">Deadline:</span>
+                        <p className="font-medium text-slate-900 dark:text-white">{selectedSubmission.task?.deadlineOffset || 'Unknown'} days from task start</p>
                       </div>
                       <div>
-                        <span className="text-gray-600 dark:text-slate-400">Current Status:</span>
+                        <span className="text-slate-600 dark:text-slate-400">Current Status:</span>
                         {getStatusBadge(selectedSubmission.status)}
                       </div>
                     </div>
@@ -588,11 +588,11 @@ export default function AdminTaskReviewPage() {
                   {/* Repository Link */}
                   {selectedSubmission.githubUrl && (
                     <div>
-                      <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Submission Repository</h4>
+                      <h4 className="font-semibold text-slate-900 dark:text-white mb-3">Submission Repository</h4>
                       <Button
                         variant="outline"
                         onClick={() => window.open(selectedSubmission.githubUrl, '_blank')}
-                        className="flex items-center space-x-2 border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                        className="flex items-center space-x-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                       >
                         <ExternalLink className="h-4 w-4" />
                         <span>Open GitHub Repository</span>
@@ -602,19 +602,19 @@ export default function AdminTaskReviewPage() {
 
                   {/* Task Description */}
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Task Description</h4>
-                    <div className="p-4 bg-gray-50 dark:bg-slate-800/50 rounded-lg">
-                      <p className="text-sm text-gray-700 dark:text-slate-300">{selectedSubmission.task?.description || 'No description available'}</p>
+                    <h4 className="font-semibold text-slate-900 dark:text-white mb-3">Task Description</h4>
+                    <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                      <p className="text-sm text-slate-700 dark:text-slate-300">{selectedSubmission.task?.description || 'No description available'}</p>
                     </div>
                   </div>
 
                   {/* Review Form */}
                   <form onSubmit={handleSubmitReview} className="space-y-4">
                     <div>
-                      <Label htmlFor="review-status" className="text-gray-900 dark:text-white">Review Decision</Label>
+                      <Label htmlFor="review-status" className="text-slate-900 dark:text-white">Review Decision</Label>
                       <select
                         id="review-status"
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                         value={reviewForm.status}
                         onChange={(e) => setReviewForm({...reviewForm, status: e.target.value})}
                         required
@@ -627,24 +627,24 @@ export default function AdminTaskReviewPage() {
                     </div>
 
                     <div>
-                      <Label htmlFor="review-feedback" className="text-gray-900 dark:text-white">Feedback</Label>
+                      <Label htmlFor="review-feedback" className="text-slate-900 dark:text-white">Feedback</Label>
                       <Textarea
                         id="review-feedback"
                         value={reviewForm.feedback}
                         onChange={(e) => setReviewForm({...reviewForm, feedback: e.target.value})}
                         placeholder="Provide detailed feedback to help the student improve..."
                         rows={6}
-                        className="border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400"
+                        className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400"
                         required
                       />
                     </div>
 
-                    <div className="flex justify-end space-x-4 pt-4 border-t border-gray-200 dark:border-slate-700">
+                    <div className="flex justify-end space-x-4 pt-4 border-t border-slate-200 dark:border-slate-700">
                       <Button 
                         type="button" 
                         variant="outline" 
                         onClick={() => router.push('/admin')}
-                        className="border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                        className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                       >
                         Cancel
                       </Button>

@@ -166,8 +166,8 @@ export default function ApplyPage() {
         <div className="px-4 py-6 sm:px-0">
           <div className="text-center">
             <AlertCircle className="mx-auto h-12 w-12 text-red-500 mb-4" />
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Internship Not Found</h2>
-            <p className="text-gray-600 dark:text-slate-300 mb-4">The internship you&apos;re looking for doesn&apos;t exist.</p>
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">Internship Not Found</h2>
+            <p className="text-slate-600 dark:text-slate-300 mb-4">The internship you&apos;re looking for doesn&apos;t exist.</p>
             <button
               onClick={() => router.push('/dashboard')}
               className="bg-blue-600 dark:bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
@@ -186,15 +186,15 @@ export default function ApplyPage() {
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Apply for Internship</h1>
-            <p className="text-gray-600 dark:text-slate-300">
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Apply for Internship</h1>
+            <p className="text-slate-600 dark:text-slate-300">
               {internship.title}
             </p>
           </div>
           <div className="flex space-x-3">
             <button
               onClick={() => router.back()}
-              className="flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white px-4 py-2 rounded-md border border-gray-300 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+              className="flex items-center text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white px-4 py-2 rounded-md border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
@@ -205,24 +205,24 @@ export default function ApplyPage() {
         <div className="space-y-6">
           {existingApplication && existingApplication.application && existingApplication.application.status ? (
             /* Already Applied */
-            <Card className="border-gray-200 dark:border-slate-700">
+            <Card className="border-slate-200 dark:border-slate-700">
               <CardContent className="p-6">
                 <div className="flex items-center space-x-3 mb-4">
                   <CheckCircle className="w-8 h-8 text-green-500" />
                   <div>
-                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                    <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
                       Application Submitted
                     </h2>
-                    <p className="text-gray-600 dark:text-slate-300">
+                    <p className="text-slate-600 dark:text-slate-300">
                       Your application has been submitted successfully.
                     </p>
                   </div>
                 </div>
                 
-                <div className="bg-gray-50 dark:bg-slate-800/50 rounded-lg p-4 mb-6">
+                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4 mb-6">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <p className="text-sm font-medium text-gray-700 dark:text-slate-300">Status</p>
+                      <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Status</p>
                       <p className={`text-sm capitalize ${
                         existingApplication.application.status === 'PENDING' ? 'text-yellow-600 dark:text-yellow-500' :
                         existingApplication.application.status === 'ACCEPTED' ? 'text-green-600 dark:text-green-500' :
@@ -232,15 +232,15 @@ export default function ApplyPage() {
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-700 dark:text-slate-300">Applied At</p>
-                      <p className="text-sm text-gray-600 dark:text-slate-400">
+                      <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Applied At</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">
                         {new Date(existingApplication.application.appliedAt).toLocaleDateString()}
                       </p>
                     </div>
                     {existingApplication.application.reviewedAt && (
                       <div>
-                        <p className="text-sm font-medium text-gray-700 dark:text-slate-300">Reviewed At</p>
-                        <p className="text-sm text-gray-600 dark:text-slate-400">
+                        <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Reviewed At</p>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">
                           {new Date(existingApplication.application.reviewedAt).toLocaleDateString()}
                         </p>
                       </div>
@@ -249,8 +249,8 @@ export default function ApplyPage() {
                   
                   {existingApplication.application.feedback && (
                     <div className="mt-4">
-                      <p className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Feedback</p>
-                      <p className="text-sm text-gray-600 dark:text-slate-400">
+                      <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Feedback</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">
                         {existingApplication.application.feedback}
                       </p>
                     </div>
@@ -267,30 +267,30 @@ export default function ApplyPage() {
             </Card>
           ) : (
             /* Application Form */
-            <Card className="border-gray-200 dark:border-slate-700">
+            <Card className="border-slate-200 dark:border-slate-700">
               <CardContent className="p-6">
                 {/* Internship Info */}
                 <div className="mb-8">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                  <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                     {internship.title}
                   </h2>
-                  <p className="text-gray-600 dark:text-slate-300 mb-4">
+                  <p className="text-slate-600 dark:text-slate-300 mb-4">
                     {internship.description}
                   </p>
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                     <div>
-                      <span className="font-medium text-gray-700 dark:text-slate-300">Duration:</span>
-                      <span className="text-gray-600 dark:text-slate-400 ml-1">{internship.duration} weeks</span>
+                      <span className="font-medium text-slate-700 dark:text-slate-300">Duration:</span>
+                      <span className="text-slate-600 dark:text-slate-400 ml-1">{internship.duration} weeks</span>
                     </div>
                     <div>
-                      <span className="font-medium text-gray-700 dark:text-slate-300">Capacity:</span>
-                      <span className="text-gray-600 dark:text-slate-400 ml-1">{internship.capacity} interns</span>
+                      <span className="font-medium text-slate-700 dark:text-slate-300">Capacity:</span>
+                      <span className="text-slate-600 dark:text-slate-400 ml-1">{internship.capacity} interns</span>
                     </div>
                     {internship.location && (
                       <div>
-                        <span className="font-medium text-gray-700 dark:text-slate-300">Location:</span>
-                        <span className="text-gray-600 dark:text-slate-400 ml-1">{internship.location}</span>
+                        <span className="font-medium text-slate-700 dark:text-slate-300">Location:</span>
+                        <span className="text-slate-600 dark:text-slate-400 ml-1">{internship.location}</span>
                       </div>
                     )}
                   </div>
@@ -299,11 +299,11 @@ export default function ApplyPage() {
                 {/* Application Form or Basic Application */}
                 {applicationForm && applicationForm.fields && Array.isArray(applicationForm.fields) && applicationForm.fields.length > 0 ? (
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
                       {applicationForm.title}
                     </h3>
                     {applicationForm.description && (
-                      <p className="text-gray-600 dark:text-slate-300 mb-6">
+                      <p className="text-slate-600 dark:text-slate-300 mb-6">
                         {applicationForm.description}
                       </p>
                     )}
@@ -315,10 +315,10 @@ export default function ApplyPage() {
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
                       Ready to Apply?
                     </h3>
-                    <p className="text-gray-600 dark:text-slate-300 mb-6">
+                    <p className="text-slate-600 dark:text-slate-300 mb-6">
                       No additional information is required for this internship. Click below to submit your application.
                     </p>
                     

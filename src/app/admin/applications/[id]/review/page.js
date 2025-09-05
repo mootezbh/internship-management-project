@@ -114,7 +114,7 @@ export default function ApplicationReviewPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
         <LoadingSpinner />
       </div>
     );
@@ -122,10 +122,10 @@ export default function ApplicationReviewPage() {
 
   if (!application) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Application Not Found</h2>
-          <p className="text-gray-600 dark:text-slate-400 mb-4">The application you&apos;re looking for doesn&apos;t exist.</p>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Application Not Found</h2>
+          <p className="text-slate-600 dark:text-slate-400 mb-4">The application you&apos;re looking for doesn&apos;t exist.</p>
           <Button onClick={() => router.push('/admin/applications')} variant="outline">
             Back to Applications
           </Button>
@@ -140,7 +140,7 @@ export default function ApplicationReviewPage() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Review Application</h1>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Review Application</h1>
             <div className="flex items-center space-x-2">
               {getStatusIcon(application.status)}
               <Badge variant={getStatusColor(application.status)}>
@@ -148,38 +148,38 @@ export default function ApplicationReviewPage() {
               </Badge>
             </div>
           </div>
-          <p className="text-gray-600 dark:text-slate-300">{application ? `${application.user?.name} - ${application.internship?.title}` : 'Loading...'}</p>
+          <p className="text-slate-600 dark:text-slate-300">{application ? `${application.user?.name} - ${application.internship?.title}` : 'Loading...'}</p>
         </div>
         {/* Main Content */}
         <div className="space-y-6">
           {/* Application Details */}
-          <Card className="border-gray-200 dark:border-slate-700">
+          <Card className="border-slate-200 dark:border-slate-700">
             <CardHeader>
-              <CardTitle className="text-gray-900 dark:text-white">
+              <CardTitle className="text-slate-900 dark:text-white">
                 Application Details
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-gray-700 dark:text-slate-300">Applicant</Label>
-                  <p className="text-gray-900 dark:text-white font-medium">{application.user?.name}</p>
-                  <p className="text-sm text-gray-600 dark:text-slate-400">{application.user?.email}</p>
+                  <Label className="text-slate-700 dark:text-slate-300">Applicant</Label>
+                  <p className="text-slate-900 dark:text-white font-medium">{application.user?.name}</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">{application.user?.email}</p>
                 </div>
                 <div>
-                  <Label className="text-gray-700 dark:text-slate-300">Internship</Label>
-                  <p className="text-gray-900 dark:text-white font-medium">{application.internship?.title}</p>
+                  <Label className="text-slate-700 dark:text-slate-300">Internship</Label>
+                  <p className="text-slate-900 dark:text-white font-medium">{application.internship?.title}</p>
                 </div>
                 <div>
-                  <Label className="text-gray-700 dark:text-slate-300">Applied At</Label>
-                  <p className="text-gray-900 dark:text-white">
+                  <Label className="text-slate-700 dark:text-slate-300">Applied At</Label>
+                  <p className="text-slate-900 dark:text-white">
                     {new Date(application.appliedAt).toLocaleDateString()}
                   </p>
                 </div>
                 {application.reviewedAt && (
                   <div>
-                    <Label className="text-gray-700 dark:text-slate-300">Reviewed At</Label>
-                    <p className="text-gray-900 dark:text-white">
+                    <Label className="text-slate-700 dark:text-slate-300">Reviewed At</Label>
+                    <p className="text-slate-900 dark:text-white">
                       {new Date(application.reviewedAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -203,7 +203,7 @@ export default function ApplicationReviewPage() {
                       <Card key={response.id} className="border-l-4 border-blue-500 dark:border-blue-400">
                         <CardContent className="pt-4">
                           <div className="flex items-start justify-between mb-2">
-                            <Label className="text-gray-800 dark:text-slate-200 font-semibold text-base">
+                            <Label className="text-slate-800 dark:text-slate-200 font-semibold text-base">
                               {index + 1}. {response.field?.label}
                               {response.field?.required && <span className="text-red-500 ml-1">*</span>}
                             </Label>
@@ -213,12 +213,12 @@ export default function ApplicationReviewPage() {
                           </div>
                           
                           {response.field?.description && (
-                            <p className="text-sm text-gray-600 dark:text-slate-400 mb-3 italic">
+                            <p className="text-sm text-slate-600 dark:text-slate-400 mb-3 italic">
                               {response.field.description}
                             </p>
                           )}
                           
-                          <div className="bg-gray-50 dark:bg-slate-800/50 rounded-md p-3">
+                          <div className="bg-slate-50 dark:bg-slate-800/50 rounded-md p-3">
                             {response.field?.type === 'FILE' ? (
                               <div className="flex items-center space-x-2">
                                 <FileText className="w-4 h-4 text-blue-500" />
@@ -232,8 +232,8 @@ export default function ApplicationReviewPage() {
                                 </a>
                               </div>
                             ) : (
-                              <p className="text-gray-900 dark:text-white whitespace-pre-wrap leading-relaxed">
-                                {response.value || <span className="text-gray-500 dark:text-slate-400 italic">No response provided</span>}
+                              <p className="text-slate-900 dark:text-white whitespace-pre-wrap leading-relaxed">
+                                {response.value || <span className="text-slate-500 dark:text-slate-400 italic">No response provided</span>}
                               </p>
                             )}
                           </div>
@@ -244,9 +244,9 @@ export default function ApplicationReviewPage() {
                 </div>
               ) : (
                 <div className="mt-6">
-                  <div className="bg-gray-50 dark:bg-slate-800/50 rounded-lg p-6 text-center">
-                    <AlertCircle className="w-8 h-8 text-gray-400 dark:text-slate-400 mx-auto mb-2" />
-                    <p className="text-gray-600 dark:text-slate-400">
+                  <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-6 text-center">
+                    <AlertCircle className="w-8 h-8 text-slate-400 dark:text-slate-400 mx-auto mb-2" />
+                    <p className="text-slate-600 dark:text-slate-400">
                       No application form responses - This was a basic application
                     </p>
                   </div>
@@ -256,13 +256,13 @@ export default function ApplicationReviewPage() {
           </Card>
 
           {/* Review Form */}
-          <Card className="border-gray-200 dark:border-slate-700">
+          <Card className="border-slate-200 dark:border-slate-700">
             <CardHeader>
-              <CardTitle className="text-gray-900 dark:text-white">Review Application</CardTitle>
+              <CardTitle className="text-slate-900 dark:text-white">Review Application</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-gray-700 dark:text-slate-300">Decision</Label>
+                <Label className="text-slate-700 dark:text-slate-300">Decision</Label>
                 <div className="mt-2 space-y-2">
                   <label className="flex items-center space-x-2">
                     <input
@@ -273,7 +273,7 @@ export default function ApplicationReviewPage() {
                       onChange={(e) => setReviewForm({ ...reviewForm, status: e.target.value })}
                       className="h-4 w-4 text-green-600 dark:text-green-400"
                     />
-                    <span className="text-gray-900 dark:text-white">Accept</span>
+                    <span className="text-slate-900 dark:text-white">Accept</span>
                   </label>
                   <label className="flex items-center space-x-2">
                     <input
@@ -284,13 +284,13 @@ export default function ApplicationReviewPage() {
                       onChange={(e) => setReviewForm({ ...reviewForm, status: e.target.value })}
                       className="h-4 w-4 text-red-600 dark:text-red-400"
                     />
-                    <span className="text-gray-900 dark:text-white">Reject</span>
+                    <span className="text-slate-900 dark:text-white">Reject</span>
                   </label>
                 </div>
               </div>
 
               <div>
-                <Label htmlFor="feedback" className="text-gray-700 dark:text-slate-300">
+                <Label htmlFor="feedback" className="text-slate-700 dark:text-slate-300">
                   Feedback (Optional)
                 </Label>
                 <Textarea
@@ -299,7 +299,7 @@ export default function ApplicationReviewPage() {
                   onChange={(e) => setReviewForm({ ...reviewForm, feedback: e.target.value })}
                   placeholder="Provide feedback to the applicant..."
                   rows={4}
-                  className="mt-1 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-slate-400"
+                  className="mt-1 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-400"
                 />
               </div>
 
@@ -307,7 +307,7 @@ export default function ApplicationReviewPage() {
                 <Button
                   onClick={() => router.push('/admin/applications')}
                   variant="outline"
-                  className="border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800"
+                  className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
                 >
                   Cancel
                 </Button>

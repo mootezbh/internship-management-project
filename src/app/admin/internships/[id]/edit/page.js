@@ -127,7 +127,7 @@ export default function EditInternshipPage() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Internships
           </Button>
-          <span className="text-2xl font-bold text-gray-900 dark:text-white">Edit Internship</span>
+          <span className="text-2xl font-bold text-slate-900 dark:text-white">Edit Internship</span>
           <Button 
             type="submit" 
             form="edit-internship-form"
@@ -147,18 +147,18 @@ export default function EditInternshipPage() {
             )}
           </Button>
         </div>
-        <p className="text-sm text-gray-600 dark:text-gray-300 mb-8">Update internship details and requirements</p>
+        <p className="text-sm text-slate-600 dark:text-slate-300 mb-8">Update internship details and requirements</p>
         {/* Main Content */}
-        <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+        <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="text-gray-900 dark:text-white">Internship Details</CardTitle>
+            <CardTitle className="text-slate-900 dark:text-white">Internship Details</CardTitle>
           </CardHeader>
           <CardContent>
             <form id="edit-internship-form" onSubmit={handleSubmit} className="space-y-6">
               {/* Basic Information */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="title" className="text-gray-900 dark:text-white">Title *</Label>
+                  <Label htmlFor="title" className="text-slate-900 dark:text-white">Title *</Label>
                   <Input
                     id="title"
                     name="title"
@@ -166,11 +166,11 @@ export default function EditInternshipPage() {
                     onChange={handleInputChange}
                     placeholder="Enter internship title"
                     required
-                    className="border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                    className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="field" className="text-gray-900 dark:text-white">Field *</Label>
+                  <Label htmlFor="field" className="text-slate-900 dark:text-white">Field *</Label>
                   <Input
                     id="field"
                     name="field"
@@ -178,12 +178,12 @@ export default function EditInternshipPage() {
                     onChange={handleInputChange}
                     placeholder="e.g., Software Development, Data Science"
                     required
-                    className="border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                    className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="description" className="text-gray-900 dark:text-white">Description *</Label>
+                <Label htmlFor="description" className="text-slate-900 dark:text-white">Description *</Label>
                 <Textarea
                   id="description"
                   name="description"
@@ -192,13 +192,13 @@ export default function EditInternshipPage() {
                   placeholder="Describe the internship program, responsibilities, and benefits"
                   rows={4}
                   required
-                  className="border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                  className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                 />
               </div>
               {/* Details */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="duration" className="text-gray-900 dark:text-white flex items-center">
+                  <Label htmlFor="duration" className="text-slate-900 dark:text-white flex items-center">
                     <Clock className="h-4 w-4 mr-2 text-blue-600 dark:text-blue-400" />
                     Duration *
                   </Label>
@@ -209,11 +209,11 @@ export default function EditInternshipPage() {
                     onChange={handleInputChange}
                     placeholder="e.g., 3 months, 6 weeks"
                     required
-                    className="border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                    className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="capacity" className="text-gray-900 dark:text-white flex items-center">
+                  <Label htmlFor="capacity" className="text-slate-900 dark:text-white flex items-center">
                     <Users className="h-4 w-4 mr-2 text-green-600 dark:text-green-400" />
                     Capacity *
                   </Label>
@@ -226,11 +226,11 @@ export default function EditInternshipPage() {
                     placeholder="Number of interns"
                     min="1"
                     required
-                    className="border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                    className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="location" className="text-gray-900 dark:text-white flex items-center">
+                  <Label htmlFor="location" className="text-slate-900 dark:text-white flex items-center">
                     <MapPin className="h-4 w-4 mr-2 text-purple-600 dark:text-purple-400" />
                     Location *
                   </Label>
@@ -241,14 +241,14 @@ export default function EditInternshipPage() {
                     onChange={handleInputChange}
                     placeholder="e.g., Remote, New York, Hybrid"
                     required
-                    className="border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                    className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   />
                 </div>
               </div>
               {/* Dates */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="startDate" className="text-gray-900 dark:text-white flex items-center">
+                  <Label htmlFor="startDate" className="text-slate-900 dark:text-white flex items-center">
                     <Calendar className="h-4 w-4 mr-2 text-orange-600 dark:text-orange-400" />
                     Start Date *
                   </Label>
@@ -259,11 +259,11 @@ export default function EditInternshipPage() {
                     value={formData.startDate}
                     onChange={handleInputChange}
                     required
-                    className="border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                    className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="endDate" className="text-gray-900 dark:text-white flex items-center">
+                  <Label htmlFor="endDate" className="text-slate-900 dark:text-white flex items-center">
                     <Calendar className="h-4 w-4 mr-2 text-red-600 dark:text-red-400" />
                     End Date *
                   </Label>
@@ -274,19 +274,19 @@ export default function EditInternshipPage() {
                     value={formData.endDate}
                     onChange={handleInputChange}
                     required
-                    className="border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                    className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   />
                 </div>
               </div>
               {/* Learning Path */}
               <div className="space-y-2">
-                <Label htmlFor="learningPathId" className="text-gray-900 dark:text-white">Learning Path (Optional)</Label>
+                <Label htmlFor="learningPathId" className="text-slate-900 dark:text-white">Learning Path (Optional)</Label>
                 <select
                   id="learningPathId"
                   name="learningPathId"
                   value={formData.learningPathId}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 >
                   <option value="">Select a learning path (optional)</option>
                   {learningPaths.map((path) => (
@@ -295,7 +295,7 @@ export default function EditInternshipPage() {
                     </option>
                   ))}
                 </select>
-                <p className="text-sm text-gray-600 dark:text-slate-400">
+                <p className="text-sm text-slate-600 dark:text-slate-400">
                   Associate this internship with a learning path to provide structured tasks and content.
                 </p>
               </div>

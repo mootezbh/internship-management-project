@@ -28,7 +28,7 @@ const Badge = ({ children, variant = "default", className = "" }) => {
   const baseClasses = "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
   const variantClasses = {
     default: "bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300",
-    secondary: "bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-slate-300",
+    secondary: "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300",
     success: "bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300",
     warning: "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300",
     destructive: "bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300"
@@ -156,7 +156,7 @@ export default function AdminLearningPathsPage() {
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Dashboard
             </Button>
-            <span className="text-2xl font-bold text-gray-900 dark:text-white">Learning Paths Management</span>
+            <span className="text-2xl font-bold text-slate-900 dark:text-white">Learning Paths Management</span>
             <Button 
               onClick={() => router.push('/admin/learning-paths/create')}
               className="ml-auto bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600"
@@ -165,7 +165,7 @@ export default function AdminLearningPathsPage() {
               Create Learning Path
             </Button>
           </div>
-          <p className="text-sm text-gray-600 dark:text-gray-300 mb-8">Create and manage learning paths with tasks for internships</p>
+          <p className="text-sm text-slate-600 dark:text-slate-300 mb-8">Create and manage learning paths with tasks for internships</p>
           {/* Main Content */}
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -221,18 +221,18 @@ export default function AdminLearningPathsPage() {
           </div>
 
           {/* Search and Filter */}
-          <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm mb-8">
+          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm mb-8">
             <CardHeader>
-              <CardTitle className="text-gray-900 dark:text-white">Search Learning Paths</CardTitle>
+              <CardTitle className="text-slate-900 dark:text-white">Search Learning Paths</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
                 <Input
                   placeholder="Search by title or description..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400"
+                  className="pl-10 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400"
                 />
               </div>
             </CardContent>
@@ -242,12 +242,12 @@ export default function AdminLearningPathsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {filteredPaths.length > 0 ? (
               filteredPaths.map((path) => (
-                <Card key={path.id} className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm hover:shadow-lg transition-shadow">
+                <Card key={path.id} className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
-                        <CardTitle className="text-gray-900 dark:text-white">{path.title}</CardTitle>
-                        <CardDescription className="text-gray-600 dark:text-slate-300">
+                        <CardTitle className="text-slate-900 dark:text-white">{path.title}</CardTitle>
+                        <CardDescription className="text-slate-600 dark:text-slate-300">
                           {path.description || 'No description provided'}
                         </CardDescription>
                       </div>
@@ -256,7 +256,7 @@ export default function AdminLearningPathsPage() {
                           variant="outline"
                           size="sm"
                           onClick={() => router.push(`/admin/learning-paths/${path.id}/tasks`)}
-                          className="border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300"
+                          className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300"
                         >
                           <Settings className="h-4 w-4 mr-1" />
                           Tasks
@@ -265,7 +265,7 @@ export default function AdminLearningPathsPage() {
                           variant="outline"
                           size="sm"
                           onClick={() => router.push(`/admin/learning-paths/${path.id}/edit`)}
-                          className="border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300"
+                          className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300"
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -283,23 +283,23 @@ export default function AdminLearningPathsPage() {
                   <CardContent>
                     <div className="space-y-4">
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600 dark:text-slate-400">Tasks:</span>
+                        <span className="text-slate-600 dark:text-slate-400">Tasks:</span>
                         <Badge variant="secondary">{path?.tasks?.length || 0} tasks</Badge>
                       </div>
                       
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600 dark:text-slate-400">Created:</span>
-                        <span className="text-gray-900 dark:text-white">
+                        <span className="text-slate-600 dark:text-slate-400">Created:</span>
+                        <span className="text-slate-900 dark:text-white">
                           {path.createdAt ? new Date(path.createdAt).toLocaleDateString() : 'Unknown'}
                         </span>
                       </div>
 
                       {path?.tasks && path.tasks.length > 0 && (
                         <div>
-                          <p className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Recent Tasks:</p>
+                          <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Recent Tasks:</p>
                           <div className="space-y-1">
                             {path.tasks.slice(0, 3).map((task, index) => (
-                              <div key={task.id || index} className="flex items-center text-xs text-gray-600 dark:text-slate-400">
+                              <div key={task.id || index} className="flex items-center text-xs text-slate-600 dark:text-slate-400">
                                 {task.contentType === 'VIDEO' ? (
                                   <PlayCircle className="h-3 w-3 mr-1" />
                                 ) : (
@@ -309,7 +309,7 @@ export default function AdminLearningPathsPage() {
                               </div>
                             ))}
                             {path.tasks.length > 3 && (
-                              <p className="text-xs text-gray-500 dark:text-slate-500">
+                              <p className="text-xs text-slate-500 dark:text-slate-500">
                                 +{path.tasks.length - 3} more tasks
                               </p>
                             )}
@@ -322,28 +322,28 @@ export default function AdminLearningPathsPage() {
               ))
             ) : (
               <div className="col-span-full">
-                <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+                <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
                   <CardContent className="text-center py-12">
                     {searchTerm ? (
                       <>
-                        <Search className="h-12 w-12 text-gray-400 dark:text-slate-500 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No matching learning paths</h3>
-                        <p className="text-gray-600 dark:text-slate-400 mb-4">
+                        <Search className="h-12 w-12 text-slate-400 dark:text-slate-500 mx-auto mb-4" />
+                        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">No matching learning paths</h3>
+                        <p className="text-slate-600 dark:text-slate-400 mb-4">
                           No learning paths match your search criteria.
                         </p>
                         <Button
                           variant="outline"
                           onClick={() => setSearchTerm('')}
-                          className="border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300"
+                          className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300"
                         >
                           Clear search
                         </Button>
                       </>
                     ) : (
                       <>
-                        <BookOpen className="h-12 w-12 text-gray-400 dark:text-slate-500 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No learning paths yet</h3>
-                        <p className="text-gray-600 dark:text-slate-400 mb-4">
+                        <BookOpen className="h-12 w-12 text-slate-400 dark:text-slate-500 mx-auto mb-4" />
+                        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">No learning paths yet</h3>
+                        <p className="text-slate-600 dark:text-slate-400 mb-4">
                           Get started by creating your first learning path.
                         </p>
                         <Button 

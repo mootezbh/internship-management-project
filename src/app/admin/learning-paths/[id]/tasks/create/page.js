@@ -87,7 +87,7 @@ export default function CreateTaskPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
         <ContentLoading title="Loading Task Builder" subtitle="Preparing your task creation environment..." icon={Settings} />
       </div>
     )
@@ -95,10 +95,10 @@ export default function CreateTaskPage() {
 
   if (!learningPath) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Learning Path Not Found</h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-4">The learning path you&apos;re looking for doesn&apos;t exist.</p>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Learning Path Not Found</h2>
+          <p className="text-slate-600 dark:text-slate-300 mb-4">The learning path you&apos;re looking for doesn&apos;t exist.</p>
           <Button onClick={() => router.push('/admin/learning-paths')} variant="outline">
             Back to Learning Paths
           </Button>
@@ -125,11 +125,11 @@ export default function CreateTaskPage() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Tasks
           </Button>
-          <span className="text-2xl font-bold text-gray-900 dark:text-white">Create Task</span>
+          <span className="text-2xl font-bold text-slate-900 dark:text-white">Create Task</span>
         </div>
-        <p className="text-sm text-gray-600 dark:text-gray-300 mb-8">Add a new task to <span className="font-semibold text-blue-600 dark:text-blue-400">{learningPath.title}</span></p>
+        <p className="text-sm text-slate-600 dark:text-slate-300 mb-8">Add a new task to <span className="font-semibold text-blue-600 dark:text-blue-400">{learningPath.title}</span></p>
         {/* Main Content */}
-        <div className="rounded-xl shadow-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm p-6">
+        <div className="rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm p-6">
           <TaskBuilder
             initialContent={[]}
             onSave={handleSaveTask}

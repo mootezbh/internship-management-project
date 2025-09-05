@@ -58,10 +58,10 @@ export default function EditLearningPathPage() {
   }
   if (!learningPath) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Learning Path Not Found</h2>
-          <p className="text-gray-600 dark:text-slate-400 mb-4">The learning path you&apos;re looking for doesn&apos;t exist.</p>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Learning Path Not Found</h2>
+          <p className="text-slate-600 dark:text-slate-400 mb-4">The learning path you&apos;re looking for doesn&apos;t exist.</p>
           <Button onClick={() => router.push('/admin/learning-paths')} variant="outline">
             Back to Learning Paths
           </Button>
@@ -141,10 +141,10 @@ export default function EditLearningPathPage() {
 
   if (!learningPath) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Learning Path Not Found</h2>
-          <p className="text-gray-600 dark:text-slate-400 mb-4">The learning path you&apos;re looking for doesn&apos;t exist.</p>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Learning Path Not Found</h2>
+          <p className="text-slate-600 dark:text-slate-400 mb-4">The learning path you&apos;re looking for doesn&apos;t exist.</p>
           <Button onClick={() => router.push('/admin/learning-paths')} variant="outline">
             Back to Learning Paths
           </Button>
@@ -159,7 +159,7 @@ export default function EditLearningPathPage() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Edit Learning Path</h1>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Edit Learning Path</h1>
             <div className="flex space-x-3">
               <Button 
                 onClick={handleDelete}
@@ -198,21 +198,21 @@ export default function EditLearningPathPage() {
               </Button>
             </div>
           </div>
-          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Update details for: {learningPath.title || 'Learning Path'}</p>
+          <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">Update details for: {learningPath.title || 'Learning Path'}</p>
         </div>
         {/* Main Content */}
         {/* Learning Path Details */}
-        <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+        <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="text-gray-900 dark:text-white">Learning Path Details</CardTitle>
-            <CardDescription className="text-gray-600 dark:text-slate-400">
+            <CardTitle className="text-slate-900 dark:text-white">Learning Path Details</CardTitle>
+            <CardDescription className="text-slate-600 dark:text-slate-400">
               Update the learning path information
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <Label htmlFor="title" className="text-gray-900 dark:text-white">
+                <Label htmlFor="title" className="text-slate-900 dark:text-white">
                   Title <span className="text-red-500">*</span>
                 </Label>
                 <Input
@@ -221,12 +221,12 @@ export default function EditLearningPathPage() {
                   onChange={(e) => handleInputChange('title', e.target.value)}
                   placeholder="Enter learning path title"
                   required
-                  className="mt-1 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400"
+                  className="mt-1 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400"
                 />
               </div>
 
               <div>
-                <Label htmlFor="description" className="text-gray-900 dark:text-white">
+                <Label htmlFor="description" className="text-slate-900 dark:text-white">
                   Description
                 </Label>
                 <Textarea
@@ -235,7 +235,7 @@ export default function EditLearningPathPage() {
                   onChange={(e) => handleInputChange('description', e.target.value)}
                   placeholder="Enter learning path description (optional)"
                   rows={4}
-                  className="mt-1 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400"
+                  className="mt-1 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400"
                 />
               </div>
             </form>

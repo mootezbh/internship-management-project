@@ -53,7 +53,7 @@ export default function ManageTasksPage() {
         return <Target className="h-4 w-4 text-purple-600 dark:text-purple-400" />
       case 'TEXT':
       default:
-        return <FileText className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+        return <FileText className="h-4 w-4 text-slate-600 dark:text-slate-400" />
     }
   }
 
@@ -65,10 +65,10 @@ export default function ManageTasksPage() {
 
   if (!learningPath) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Learning Path Not Found</h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-4">The learning path you&apos;re looking for doesn&apos;t exist.</p>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Learning Path Not Found</h2>
+          <p className="text-slate-600 dark:text-slate-300 mb-4">The learning path you&apos;re looking for doesn&apos;t exist.</p>
           <Button onClick={handleBackToLearningPaths} variant="outline">
             Back to Learning Paths
           </Button>
@@ -92,14 +92,14 @@ export default function ManageTasksPage() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Learning Paths
           </Button>
-          <span className="text-xl font-bold text-gray-900 dark:text-white">Manage Tasks</span>
+          <span className="text-xl font-bold text-slate-900 dark:text-white">Manage Tasks</span>
         </div>
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Manage Tasks</h1>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Manage Tasks</h1>
             <div className="flex items-center space-x-3">
-              <Badge variant="secondary" className="bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300">
+              <Badge variant="secondary" className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                 {learningPath.tasks?.length || 0} tasks
               </Badge>
               <Button
@@ -111,14 +111,14 @@ export default function ManageTasksPage() {
               </Button>
             </div>
           </div>
-          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{learningPath.title}</p>
+          <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">{learningPath.title}</p>
         </div>
         {/* Main Content */}
         {/* Quick Actions */}
-        <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+        <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="text-gray-900 dark:text-white">Task Management</CardTitle>
-            <CardDescription className="text-gray-600 dark:text-slate-400">
+            <CardTitle className="text-slate-900 dark:text-white">Task Management</CardTitle>
+            <CardDescription className="text-slate-600 dark:text-slate-400">
               Create and manage tasks for this learning path using our advanced task builder
             </CardDescription>
           </CardHeader>
@@ -131,7 +131,7 @@ export default function ManageTasksPage() {
                 <Plus className="w-4 h-4 mr-2" />
                 Create New Task
               </Button>
-              <div className="flex items-center text-sm text-gray-600 dark:text-slate-400">
+              <div className="flex items-center text-sm text-slate-600 dark:text-slate-400">
                 <Target className="w-4 h-4 mr-2 text-purple-600 dark:text-purple-400" />
                 Use our drag-and-drop builder to create rich, interactive tasks
               </div>
@@ -140,12 +140,12 @@ export default function ManageTasksPage() {
         </Card>
 
         {/* Existing Tasks */}
-        <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+        <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="text-gray-900 dark:text-white">
+            <CardTitle className="text-slate-900 dark:text-white">
               Existing Tasks ({learningPath.tasks?.length || 0})
             </CardTitle>
-            <CardDescription className="text-gray-600 dark:text-slate-400">
+            <CardDescription className="text-slate-600 dark:text-slate-400">
               Manage the tasks in this learning path
             </CardDescription>
           </CardHeader>
@@ -155,7 +155,7 @@ export default function ManageTasksPage() {
                   {learningPath.tasks
                   .sort((a, b) => (a.order || 0) - (b.order || 0))
                   .map((task, index) => (
-                    <Card key={task.id} className="border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow duration-200">
+                    <Card key={task.id} className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow duration-200">
                       <CardContent className="p-6">
                         <div className="flex justify-between items-start gap-4">
                           <div className="flex-1">
@@ -164,7 +164,7 @@ export default function ManageTasksPage() {
                               <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-sm font-semibold">
                                 {task.order || index + 1}
                               </div>
-                              <h5 className="text-lg font-semibold text-gray-900 dark:text-white flex-1">{task.title}</h5>
+                              <h5 className="text-lg font-semibold text-slate-900 dark:text-white flex-1">{task.title}</h5>
                               <div className="flex items-center gap-2">
                                 {getContentTypeIcon(task.contentType)}
                                 <Badge variant={
@@ -180,13 +180,13 @@ export default function ManageTasksPage() {
                             </div>
                             
                             {/* Description */}
-                            <p className="text-sm text-gray-600 dark:text-slate-400 mb-4 leading-relaxed">{task.description}</p>
+                            <p className="text-sm text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">{task.description}</p>
                             
                             {/* Content preview or builder indicator */}
                             {task.content && task.contentType !== 'BUILDER' && (
-                              <div className="bg-gray-50 dark:bg-slate-800/50 rounded-lg p-3 mb-4">
-                                <p className="text-xs text-gray-500 dark:text-slate-500 font-medium mb-1">Content Preview:</p>
-                                <p className="text-sm text-gray-700 dark:text-slate-300">
+                              <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3 mb-4">
+                                <p className="text-xs text-slate-500 dark:text-slate-500 font-medium mb-1">Content Preview:</p>
+                                <p className="text-sm text-slate-700 dark:text-slate-300">
                                   {task.content.length > 150 ? task.content.substring(0, 150) + '...' : task.content}
                                 </p>
                               </div>
@@ -207,7 +207,7 @@ export default function ManageTasksPage() {
                             )}
                             
                             {/* Task metadata */}
-                            <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-slate-400">
+                            <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
                               <div className="flex items-center gap-1">
                                 <Clock className="h-3 w-3" />
                                 <span>Deadline: {task.deadlineOffset ? `${task.deadlineOffset} days` : 'No deadline'}</span>
@@ -250,8 +250,8 @@ export default function ManageTasksPage() {
                 <div className="mx-auto w-24 h-24 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 rounded-full flex items-center justify-center mb-6">
                   <Target className="w-12 h-12 text-purple-600 dark:text-purple-400" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No Tasks Found</h3>
-                <p className="text-gray-600 dark:text-slate-400">No tasks have been created for this learning path yet.</p>
+                <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">No Tasks Found</h3>
+                <p className="text-slate-600 dark:text-slate-400">No tasks have been created for this learning path yet.</p>
               </div>
             )}
           </CardContent>

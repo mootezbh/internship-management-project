@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button'
 import { toast } from "sonner"
 import { ContentLoading } from '@/components/ui/loading-spinner'
 import TaskBuilder from '@/components/task-builder/TaskBuilder'
-import { AdminLayout } from '@/components/layout/admin-layout'
 
 export default function EditTaskPage() {
   const router = useRouter()
@@ -91,10 +90,10 @@ export default function EditTaskPage() {
 
   if (!learningPath || !task) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Task Not Found</h2>
-          <p className="text-gray-600 dark:text-slate-400 mb-4">The task you&apos;re looking for doesn&apos;t exist.</p>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Task Not Found</h2>
+          <p className="text-slate-600 dark:text-slate-400 mb-4">The task you&apos;re looking for doesn&apos;t exist.</p>
           <Button onClick={() => router.push(`/admin/learning-paths/${pathId}/tasks`)} variant="outline">
             Back to Tasks
           </Button>
@@ -147,12 +146,12 @@ export default function EditTaskPage() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Tasks
           </Button>
-          <span className="text-2xl font-bold text-gray-900 dark:text-white">Edit Task</span>
+          <span className="text-2xl font-bold text-slate-900 dark:text-white">Edit Task</span>
         </div>
         <div className="mb-8">
           <p className="text-md text-slate-600 dark:text-slate-400">Edit <span className="font-semibold text-blue-600 dark:text-blue-400">{task.title}</span> in <span className="font-semibold text-blue-600 dark:text-blue-400">{learningPath.title}</span></p>
         </div>
-        <div className="rounded-2xl shadow-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 backdrop-blur-md p-8">
+        <div className="rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 backdrop-blur-md p-8">
           <TaskBuilder
             initialContent={initialContent}
             onSave={handleSaveTask}

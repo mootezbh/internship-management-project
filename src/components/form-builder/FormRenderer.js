@@ -93,7 +93,7 @@ export default function FormRenderer({ fields = [], onSubmit, initialValues = {}
     const hasError = !!error;
 
     const inputClassName = `w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors dark:bg-slate-700 dark:text-white ${
-      hasError ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-slate-600'
+      hasError ? 'border-red-500 dark:border-red-400' : 'border-slate-300 dark:border-slate-600'
     }`;
 
     switch (field.type) {
@@ -153,9 +153,9 @@ export default function FormRenderer({ fields = [], onSubmit, initialValues = {}
                         : [...selectedValues, option];
                       handleInputChange(field.id, newValues);
                     }}
-                    className="h-4 w-4 text-blue-600 dark:text-blue-400 focus:ring-blue-500 border-gray-300 dark:border-slate-600 rounded dark:bg-slate-700"
+                    className="h-4 w-4 text-blue-600 dark:text-blue-400 focus:ring-blue-500 border-slate-300 dark:border-slate-600 rounded dark:bg-slate-700"
                   />
-                  <span className="text-sm text-gray-700 dark:text-slate-300">{option}</span>
+                  <span className="text-sm text-slate-700 dark:text-slate-300">{option}</span>
                 </label>
               );
             })}
@@ -173,9 +173,9 @@ export default function FormRenderer({ fields = [], onSubmit, initialValues = {}
                   value={option}
                   checked={value === option}
                   onChange={(e) => handleInputChange(field.id, e.target.value)}
-                  className="h-4 w-4 text-blue-600 dark:text-blue-400 focus:ring-blue-500 border-gray-300 dark:border-slate-600 dark:bg-slate-700"
+                  className="h-4 w-4 text-blue-600 dark:text-blue-400 focus:ring-blue-500 border-slate-300 dark:border-slate-600 dark:bg-slate-700"
                 />
-                <span className="text-sm text-gray-700 dark:text-slate-300">{option}</span>
+                <span className="text-sm text-slate-700 dark:text-slate-300">{option}</span>
               </label>
             ))}
           </div>
@@ -199,9 +199,9 @@ export default function FormRenderer({ fields = [], onSubmit, initialValues = {}
                         : [...selectedValues, option];
                       handleInputChange(field.id, newValues);
                     }}
-                    className="h-4 w-4 text-blue-600 dark:text-blue-400 focus:ring-blue-500 border-gray-300 dark:border-slate-600 rounded dark:bg-slate-700"
+                    className="h-4 w-4 text-blue-600 dark:text-blue-400 focus:ring-blue-500 border-slate-300 dark:border-slate-600 rounded dark:bg-slate-700"
                   />
-                  <span className="text-sm text-gray-700 dark:text-slate-300">{option}</span>
+                  <span className="text-sm text-slate-700 dark:text-slate-300">{option}</span>
                 </label>
               );
             })}
@@ -266,12 +266,12 @@ export default function FormRenderer({ fields = [], onSubmit, initialValues = {}
                 </button>
               </div>
             ) : (
-              <label className={`cursor-pointer flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-md transition-colors hover:bg-gray-50 dark:hover:bg-slate-700 dark:border-slate-600 ${
-                hasError ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-slate-600'
+              <label className={`cursor-pointer flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-md transition-colors hover:bg-slate-50 dark:hover:bg-slate-700 dark:border-slate-600 ${
+                hasError ? 'border-red-500 dark:border-red-400' : 'border-slate-300 dark:border-slate-600'
               }`}>
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <Upload className="w-8 h-8 mb-3 text-gray-400 dark:text-slate-500" />
-                  <p className="mb-2 text-sm text-gray-500 dark:text-slate-400">
+                  <Upload className="w-8 h-8 mb-3 text-slate-400 dark:text-slate-500" />
+                  <p className="mb-2 text-sm text-slate-500 dark:text-slate-400">
                     <span className="font-semibold">Click to upload</span> or drag and drop
                   </p>
                 </div>
@@ -307,13 +307,13 @@ export default function FormRenderer({ fields = [], onSubmit, initialValues = {}
     <form onSubmit={handleSubmit} className="space-y-6">
       {fields.map((field) => (
         <div key={field.id} className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
           
           {field.helpText && (
-            <p className="text-sm text-gray-600 dark:text-slate-400">{field.helpText}</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">{field.helpText}</p>
           )}
           
           {renderField(field)}

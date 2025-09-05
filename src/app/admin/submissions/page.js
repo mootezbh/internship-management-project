@@ -33,7 +33,7 @@ const Badge = ({ children, variant = "default", className = "" }) => {
   const baseClasses = "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
   const variantClasses = {
     default: "bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300",
-    secondary: "bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-slate-300",
+    secondary: "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300",
     success: "bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300",
     warning: "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300",
     destructive: "bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300"
@@ -145,7 +145,7 @@ export default function AdminSubmissionsPage() {
       case 'REQUIRES_CHANGES':
         return <AlertCircle className="h-4 w-4 text-orange-600" />
       default:
-        return <FileText className="h-4 w-4 text-gray-400" />
+        return <FileText className="h-4 w-4 text-slate-400" />
     }
   }
 
@@ -206,10 +206,10 @@ export default function AdminSubmissionsPage() {
                 Back to Admin Dashboard
               </Button>
               
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              <h1 className="text-3xl font-bold text-slate-900 mb-2">
                 Task Submissions Review
               </h1>
-              <p className="text-gray-600">
+              <p className="text-slate-600">
                 Review and provide feedback on student task submissions
               </p>
             </div>
@@ -223,8 +223,8 @@ export default function AdminSubmissionsPage() {
                       <FileText className="h-6 w-6 text-blue-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-2xl font-bold text-gray-900">{stats.total || 0}</p>
-                      <p className="text-gray-600">Total Submissions</p>
+                      <p className="text-2xl font-bold text-slate-900">{stats.total || 0}</p>
+                      <p className="text-slate-600">Total Submissions</p>
                     </div>
                   </div>
                 </CardContent>
@@ -237,36 +237,36 @@ export default function AdminSubmissionsPage() {
                       <Timer className="h-6 w-6 text-yellow-600" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.pending || 0}</p>
-                      <p className="text-gray-600 dark:text-slate-400">Pending Review</p>
+                      <p className="text-2xl font-bold text-slate-900 dark:text-white">{stats.pending || 0}</p>
+                      <p className="text-slate-600 dark:text-slate-400">Pending Review</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+              <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
                 <CardContent className="p-6">
                   <div className="flex items-center">
                     <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
                       <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.approved || 0}</p>
-                      <p className="text-gray-600 dark:text-slate-400">Approved</p>
+                      <p className="text-2xl font-bold text-slate-900 dark:text-white">{stats.approved || 0}</p>
+                      <p className="text-slate-600 dark:text-slate-400">Approved</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+              <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
                 <CardContent className="p-6">
                   <div className="flex items-center">
                     <div className="p-2 bg-red-100 dark:bg-red-900/50 rounded-lg">
                       <AlertCircle className="h-6 w-6 text-red-600 dark:text-red-400" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.requiresChanges || 0}</p>
-                      <p className="text-gray-600 dark:text-slate-400">Needs Changes</p>
+                      <p className="text-2xl font-bold text-slate-900 dark:text-white">{stats.requiresChanges || 0}</p>
+                      <p className="text-slate-600 dark:text-slate-400">Needs Changes</p>
                     </div>
                   </div>
                 </CardContent>
@@ -274,9 +274,9 @@ export default function AdminSubmissionsPage() {
             </div>
 
             {/* Filters */}
-            <Card className="mb-8 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+            <Card className="mb-8 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2 text-gray-900 dark:text-white">
+                <CardTitle className="text-lg flex items-center gap-2 text-slate-900 dark:text-white">
                   <Filter className="h-5 w-5" />
                   Filters
                 </CardTitle>
@@ -290,7 +290,7 @@ export default function AdminSubmissionsPage() {
                       id="status-filter"
                       value={filters.status}
                       onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                     >
                       <option value="ALL">All Statuses</option>
                       <option value="PENDING">Pending Review</option>
@@ -307,7 +307,7 @@ export default function AdminSubmissionsPage() {
                       id="internship-filter"
                       value={filters.internshipId}
                       onChange={(e) => setFilters(prev => ({ ...prev, internshipId: e.target.value }))}
-                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                     >
                       <option value="">All Internships</option>
                       {internships.map(internship => (
@@ -322,7 +322,7 @@ export default function AdminSubmissionsPage() {
                   <div>
                     <Label htmlFor="search-filter">Search</Label>
                     <div className="relative mt-1">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
                       <Input
                         id="search-filter"
                         type="text"
@@ -339,7 +339,7 @@ export default function AdminSubmissionsPage() {
 
             {/* Results Summary */}
             <div className="mb-4">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-slate-600">
                 Showing {filteredSubmissions.length} of {submissions.length} submissions
               </p>
             </div>
@@ -364,7 +364,7 @@ export default function AdminSubmissionsPage() {
                         </div>
                         <div className="flex flex-col items-end gap-2">
                           {getStatusBadge(submission.status)}
-                          <div className="text-xs text-gray-500 flex items-center gap-1">
+                          <div className="text-xs text-slate-500 flex items-center gap-1">
                             <Calendar className="h-3 w-3" />
                             {formatDate(submission.submittedAt)}
                           </div>
@@ -375,23 +375,23 @@ export default function AdminSubmissionsPage() {
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
-                          <h4 className="font-medium text-sm text-gray-700 mb-2">Student Information</h4>
+                          <h4 className="font-medium text-sm text-slate-700 mb-2">Student Information</h4>
                           <div className="space-y-1 text-sm">
                             <div className="flex items-center gap-2">
-                              <User className="h-3 w-3 text-gray-400 dark:text-slate-500" />
-                              <span className="text-gray-900 dark:text-white">{submission.user.fullName || submission.user.firstName || 'Unknown'}</span>
+                              <User className="h-3 w-3 text-slate-400 dark:text-slate-500" />
+                              <span className="text-slate-900 dark:text-white">{submission.user.fullName || submission.user.firstName || 'Unknown'}</span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <span className="text-gray-500 dark:text-slate-400">{submission.user.email}</span>
+                              <span className="text-slate-500 dark:text-slate-400">{submission.user.email}</span>
                             </div>
                           </div>
                         </div>
 
                         <div>
-                          <h4 className="font-medium text-sm text-gray-700 dark:text-slate-300 mb-2">Submission Details</h4>
+                          <h4 className="font-medium text-sm text-slate-700 dark:text-slate-300 mb-2">Submission Details</h4>
                           <div className="space-y-1 text-sm">
                             <div className="flex items-center gap-2">
-                              <Github className="h-3 w-3 text-gray-400 dark:text-slate-500" />
+                              <Github className="h-3 w-3 text-slate-400 dark:text-slate-500" />
                               <a 
                                 href={submission.githubUrl} 
                                 target="_blank" 
@@ -424,11 +424,11 @@ export default function AdminSubmissionsPage() {
                   </Card>
                 ))
               ) : (
-                <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+                <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
                   <CardContent className="p-12 text-center">
-                    <FileText className="h-12 w-12 text-gray-400 dark:text-slate-500 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No Submissions Found</h3>
-                    <p className="text-gray-600">
+                    <FileText className="h-12 w-12 text-slate-400 dark:text-slate-500 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">No Submissions Found</h3>
+                    <p className="text-slate-600">
                       {filters.status !== 'ALL' || filters.search || filters.internshipId ? 
                         'No submissions match your current filters.' : 
                         'No task submissions have been made yet.'

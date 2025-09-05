@@ -43,14 +43,14 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
         case 'TEXT':
           return (
             <div className="prose prose-sm dark:prose-invert max-w-none">
-              <p className="text-gray-700 dark:text-slate-300">{content.content}</p>
+              <p className="text-slate-700 dark:text-slate-300">{content.content}</p>
             </div>
           );
 
         case 'TEXTAREA':
           return (
             <div className="prose prose-sm dark:prose-invert max-w-none">
-              <div className="text-gray-700 dark:text-slate-300 whitespace-pre-wrap">
+              <div className="text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
                 {content.content}
               </div>
             </div>
@@ -60,7 +60,7 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
           return (
             <div className="space-y-3">
               {content.url && (
-                <div className="aspect-video bg-gray-100 dark:bg-slate-800 rounded-lg flex items-center justify-center">
+                <div className="aspect-video bg-slate-100 dark:bg-slate-800 rounded-lg flex items-center justify-center">
                   {content.url.includes('youtube.com') || content.url.includes('youtu.be') ? (
                     <iframe
                       src={content.url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/')}
@@ -70,7 +70,7 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
                     />
                   ) : (
                     <div className="text-center">
-                      <Play className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <Play className="h-12 w-12 text-slate-400 mx-auto mb-4" />
                       <Button asChild variant="outline">
                         <a 
                           href={content.url} 
@@ -92,9 +92,9 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
 
         case 'FILE':
           return (
-            <div className="border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-lg p-6 text-center">
-              <Download className="h-8 w-8 text-gray-400 mx-auto mb-3" />
-              <p className="text-sm text-gray-600 dark:text-slate-400 mb-3">
+            <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-6 text-center">
+              <Download className="h-8 w-8 text-slate-400 mx-auto mb-3" />
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-3">
                 {content.content || 'Download the attached file to continue'}
               </p>
               {content.url && (
@@ -114,14 +114,14 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
 
         case 'URL':
           return (
-            <div className="border border-gray-200 dark:border-slate-700 rounded-lg p-4">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white mb-1">
+                  <h4 className="font-medium text-slate-900 dark:text-white mb-1">
                     {content.title}
                   </h4>
                   {content.content && (
-                    <p className="text-sm text-gray-600 dark:text-slate-400 mb-3">
+                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-3">
                       {content.content}
                     </p>
                   )}
@@ -158,12 +158,12 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
                   />
                 </div>
               ) : (
-                <div className="bg-gray-100 dark:bg-slate-800 rounded-lg p-8">
-                  <p className="text-gray-500 dark:text-slate-400">No image available</p>
+                <div className="bg-slate-100 dark:bg-slate-800 rounded-lg p-8">
+                  <p className="text-slate-500 dark:text-slate-400">No image available</p>
                 </div>
               )}
               {content.content && (
-                <p className="text-sm text-gray-600 dark:text-slate-400 mt-3">
+                <p className="text-sm text-slate-600 dark:text-slate-400 mt-3">
                   {content.content}
                 </p>
               )}
@@ -174,8 +174,8 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
           return (
             <div className="space-y-3">
               {content.content && (
-                <div className="bg-gray-900 dark:bg-slate-950 rounded-lg p-4 overflow-x-auto">
-                  <pre className="text-sm text-gray-100">
+                <div className="bg-slate-900 dark:bg-slate-950 rounded-lg p-4 overflow-x-auto">
+                  <pre className="text-sm text-slate-100">
                     <code>{content.content}</code>
                   </pre>
                 </div>
@@ -185,7 +185,7 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
 
         default:
           return (
-            <div className="text-gray-500 dark:text-slate-400">
+            <div className="text-slate-500 dark:text-slate-400">
               Unsupported content type: {content.type}
             </div>
           );
@@ -196,7 +196,7 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
       <Card className={`mb-4 transition-all duration-200 ${
         isBlockCompleted 
           ? 'border-green-200 dark:border-green-700 bg-green-50 dark:bg-green-900/20' 
-          : 'border-gray-200 dark:border-slate-700'
+          : 'border-slate-200 dark:border-slate-700'
       }`}>
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
@@ -208,7 +208,7 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
                 className={`p-1 ${
                   isBlockCompleted 
                     ? 'text-green-600 dark:text-green-400' 
-                    : 'text-gray-400'
+                    : 'text-slate-400'
                 }`}
               >
                 {isBlockCompleted ? (
@@ -246,24 +246,24 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
   return (
     <div className="max-w-4xl mx-auto">
       {/* Task Header */}
-      <Card className="mb-6 border-gray-200 dark:border-slate-700">
+      <Card className="mb-6 border-slate-200 dark:border-slate-700">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-2xl text-gray-900 dark:text-white">
+              <CardTitle className="text-2xl text-slate-900 dark:text-white">
                 {task.title}
               </CardTitle>
               {task.description && (
-                <p className="text-gray-600 dark:text-slate-400 mt-2">
+                <p className="text-slate-600 dark:text-slate-400 mt-2">
                   {task.description}
                 </p>
               )}
             </div>
             <div className="text-right">
-              <div className="text-sm text-gray-500 dark:text-slate-400 mb-1">
+              <div className="text-sm text-slate-500 dark:text-slate-400 mb-1">
                 Progress
               </div>
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+              <div className="text-2xl font-bold text-slate-900 dark:text-white">
                 {Math.round(progress)}%
               </div>
               {isCompleted && (
@@ -277,13 +277,13 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
           {/* Progress Bar */}
           {requiredBlocks.length > 0 && (
             <div className="mt-4">
-              <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
+              <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
                 <div 
                   className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                   style={{ width: `${progress}%` }}
                 />
               </div>
-              <div className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+              <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                 {completedRequiredBlocks.length} of {requiredBlocks.length} required items completed
               </div>
             </div>
@@ -300,9 +300,9 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
               <ContentBlock key={content.id} content={content} />
             ))
         ) : (
-          <Card className="border-gray-200 dark:border-slate-700">
+          <Card className="border-slate-200 dark:border-slate-700">
             <CardContent className="py-12 text-center">
-              <p className="text-gray-500 dark:text-slate-400">
+              <p className="text-slate-500 dark:text-slate-400">
                 No content available for this task.
               </p>
             </CardContent>

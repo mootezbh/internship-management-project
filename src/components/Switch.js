@@ -34,8 +34,8 @@ const Switch = ({
         className={`
           relative w-11 h-6 rounded-full transition-colors duration-200 ease-in-out
           ${checked 
-            ? 'bg-blue-600 dark:bg-blue-500' 
-            : 'bg-gray-200 dark:bg-gray-700'
+            ? 'bg-blue-600 dark:bg-blue-500'
+            : 'bg-slate-200 dark:bg-slate-700'
           }
           ${disabled ? '' : 'focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-gray-900'}
           ${className}

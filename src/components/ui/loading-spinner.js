@@ -107,7 +107,7 @@ export function PageLoading({
           icon={icon}
           className="mx-auto mb-6"
         />
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
+        <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-2">
           {title}
         </h2>
         <p className="text-slate-600 dark:text-slate-300">
@@ -135,7 +135,7 @@ export function ContentLoading({
           icon={icon}
           className="mx-auto mb-6"
         />
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
+        <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-2">
           {title}
         </h2>
         <p className="text-slate-600 dark:text-slate-300">
@@ -154,18 +154,18 @@ export function CardLoading({
 }) {
   return (
     <div className={cn(
-      "animate-pulse bg-white dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 rounded-lg p-6",
+      "animate-pulse bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-lg p-6",
       className
     )}>
       <div className="flex items-start space-x-4">
         {showAvatar && (
-          <div className="h-12 w-12 bg-gray-300 dark:bg-slate-700 rounded-full" />
+          <div className="h-12 w-12 bg-slate-300 dark:bg-slate-700 rounded-full" />
         )}
         <div className="flex-1 space-y-3">
           {Array.from({ length: lines }).map((_, i) => (
             <div key={i} className="space-y-2">
               <div className={cn(
-                "h-4 bg-gray-300 dark:bg-slate-700 rounded",
+                "h-4 bg-slate-300 dark:bg-slate-700 rounded",
                 i === 0 ? "w-3/4" : i === lines - 1 ? "w-1/2" : "w-full"
               )} />
             </div>
@@ -180,25 +180,25 @@ export function CardLoading({
 export function TableLoading({ rows = 5, columns = 4 }) {
   return (
     <div className="animate-pulse">
-      <div className="bg-white dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 rounded-lg overflow-hidden">
+      <div className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
         {/* Table header */}
-        <div className="bg-gray-50 dark:bg-slate-800/50 px-6 py-4">
+        <div className="bg-slate-50 dark:bg-slate-800/50 px-6 py-4">
           <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
             {Array.from({ length: columns }).map((_, i) => (
-              <div key={i} className="h-4 bg-gray-300 dark:bg-slate-700 rounded w-3/4" />
+              <div key={i} className="h-4 bg-slate-300 dark:bg-slate-700 rounded w-3/4" />
             ))}
           </div>
         </div>
         
         {/* Table rows */}
         {Array.from({ length: rows }).map((_, rowIndex) => (
-          <div key={rowIndex} className="px-6 py-4 border-t border-gray-200 dark:border-slate-700">
+          <div key={rowIndex} className="px-6 py-4 border-t border-slate-200 dark:border-slate-700">
             <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
               {Array.from({ length: columns }).map((_, colIndex) => (
                 <div 
                   key={colIndex} 
                   className={cn(
-                    "h-4 bg-gray-300 dark:bg-slate-700 rounded",
+                    "h-4 bg-slate-300 dark:bg-slate-700 rounded",
                     colIndex === 0 ? "w-full" : "w-2/3"
                   )} 
                 />
@@ -254,7 +254,7 @@ export function InlineLoading({
         showText={false}
         className="text-blue-600 dark:text-blue-400"
       />
-      <span className="text-sm text-gray-600 dark:text-slate-400">
+      <span className="text-sm text-slate-600 dark:text-slate-400">
         {text}
       </span>
     </div>

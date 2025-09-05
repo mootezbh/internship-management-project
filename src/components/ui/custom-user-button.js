@@ -90,10 +90,10 @@ export function CustomUserButton() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        className="flex items-center space-x-2 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
       >
         {/* Custom Avatar Image */}
-        <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-gray-200 dark:border-gray-600 hover:shadow-lg transition-shadow">
+        <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-slate-200 dark:border-slate-600 hover:shadow-lg transition-shadow">
           {!isLoading && !imageError && profileImageUrl ? (
             <Image
               src={profileImageUrl}
@@ -107,26 +107,26 @@ export function CustomUserButton() {
               unoptimized={profileImageUrl?.includes('clerk')} // Use unoptimized for Clerk images
             />
           ) : (
-            <div className="w-full h-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
+            <div className="w-full h-full bg-slate-300 dark:bg-slate-600 flex items-center justify-center">
               {isLoading ? (
-                <div className="w-4 h-4 border border-gray-400 border-t-transparent rounded-full animate-spin" />
+                <div className="w-4 h-4 border border-slate-400 border-t-transparent rounded-full animate-spin" />
               ) : (
-                <User className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                <User className="w-5 h-5 text-slate-500 dark:text-slate-400" />
               )}
             </div>
           )}
         </div>
-        <ChevronDown className="w-3 h-3 text-gray-500" />
+        <ChevronDown className="w-3 h-3 text-slate-500" />
       </button>
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-600 z-50">
-          <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-600">
-            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+        <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-800 rounded-md shadow-lg border border-slate-200 dark:border-slate-600 z-50">
+          <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-600">
+            <p className="text-sm font-medium text-slate-900 dark:text-white truncate">
               {user?.firstName} {user?.lastName}
             </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 truncate" title={user?.emailAddresses?.[0]?.emailAddress}>
+            <p className="text-sm text-slate-500 dark:text-slate-400 truncate" title={user?.emailAddresses?.[0]?.emailAddress}>
               {user?.emailAddresses?.[0]?.emailAddress}
             </p>
           </div>
@@ -134,7 +134,7 @@ export function CustomUserButton() {
           <div className="py-1">
             <Link
               href="/profile"
-              className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              className="flex items-center px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
               onClick={() => setIsOpen(false)}
             >
               <User className="w-4 h-4 mr-2" />
@@ -143,7 +143,7 @@ export function CustomUserButton() {
             
             <button
               onClick={handleSignOut}
-              className="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              className="w-full flex items-center px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Sign out

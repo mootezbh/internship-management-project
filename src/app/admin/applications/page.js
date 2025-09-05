@@ -34,7 +34,7 @@ const Badge = ({ children, variant = "default", className = "" }) => {
   const baseClasses = "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
   const variantClasses = {
     default: "bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300",
-    secondary: "bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-slate-300",
+    secondary: "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300",
     success: "bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300",
     warning: "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300",
     destructive: "bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300"
@@ -214,14 +214,14 @@ function AdminApplicationsContent() {
                 onClick={() => router.push('/admin')}
                 variant="outline"
                 size="sm"
-                className="mr-4 border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                className="mr-4 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Admin
               </Button>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Applications Management</h1>
-                <p className="text-gray-600 dark:text-slate-300">Review and manage internship applications</p>
+                <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Applications Management</h1>
+                <p className="text-slate-600 dark:text-slate-300">Review and manage internship applications</p>
               </div>
             </div>
           </div>
@@ -235,8 +235,8 @@ function AdminApplicationsContent() {
                     <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{statusCounts.total}</p>
-                    <p className="text-gray-600 dark:text-slate-400">Total Applications</p>
+                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{statusCounts.total}</p>
+                    <p className="text-slate-600 dark:text-slate-400">Total Applications</p>
                   </div>
                 </div>
               </CardContent>
@@ -249,8 +249,8 @@ function AdminApplicationsContent() {
                     <Clock className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{statusCounts.pending}</p>
-                    <p className="text-gray-600 dark:text-slate-400">Pending Review</p>
+                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{statusCounts.pending}</p>
+                    <p className="text-slate-600 dark:text-slate-400">Pending Review</p>
                   </div>
                 </div>
               </CardContent>
@@ -263,8 +263,8 @@ function AdminApplicationsContent() {
                     <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{statusCounts.accepted}</p>
-                    <p className="text-gray-600 dark:text-slate-400">Accepted</p>
+                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{statusCounts.accepted}</p>
+                    <p className="text-slate-600 dark:text-slate-400">Accepted</p>
                   </div>
                 </div>
               </CardContent>
@@ -277,8 +277,8 @@ function AdminApplicationsContent() {
                     <XCircle className="h-6 w-6 text-red-600 dark:text-red-400" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{statusCounts.rejected}</p>
-                    <p className="text-gray-600 dark:text-slate-400">Rejected</p>
+                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{statusCounts.rejected}</p>
+                    <p className="text-slate-600 dark:text-slate-400">Rejected</p>
                   </div>
                 </div>
               </CardContent>
@@ -288,23 +288,23 @@ function AdminApplicationsContent() {
           {/* Filters */}
           <div className="mb-8 space-y-4">
             <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-slate-500" />
+              <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400 dark:text-slate-500" />
               <Input
                 placeholder="Search by applicant name, email, internship title, or field..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400"
+                className="pl-10 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400"
               />
             </div>
             
             <div className="flex flex-wrap gap-4">
               <div className="flex items-center space-x-2">
-                <Label htmlFor="status-filter" className="text-gray-900 dark:text-white">Status:</Label>
+                <Label htmlFor="status-filter" className="text-slate-900 dark:text-white">Status:</Label>
                 <select
                   id="status-filter"
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                  className="px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                 >
                   <option value="all">All Statuses</option>
                   <option value="PENDING">Pending</option>
@@ -314,12 +314,12 @@ function AdminApplicationsContent() {
               </div>
               
               <div className="flex items-center space-x-2">
-                <Label htmlFor="internship-filter" className="text-gray-900 dark:text-white">Internship:</Label>
+                <Label htmlFor="internship-filter" className="text-slate-900 dark:text-white">Internship:</Label>
                 <select
                   id="internship-filter"
                   value={internshipFilter}
                   onChange={(e) => setInternshipFilter(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                  className="px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                 >
                   <option value="all">All Internships</option>
                   {internships.map((internship) => (
@@ -361,7 +361,7 @@ function AdminApplicationsContent() {
 
           {/* Results Count */}
           <div className="mb-6">
-            <p className="text-gray-600 dark:text-slate-400">
+            <p className="text-slate-600 dark:text-slate-400">
               {Array.isArray(filteredApplications) ? filteredApplications.length : 0} {(Array.isArray(filteredApplications) ? filteredApplications.length : 0) === 1 ? 'application' : 'applications'} found
             </p>
           </div>
@@ -370,12 +370,12 @@ function AdminApplicationsContent() {
           {Array.isArray(filteredApplications) && filteredApplications.length > 0 ? (
             <div className="space-y-6">
               {filteredApplications.map((application) => (
-                <Card key={application?.id || Math.random()} className="hover:shadow-lg dark:hover:shadow-slate-800/50 transition-shadow border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+                <Card key={application?.id || Math.random()} className="hover:shadow-lg dark:hover:shadow-slate-800/50 transition-shadow border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
                   <CardContent className="p-6">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex-1">
                         <div className="flex items-center mb-2">
-                          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mr-3">
+                          <h3 className="text-xl font-semibold text-slate-900 dark:text-white mr-3">
                             {application?.user?.name || 'Unknown Applicant'}
                           </h3>
                           <Badge variant={getStatusBadgeVariant(application?.status)}>
@@ -386,7 +386,7 @@ function AdminApplicationsContent() {
                           </Badge>
                         </div>
                         
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600 dark:text-slate-300 mb-3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-600 dark:text-slate-300 mb-3">
                           <div className="flex items-center">
                             <Mail className="h-4 w-4 mr-2" />
                             {application?.user?.email || 'No email'}
@@ -410,9 +410,9 @@ function AdminApplicationsContent() {
                         </div>
 
                         {/* Internship Details */}
-                        <div className="bg-gray-50 dark:bg-slate-800/50 rounded-lg p-4">
-                          <h4 className="font-medium text-gray-900 dark:text-white mb-2">Applied for:</h4>
-                          <div className="text-sm text-gray-600 dark:text-slate-300">
+                        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4">
+                          <h4 className="font-medium text-slate-900 dark:text-white mb-2">Applied for:</h4>
+                          <div className="text-sm text-slate-600 dark:text-slate-300">
                             <div className="flex items-center mb-1">
                               <Building className="h-4 w-4 mr-2" />
                               <span className="font-medium">{application?.internship?.title || 'Unknown Position'}</span>
@@ -458,10 +458,10 @@ function AdminApplicationsContent() {
                             </button>
                             
                             {expandedResponses[application.id] && (
-                              <div className="mt-3 space-y-3 bg-white dark:bg-slate-800 rounded-lg p-4 border border-gray-200 dark:border-slate-600">
+                              <div className="mt-3 space-y-3 bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-600">
                                 {application.responses.map((response, index) => (
-                                  <div key={response.id} className="border-l-4 border-blue-400 dark:border-blue-500 pl-4 bg-gray-50 dark:bg-slate-700/50 rounded-r-md p-3">
-                                    <p className="text-sm font-semibold text-gray-800 dark:text-slate-200 mb-2">
+                                  <div key={response.id} className="border-l-4 border-blue-400 dark:border-blue-500 pl-4 bg-slate-50 dark:bg-slate-700/50 rounded-r-md p-3">
+                                    <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">
                                       {index + 1}. {response.field?.label || 'Unknown Field'}
                                       {response.field?.required && <span className="text-red-500 ml-1">*</span>}
                                       <Badge variant="outline" className="ml-2 text-xs">
@@ -470,12 +470,12 @@ function AdminApplicationsContent() {
                                     </p>
                                     
                                     {response.field?.description && (
-                                      <p className="text-xs text-gray-600 dark:text-slate-400 mb-2 italic">
+                                      <p className="text-xs text-slate-600 dark:text-slate-400 mb-2 italic">
                                         {response.field.description}
                                       </p>
                                     )}
                                     
-                                    <div className="bg-white dark:bg-slate-800 rounded p-2 border border-gray-200 dark:border-slate-600">
+                                    <div className="bg-white dark:bg-slate-800 rounded p-2 border border-slate-200 dark:border-slate-600">
                                       {response.field?.type === 'FILE' ? (
                                         <div className="flex items-center">
                                           <FileText className="h-4 w-4 mr-2 text-blue-500" />
@@ -499,8 +499,8 @@ function AdminApplicationsContent() {
                                       ) : response.field?.type === 'RADIO' || response.field?.type === 'SELECT' ? (
                                         <Badge variant="default" className="text-xs">{response.value}</Badge>
                                       ) : (
-                                        <p className="text-sm text-gray-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed">
-                                          {response.value || <span className="text-gray-500 italic">No response provided</span>}
+                                        <p className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed">
+                                          {response.value || <span className="text-slate-500 italic">No response provided</span>}
                                         </p>
                                       )}
                                     </div>
@@ -525,7 +525,7 @@ function AdminApplicationsContent() {
                             onClick={() => window.open(application.user.cvUrl, '_blank')}
                             variant="outline"
                             size="sm"
-                            className="border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                            className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                           >
                             <Download className="h-4 w-4 mr-1" />
                             CV
@@ -535,7 +535,7 @@ function AdminApplicationsContent() {
                           onClick={() => router.push(`/admin/users/${application.user.id}/profile?from=/admin/applications`)}
                           variant="outline"
                           size="sm"
-                          className="border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                          className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                         >
                           <Eye className="h-4 w-4 mr-1" />
                           Profile
@@ -544,7 +544,7 @@ function AdminApplicationsContent() {
                           onClick={() => router.push(`/admin/applications/${application.id}/review`)}
                           variant="outline"
                           size="sm"
-                          className="border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                          className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                         >
                           <Check className="h-4 w-4 mr-1" />
                           Review
@@ -556,11 +556,11 @@ function AdminApplicationsContent() {
               ))}
             </div>
           ) : (
-            <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+            <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
               <CardContent className="p-12 text-center">
-                <FileText className="h-16 w-16 text-gray-400 dark:text-slate-500 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No applications found</h3>
-                <p className="text-gray-600 dark:text-slate-400">
+                <FileText className="h-16 w-16 text-slate-400 dark:text-slate-500 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">No applications found</h3>
+                <p className="text-slate-600 dark:text-slate-400">
                   {Array.isArray(applications) && applications.length === 0 
                     ? "No applications have been submitted yet." 
                     : "Try adjusting your search or filter criteria."}

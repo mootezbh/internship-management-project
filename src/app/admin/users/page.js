@@ -30,7 +30,7 @@ const Badge = ({ children, variant = "default", className = "" }) => {
   const baseClasses = "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
   const variantClasses = {
     default: "bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300",
-    secondary: "bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-slate-300",
+    secondary: "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300",
     success: "bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300",
     warning: "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300",
     destructive: "bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300"
@@ -51,7 +51,7 @@ const Dialog = ({ open, onOpenChange, children }) => {
   if (!open) return null
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white dark:bg-slate-900 rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-slate-700">
+      <div className="bg-white dark:bg-slate-900 rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700">
         {children}
       </div>
     </div>
@@ -59,7 +59,7 @@ const Dialog = ({ open, onOpenChange, children }) => {
 }
 
 const DialogHeader = ({ children }) => <div className="mb-4">{children}</div>
-const DialogTitle = ({ children }) => <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{children}</h2>
+const DialogTitle = ({ children }) => <h2 className="text-xl font-semibold text-slate-900 dark:text-white">{children}</h2>
 const DialogContent = ({ children }) => <div>{children}</div>
 
 export default function AdminUsersPage() {
@@ -292,7 +292,7 @@ export default function AdminUsersPage() {
 
   return (
     <SignedIn>
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 py-8">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8">
@@ -300,14 +300,14 @@ export default function AdminUsersPage() {
               <Button 
                 variant="outline" 
                 onClick={() => router.push('/admin')}
-                className="flex items-center space-x-2 border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                className="flex items-center space-x-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
               >
                 <ArrowLeft className="h-4 w-4" />
                 <span>Back to Admin Dashboard</span>
               </Button>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">User Management</h1>
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-white">User Management</h1>
             </div>
-            <p className="text-gray-600 dark:text-slate-300">Manage and view all registered users</p>
+            <p className="text-slate-600 dark:text-slate-300">Manage and view all registered users</p>
           </div>
 
           {/* Statistics Cards */}
@@ -318,10 +318,10 @@ export default function AdminUsersPage() {
                   <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
                     <Users className="h-7 w-7 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <p className="text-xl font-bold text-gray-900 dark:text-white">
+                  <p className="text-xl font-bold text-slate-900 dark:text-white">
                     {Array.isArray(users) ? users.length : 0}
                   </p>
-                  <p className="text-gray-600 dark:text-slate-400 text-sm">Total Users</p>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">Total Users</p>
                 </div>
               </CardContent>
             </Card>
@@ -331,10 +331,10 @@ export default function AdminUsersPage() {
                   <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
                     <UserCheck className="h-7 w-7 text-green-600 dark:text-green-400" />
                   </div>
-                  <p className="text-xl font-bold text-gray-900 dark:text-white">
+                  <p className="text-xl font-bold text-slate-900 dark:text-white">
                     {Array.isArray(users) ? users.filter(u => u && u.profileComplete).length : 0}
                   </p>
-                  <p className="text-gray-600 dark:text-slate-400 text-sm">Complete Profiles</p>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">Complete Profiles</p>
                 </div>
               </CardContent>
             </Card>
@@ -344,10 +344,10 @@ export default function AdminUsersPage() {
                   <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
                     <GraduationCap className="h-7 w-7 text-purple-600 dark:text-purple-400" />
                   </div>
-                  <p className="text-xl font-bold text-gray-900 dark:text-white">
+                  <p className="text-xl font-bold text-slate-900 dark:text-white">
                     {Array.isArray(users) ? users.filter(u => u && u.role === 'INTERN').length : 0}
                   </p>
-                  <p className="text-gray-600 dark:text-slate-400 text-sm">Interns</p>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">Interns</p>
                 </div>
               </CardContent>
             </Card>
@@ -357,27 +357,27 @@ export default function AdminUsersPage() {
                   <div className="p-2 bg-orange-100 dark:bg-orange-900/50 rounded-lg">
                     <Award className="h-7 w-7 text-orange-600 dark:text-orange-400" />
                   </div>
-                  <p className="text-xl font-bold text-gray-900 dark:text-white">
+                  <p className="text-xl font-bold text-slate-900 dark:text-white">
                     {Array.isArray(users) ? users.filter(u => u && (u.role === 'ADMIN' || u.role === 'SUPER_ADMIN')).length : 0}
                   </p>
-                  <p className="text-gray-600 dark:text-slate-400 text-sm">Admins</p>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">Admins</p>
                 </div>
               </CardContent>
             </Card>
           </div>
 
           {/* Search and Filters */}
-          <Card className="mb-6 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+          <Card className="mb-6 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
             <CardContent className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                  <Label htmlFor="search" className="text-gray-900 dark:text-white">Search Users</Label>
+                  <Label htmlFor="search" className="text-slate-900 dark:text-white">Search Users</Label>
                   <div className="relative">
-                    <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-slate-500" />
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400 dark:text-slate-500" />
                     <Input
                       id="search"
                       placeholder="Search by name, email, university..."
-                      className="pl-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400"
+                      className="pl-10 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -385,10 +385,10 @@ export default function AdminUsersPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="role-filter" className="text-gray-900 dark:text-white">Role</Label>
+                  <Label htmlFor="role-filter" className="text-slate-900 dark:text-white">Role</Label>
                   <select
                     id="role-filter"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                    className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                     value={roleFilter}
                     onChange={(e) => setRoleFilter(e.target.value)}
                   >
@@ -400,10 +400,10 @@ export default function AdminUsersPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="status-filter" className="text-gray-900 dark:text-white">Profile Status</Label>
+                  <Label htmlFor="status-filter" className="text-slate-900 dark:text-white">Profile Status</Label>
                   <select
                     id="status-filter"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                    className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
                   >
@@ -421,7 +421,7 @@ export default function AdminUsersPage() {
                       setRoleFilter('all')
                       setStatusFilter('all')
                     }}
-                    className="w-full border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                    className="w-full border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                   >
                     <Filter className="h-4 w-4 mr-2" />
                     Clear Filters
@@ -433,7 +433,7 @@ export default function AdminUsersPage() {
 
           {/* Results Count */}
           <div className="mb-6">
-            <p className="text-gray-600 dark:text-slate-400">
+            <p className="text-slate-600 dark:text-slate-400">
               {Array.isArray(filteredUsers) ? filteredUsers.length : 0} {(Array.isArray(filteredUsers) && filteredUsers.length === 1) ? 'user' : 'users'} found
             </p>
           </div>
@@ -442,14 +442,14 @@ export default function AdminUsersPage() {
           {Array.isArray(filteredUsers) && filteredUsers.length > 0 ? (
             <div className="space-y-4">
               {filteredUsers.map((userData, index) => (
-                <Card key={userData?.id || `user-${index}`} className="hover:shadow-lg dark:hover:shadow-slate-800/50 transition-shadow border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+                <Card key={userData?.id || `user-${index}`} className="hover:shadow-lg dark:hover:shadow-slate-800/50 transition-shadow border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
                   <CardContent className="p-6">
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className="flex items-center space-x-4 mb-3">
                           <div>
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{userData.name || 'Unknown User'}</h3>
-                            <p className="text-gray-600 dark:text-slate-400">{userData.email || 'No email'}</p>
+                            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{userData.name || 'Unknown User'}</h3>
+                            <p className="text-slate-600 dark:text-slate-400">{userData.email || 'No email'}</p>
                           </div>
                           <div className="flex space-x-2">
                             <Badge variant={userData.role === 'ADMIN' ? 'destructive' : 'default'}>
@@ -461,7 +461,7 @@ export default function AdminUsersPage() {
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600 dark:text-slate-400">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-slate-600 dark:text-slate-400">
                           {userData.university && (
                             <div className="flex items-center space-x-2">
                               <GraduationCap className="h-4 w-4" />
@@ -499,7 +499,7 @@ export default function AdminUsersPage() {
                             variant="outline"
                             size="sm"
                             onClick={() => handleOpenCV(userData.cvUrl)}
-                            className="border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                            className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                           >
                             <FileText className="h-4 w-4 mr-2" />
                             Open CV
@@ -509,7 +509,7 @@ export default function AdminUsersPage() {
                           variant="outline"
                           size="sm"
                           onClick={() => handleViewUser(userData)}
-                          className="border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                          className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                         >
                           <Eye className="h-4 w-4 mr-2" />
                           View Details
@@ -540,11 +540,11 @@ export default function AdminUsersPage() {
               ))}
             </div>
           ) : (
-            <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+            <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
               <CardContent className="p-12 text-center">
-                <Users className="h-12 w-12 text-gray-400 dark:text-slate-500 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No Users Found</h3>
-                <p className="text-gray-600 dark:text-slate-400">No users match your current filters.</p>
+                <Users className="h-12 w-12 text-slate-400 dark:text-slate-500 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">No Users Found</h3>
+                <p className="text-slate-600 dark:text-slate-400">No users match your current filters.</p>
               </CardContent>
             </Card>
           )}
@@ -558,14 +558,14 @@ export default function AdminUsersPage() {
                 <DialogTitle>Promote to Admin</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
-                <p className="text-gray-700">
+                <p className="text-slate-700">
                   To confirm promoting <strong>{userToMakeAdmin?.name || userToMakeAdmin?.id}</strong> to admin, type <span className="font-mono font-bold text-blue-600">CREATEADMIN</span> below:
                 </p>
                 <Input
                   value={makeAdminConfirmText}
                   onChange={e => setMakeAdminConfirmText(e.target.value)}
                   placeholder="Type CREATEADMIN to confirm"
-                  className="border-gray-300 dark:border-slate-600"
+                  className="border-slate-300 dark:border-slate-600"
                   autoFocus
                 />
                 <div className="flex justify-end space-x-4 pt-4">
@@ -582,7 +582,7 @@ export default function AdminUsersPage() {
                 <DialogTitle>Delete User</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
-                <p className="text-gray-700">
+                <p className="text-slate-700">
                   Are you sure you want to delete the user <strong>{userToDelete?.name}</strong>? 
                   This action cannot be undone and will permanently remove the user and all their associated data.
                 </p>
@@ -594,13 +594,13 @@ export default function AdminUsersPage() {
                   </div>
                 )}
                 <div className="space-y-2 w-full max-w-md mx-auto">
-                  <Label htmlFor="delete-confirm" className="block text-gray-900 dark:text-white mb-1">Type <span className="font-mono font-bold text-red-600">DELETEUSER</span> to confirm:</Label>
+                  <Label htmlFor="delete-confirm" className="block text-slate-900 dark:text-white mb-1">Type <span className="font-mono font-bold text-red-600">DELETEUSER</span> to confirm:</Label>
                   <Input
                     id="delete-confirm"
                     value={deleteConfirmText}
                     onChange={e => setDeleteConfirmText(e.target.value)}
                     placeholder="Type DELETEUSER to confirm"
-                    className="border-gray-300 dark:border-slate-600 w-full"
+                    className="border-slate-300 dark:border-slate-600 w-full"
                     autoFocus
                   />
                 </div>

@@ -110,7 +110,7 @@ export default function AdminDashboardPage() {
       case 'REJECTED':
         return <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300 border border-red-300 dark:border-red-700"><XCircle className="w-3 h-3 mr-1" />Rejected</span>
       default:
-        return <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-slate-300 border border-gray-300 dark:border-slate-600">{status}</span>
+        return <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-600">{status}</span>
     }
   }
 
@@ -141,7 +141,7 @@ export default function AdminDashboardPage() {
             {/* Header */}
             <div className="mb-8">
               <div className="flex items-center justify-between mb-4">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Admin Dashboard</h1>
                 <div className="flex space-x-3">
                   <Button 
                     onClick={() => router.push('/admin/internships/create')}
@@ -160,7 +160,7 @@ export default function AdminDashboardPage() {
                   </Button>
                 </div>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Manage internships, applications, and user activities</p>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">Manage internships, applications, and user activities</p>
             </div>
             {/* Main Content */}
           {/* Admin Stats */}
@@ -220,73 +220,73 @@ export default function AdminDashboardPage() {
 
           {/* Admin Quick Actions */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Quick Actions</h2>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Quick Actions</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <Card className="hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow cursor-pointer border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm" onClick={() => router.push('/admin/users')}>
+                <Card className="hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow cursor-pointer border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm" onClick={() => router.push('/admin/users')}>
                   <CardContent className="p-6">
                     <div className="flex items-center">
                       <div className="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
                         <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                       </div>
                       <div className="ml-4">
-                        <h3 className="font-semibold text-gray-900 dark:text-white">User Management</h3>
-                        <p className="text-sm text-gray-600 dark:text-slate-400">View and manage user accounts</p>
+                        <h3 className="font-semibold text-slate-900 dark:text-white">User Management</h3>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">View and manage user accounts</p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow cursor-pointer border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm" onClick={() => router.push('/admin/internships')}>
+                <Card className="hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow cursor-pointer border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm" onClick={() => router.push('/admin/internships')}>
                   <CardContent className="p-6">
                     <div className="flex items-center">
                       <div className="p-3 bg-green-100 dark:bg-green-900/50 rounded-lg">
                         <Building className="h-6 w-6 text-green-600 dark:text-green-400" />
                       </div>
                       <div className="ml-4">
-                        <h3 className="font-semibold text-gray-900 dark:text-white">Manage Internships</h3>
-                        <p className="text-sm text-gray-600 dark:text-slate-400">Create and edit internship offers</p>
+                        <h3 className="font-semibold text-slate-900 dark:text-white">Manage Internships</h3>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">Create and edit internship offers</p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow cursor-pointer border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm" onClick={() => router.push('/admin/learning-paths')}>
+                <Card className="hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow cursor-pointer border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm" onClick={() => router.push('/admin/learning-paths')}>
                   <CardContent className="p-6">
                     <div className="flex items-center">
                       <div className="p-3 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
                         <BookOpen className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                       </div>
                       <div className="ml-4">
-                        <h3 className="font-semibold text-gray-900 dark:text-white">Learning Paths</h3>
-                        <p className="text-sm text-gray-600 dark:text-slate-400">Create and manage learning paths</p>
+                        <h3 className="font-semibold text-slate-900 dark:text-white">Learning Paths</h3>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">Create and manage learning paths</p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow cursor-pointer border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm" onClick={() => router.push('/admin/applications')}>
+                <Card className="hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow cursor-pointer border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm" onClick={() => router.push('/admin/applications')}>
                   <CardContent className="p-6">
                     <div className="flex items-center">
                       <div className="p-3 bg-orange-100 dark:bg-orange-900/50 rounded-lg">
                         <FileText className="h-6 w-6 text-orange-600 dark:text-orange-400" />
                       </div>
                       <div className="ml-4">
-                        <h3 className="font-semibold text-gray-900 dark:text-white">Application Review</h3>
-                        <p className="text-sm text-gray-600 dark:text-slate-400">Accept or reject applications</p>
+                        <h3 className="font-semibold text-slate-900 dark:text-white">Application Review</h3>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">Accept or reject applications</p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow cursor-pointer border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm" onClick={() => router.push('/admin/task-review')}>
+                <Card className="hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow cursor-pointer border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm" onClick={() => router.push('/admin/task-review')}>
                   <CardContent className="p-6">
                     <div className="flex items-center">
                       <div className="p-3 bg-red-100 dark:bg-red-900/50 rounded-lg">
                         <CheckCircle className="h-6 w-6 text-red-600 dark:text-red-400" />
                       </div>
                       <div className="ml-4">
-                        <h3 className="font-semibold text-gray-900 dark:text-white">Task Review</h3>
-                        <p className="text-sm text-gray-600 dark:text-slate-400">Review task submissions</p>
+                        <h3 className="font-semibold text-slate-900 dark:text-white">Task Review</h3>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">Review task submissions</p>
                       </div>
                     </div>
                   </CardContent>
@@ -297,7 +297,7 @@ export default function AdminDashboardPage() {
             {/* Pending Applications */}
             <div className="mb-8">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Pending Applications</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Pending Applications</h2>
                 <Badge className="bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300">{applications.filter(app => app.status === 'PENDING').length} requiring review</Badge>
               </div>
 
@@ -306,12 +306,12 @@ export default function AdminDashboardPage() {
                   {applications
                     .filter(app => app.status === 'PENDING')
                     .map((application) => (
-                      <Card key={application.id} className="hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+                      <Card key={application.id} className="hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
                         <CardHeader>
                           <div className="flex justify-between items-start">
                             <div>
-                              <CardTitle className="text-lg text-gray-900 dark:text-white">{application.internship.title}</CardTitle>
-                              <CardDescription className="mt-1 text-gray-600 dark:text-slate-400">
+                              <CardTitle className="text-lg text-slate-900 dark:text-white">{application.internship.title}</CardTitle>
+                              <CardDescription className="mt-1 text-slate-600 dark:text-slate-400">
                                 Applied by {application.user.fullName || application.user.firstName || 'Unknown'} • {formatDate(application.appliedAt)}
                               </CardDescription>
                             </div>
@@ -322,14 +322,14 @@ export default function AdminDashboardPage() {
                         <CardContent>
                           <div className="flex items-center justify-between">
                             <div className="space-y-1">
-                              <p className="text-sm text-gray-600 dark:text-slate-400">
-                                <strong className="text-gray-900 dark:text-white">Applicant:</strong> {application.user.email}
+                              <p className="text-sm text-slate-600 dark:text-slate-400">
+                                <strong className="text-slate-900 dark:text-white">Applicant:</strong> {application.user.email}
                               </p>
-                              <p className="text-sm text-gray-600 dark:text-slate-400">
-                                <strong className="text-gray-900 dark:text-white">Education:</strong> {application.user.education || 'Not provided'}
+                              <p className="text-sm text-slate-600 dark:text-slate-400">
+                                <strong className="text-slate-900 dark:text-white">Education:</strong> {application.user.education || 'Not provided'}
                               </p>
-                              <p className="text-sm text-gray-600 dark:text-slate-400">
-                                <strong className="text-gray-900 dark:text-white">Skills:</strong> {application.user.skills || 'Not provided'}
+                              <p className="text-sm text-slate-600 dark:text-slate-400">
+                                <strong className="text-slate-900 dark:text-white">Skills:</strong> {application.user.skills || 'Not provided'}
                               </p>
                             </div>
                             
@@ -356,11 +356,11 @@ export default function AdminDashboardPage() {
                     ))}
                 </div>
               ) : (
-                <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+                <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
                   <CardContent className="p-12 text-center">
                     <CheckCircle className="h-12 w-12 text-green-400 dark:text-green-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">All Caught Up!</h3>
-                    <p className="text-gray-600 dark:text-slate-400">No pending applications to review at this time.</p>
+                    <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">All Caught Up!</h3>
+                    <p className="text-slate-600 dark:text-slate-400">No pending applications to review at this time.</p>
                   </CardContent>
                 </Card>
               )}
@@ -368,17 +368,17 @@ export default function AdminDashboardPage() {
 
             {/* All Applications */}
             <div className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">All Applications</h2>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">All Applications</h2>
               
               {applications.length > 0 ? (
                 <div className="space-y-4">
                   {applications.map((application) => (
-                    <Card key={application.id} className="hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+                    <Card key={application.id} className="hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
                       <CardHeader>
                         <div className="flex justify-between items-start">
                           <div>
-                            <CardTitle className="text-lg text-gray-900 dark:text-white">{application.internship.title}</CardTitle>
-                            <CardDescription className="mt-1 text-gray-600 dark:text-slate-400">
+                            <CardTitle className="text-lg text-slate-900 dark:text-white">{application.internship.title}</CardTitle>
+                            <CardDescription className="mt-1 text-slate-600 dark:text-slate-400">
                               {application.user.fullName || application.user.firstName || 'Unknown'} • {formatDate(application.appliedAt)}
                             </CardDescription>
                           </div>
@@ -389,19 +389,19 @@ export default function AdminDashboardPage() {
                       <CardContent>
                         <div className="grid grid-cols-2 gap-4 text-sm">
                           <div>
-                            <p className="text-gray-600 dark:text-slate-400">
-                              <strong className="text-gray-900 dark:text-white">Email:</strong> {application.user.email}
+                            <p className="text-slate-600 dark:text-slate-400">
+                              <strong className="text-slate-900 dark:text-white">Email:</strong> {application.user.email}
                             </p>
-                            <p className="text-gray-600 dark:text-slate-400">
-                              <strong className="text-gray-900 dark:text-white">Education:</strong> {application.user.education || 'Not provided'}
+                            <p className="text-slate-600 dark:text-slate-400">
+                              <strong className="text-slate-900 dark:text-white">Education:</strong> {application.user.education || 'Not provided'}
                             </p>
                           </div>
                           <div>
-                            <p className="text-gray-600 dark:text-slate-400">
-                              <strong className="text-gray-900 dark:text-white">Skills:</strong> {application.user.skills || 'Not provided'}
+                            <p className="text-slate-600 dark:text-slate-400">
+                              <strong className="text-slate-900 dark:text-white">Skills:</strong> {application.user.skills || 'Not provided'}
                             </p>
-                            <p className="text-gray-600 dark:text-slate-400">
-                              <strong className="text-gray-900 dark:text-white">Application Date:</strong> {formatDate(application.appliedAt)}
+                            <p className="text-slate-600 dark:text-slate-400">
+                              <strong className="text-slate-900 dark:text-white">Application Date:</strong> {formatDate(application.appliedAt)}
                             </p>
                           </div>
                         </div>
@@ -410,11 +410,11 @@ export default function AdminDashboardPage() {
                   ))}
                 </div>
               ) : (
-                <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+                <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
                   <CardContent className="p-12 text-center">
-                    <Users className="h-12 w-12 text-gray-400 dark:text-slate-500 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No Applications Yet</h3>
-                    <p className="text-gray-600 dark:text-slate-400">Applications will appear here once users start applying.</p>
+                    <Users className="h-12 w-12 text-slate-400 dark:text-slate-500 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">No Applications Yet</h3>
+                    <p className="text-slate-600 dark:text-slate-400">Applications will appear here once users start applying.</p>
                   </CardContent>
                 </Card>
               )}

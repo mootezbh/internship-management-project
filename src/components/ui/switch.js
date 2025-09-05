@@ -22,7 +22,7 @@ const Switch = React.forwardRef(({
         transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
         ${checked 
           ? 'bg-blue-600 dark:bg-blue-500' 
-          : 'bg-gray-200 dark:bg-slate-600'
+          : 'bg-slate-200 dark:bg-slate-600'
         }
         ${disabled 
           ? 'opacity-50 cursor-not-allowed' 

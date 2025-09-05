@@ -78,8 +78,8 @@ export default function SetupTasksPage() {
     return (
       <div className="min-h-screen bg-white dark:bg-slate-950 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Learning Path Not Found</h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-4">The learning path you&apos;re looking for doesn&apos;t exist.</p>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Learning Path Not Found</h2>
+          <p className="text-slate-600 dark:text-slate-300 mb-4">The learning path you&apos;re looking for doesn&apos;t exist.</p>
           <Button onClick={() => router.push('/admin/learning-paths')} variant="outline">
             Back to Learning Paths
           </Button>

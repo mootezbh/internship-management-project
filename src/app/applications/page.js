@@ -104,7 +104,7 @@ export default function ApplicationsPage() {
           Rejected
         </Badge>
       default:
-        return <Badge variant="secondary" className="bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-slate-300">{status}</Badge>
+        return <Badge variant="secondary" className="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300">{status}</Badge>
     }
   }
 
@@ -126,10 +126,10 @@ export default function ApplicationsPage() {
           <div className="px-4 py-6 sm:px-0">
             {/* Header */}
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
                 My Applications
               </h1>
-              <p className="text-gray-600 dark:text-slate-300">
+              <p className="text-slate-600 dark:text-slate-300">
                 Track your internship application status and progress.
               </p>
             </div>
@@ -140,7 +140,7 @@ export default function ApplicationsPage() {
                 variant={statusFilter === 'all' ? 'default' : 'outline'}
                 onClick={() => setStatusFilter('all')}
                 size="sm"
-                className={statusFilter === 'all' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60'}
+                className={statusFilter === 'all' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'}
               >
                 All Applications
               </Button>
@@ -148,7 +148,7 @@ export default function ApplicationsPage() {
                 variant={statusFilter === 'pending' ? 'default' : 'outline'}
                 onClick={() => setStatusFilter('pending')}
                 size="sm"
-                className={statusFilter === 'pending' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60'}
+                className={statusFilter === 'pending' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'}
               >
                 Pending
               </Button>
@@ -156,7 +156,7 @@ export default function ApplicationsPage() {
                 variant={statusFilter === 'under_review' ? 'default' : 'outline'}
                 onClick={() => setStatusFilter('under_review')}
                 size="sm"
-                className={statusFilter === 'under_review' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60'}
+                className={statusFilter === 'under_review' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'}
               >
                 Under Review
               </Button>
@@ -164,7 +164,7 @@ export default function ApplicationsPage() {
                 variant={statusFilter === 'accepted' ? 'default' : 'outline'}
                 onClick={() => setStatusFilter('accepted')}
                 size="sm"
-                className={statusFilter === 'accepted' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60'}
+                className={statusFilter === 'accepted' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'}
               >
                 Accepted
               </Button>
@@ -172,7 +172,7 @@ export default function ApplicationsPage() {
                 variant={statusFilter === 'rejected' ? 'default' : 'outline'}
                 onClick={() => setStatusFilter('rejected')}
                 size="sm"
-                className={statusFilter === 'rejected' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60'}
+                className={statusFilter === 'rejected' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'}
               >
                 Rejected
               </Button>
@@ -182,14 +182,14 @@ export default function ApplicationsPage() {
             {filteredApplications.length > 0 ? (
               <div className="space-y-4">
                 {filteredApplications.map((application) => (
-                  <Card key={application.id} className="hover:shadow-lg dark:hover:shadow-slate-800/50 transition-shadow border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+                  <Card key={application.id} className="hover:shadow-lg dark:hover:shadow-slate-800/50 transition-shadow border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
                     <CardHeader>
                       <div className="flex justify-between items-start">
                         <div>
-                          <CardTitle className="text-lg mb-1 text-gray-900 dark:text-white">
+                          <CardTitle className="text-lg mb-1 text-slate-900 dark:text-white">
                             {application.internship.title}
                           </CardTitle>
-                          <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-slate-400">
+                          <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
                             <div className="flex items-center gap-1">
                               <MapPin className="h-4 w-4" />
                               {application.internship.location}
@@ -206,7 +206,7 @@ export default function ApplicationsPage() {
                         </div>
                         <div className="flex flex-col items-end gap-2">
                           {getStatusBadge(application.status)}
-                          <div className="text-xs text-gray-500 dark:text-slate-400">
+                          <div className="text-xs text-slate-500 dark:text-slate-400">
                             Applied {formatDate(application.appliedAt)}
                           </div>
                         </div>
@@ -215,7 +215,7 @@ export default function ApplicationsPage() {
                     
                     <CardContent>
                       <div className="flex justify-between items-center">
-                        <div className="text-sm text-gray-600 dark:text-slate-400">
+                        <div className="text-sm text-slate-600 dark:text-slate-400">
                           <p>Application ID: {application.id}</p>
                         </div>
                         
@@ -235,10 +235,10 @@ export default function ApplicationsPage() {
               </div>
             ) : (
               <div className="text-center py-12">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
                   {statusFilter === 'all' ? 'No applications yet' : `No ${statusFilter.replace('_', ' ')} applications`}
                 </h3>
-                <p className="text-gray-600 dark:text-slate-400 mb-4">
+                <p className="text-slate-600 dark:text-slate-400 mb-4">
                   {statusFilter === 'all' 
                     ? 'Your internship applications will appear here once you start applying.'
                     : 'Try adjusting your filter or check back later.'

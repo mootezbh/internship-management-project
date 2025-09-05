@@ -125,15 +125,15 @@ export default function CreateInternshipPage() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Internships
           </Button>
-          <span className="text-2xl font-bold text-gray-900 dark:text-white">Create New Internship</span>
+          <span className="text-2xl font-bold text-slate-900 dark:text-white">Create New Internship</span>
         </div>
-        <p className="text-sm text-gray-600 dark:text-gray-300 mb-8">Add a new internship opportunity</p>
+        <p className="text-sm text-slate-600 dark:text-slate-300 mb-8">Add a new internship opportunity</p>
         {/* Main Content */}
         <form id="create-internship-form" onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Information */}
-          <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="flex items-center text-gray-900 dark:text-white">
+              <CardTitle className="flex items-center text-slate-900 dark:text-white">
                 <Target className="w-5 h-5 mr-2" />
                 Basic Information
               </CardTitle>
@@ -141,7 +141,7 @@ export default function CreateInternshipPage() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="title" className="text-gray-700 dark:text-gray-300">
+                  <Label htmlFor="title" className="text-slate-700 dark:text-slate-300">
                     Title *
                   </Label>
                   <Input
@@ -151,11 +151,11 @@ export default function CreateInternshipPage() {
                     onChange={handleInputChange}
                     placeholder="e.g., Frontend Developer Intern"
                     required
-                    className="border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
+                    className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="field" className="text-gray-700 dark:text-gray-300">
+                  <Label htmlFor="field" className="text-slate-700 dark:text-slate-300">
                     Field *
                   </Label>
                   <Input
@@ -165,13 +165,13 @@ export default function CreateInternshipPage() {
                     onChange={handleInputChange}
                     placeholder="e.g., Technology, Marketing, Design"
                     required
-                    className="border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
+                    className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                   />
                 </div>
               </div>
 
               <div>
-                <Label htmlFor="description" className="text-gray-700 dark:text-gray-300">
+                <Label htmlFor="description" className="text-slate-700 dark:text-slate-300">
                   Description *
                 </Label>
                 <Textarea
@@ -182,12 +182,12 @@ export default function CreateInternshipPage() {
                   placeholder="Describe the internship opportunity, responsibilities, and requirements..."
                   rows={4}
                   required
-                  className="border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
+                  className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                 />
               </div>
 
               <div>
-                <Label htmlFor="location" className="text-gray-700 dark:text-gray-300">
+                <Label htmlFor="location" className="text-slate-700 dark:text-slate-300">
                   Location
                 </Label>
                 <Input
@@ -196,16 +196,16 @@ export default function CreateInternshipPage() {
                   value={formData.location}
                   onChange={handleInputChange}
                   placeholder="e.g., Remote, New York, Hybrid"
-                  className="border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
+                  className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                 />
               </div>
             </CardContent>
           </Card>
 
           {/* Capacity and Duration */}
-          <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="flex items-center text-gray-900 dark:text-white">
+              <CardTitle className="flex items-center text-slate-900 dark:text-white">
                 <Users className="w-5 h-5 mr-2" />
                 Capacity & Duration
               </CardTitle>
@@ -213,7 +213,7 @@ export default function CreateInternshipPage() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="capacity" className="text-gray-700 dark:text-gray-300">
+                  <Label htmlFor="capacity" className="text-slate-700 dark:text-slate-300">
                     Capacity *
                   </Label>
                   <Input
@@ -225,11 +225,11 @@ export default function CreateInternshipPage() {
                     placeholder="Number of interns"
                     min="1"
                     required
-                    className="border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
+                    className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="duration" className="text-gray-700 dark:text-gray-300">
+                  <Label htmlFor="duration" className="text-slate-700 dark:text-slate-300">
                     Duration (weeks) *
                   </Label>
                   <Input
@@ -241,7 +241,7 @@ export default function CreateInternshipPage() {
                     placeholder="Duration in weeks"
                     min="1"
                     required
-                    className="border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
+                    className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -249,9 +249,9 @@ export default function CreateInternshipPage() {
           </Card>
 
           {/* Dates */}
-          <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="flex items-center text-gray-900 dark:text-white">
+              <CardTitle className="flex items-center text-slate-900 dark:text-white">
                 <Calendar className="w-5 h-5 mr-2" />
                 Timeline
               </CardTitle>
@@ -259,7 +259,7 @@ export default function CreateInternshipPage() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="startDate" className="text-gray-700 dark:text-gray-300">
+                  <Label htmlFor="startDate" className="text-slate-700 dark:text-slate-300">
                     Start Date
                   </Label>
                   <Input
@@ -268,11 +268,11 @@ export default function CreateInternshipPage() {
                     type="date"
                     value={formData.startDate}
                     onChange={handleInputChange}
-                    className="border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
+                    className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="endDate" className="text-gray-700 dark:text-gray-300">
+                  <Label htmlFor="endDate" className="text-slate-700 dark:text-slate-300">
                     End Date
                   </Label>
                   <Input
@@ -281,7 +281,7 @@ export default function CreateInternshipPage() {
                     type="date"
                     value={formData.endDate}
                     onChange={handleInputChange}
-                    className="border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
+                    className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -289,16 +289,16 @@ export default function CreateInternshipPage() {
           </Card>
 
           {/* Learning Path */}
-          <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="flex items-center text-gray-900 dark:text-white">
+              <CardTitle className="flex items-center text-slate-900 dark:text-white">
                 <Clock className="w-5 h-5 mr-2" />
                 Learning Path
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div>
-                <Label htmlFor="learningPathId" className="text-gray-700 dark:text-gray-300">
+                <Label htmlFor="learningPathId" className="text-slate-700 dark:text-slate-300">
                   Learning Path (Optional)
                 </Label>
                 <select
@@ -306,7 +306,7 @@ export default function CreateInternshipPage() {
                   name="learningPathId"
                   value={formData.learningPathId}
                   onChange={handleInputChange}
-                  className="mt-1 w-full p-2 border border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="mt-1 w-full p-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="">No learning path</option>
                   {learningPaths.map((path) => (
@@ -315,7 +315,7 @@ export default function CreateInternshipPage() {
                     </option>
                   ))}
                 </select>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
                   Associate a learning path with tasks for interns to complete
                 </p>
               </div>
@@ -328,7 +328,7 @@ export default function CreateInternshipPage() {
               type="button"
               onClick={() => router.back()}
               variant="outline"
-              className="border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300"
+              className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300"
             >
               Cancel
             </Button>

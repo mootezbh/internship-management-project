@@ -35,7 +35,7 @@ const Badge = ({ children, variant = "default", className = "" }) => {
   const baseClasses = "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
   const variantClasses = {
     default: "bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300",
-    secondary: "bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-slate-300",
+    secondary: "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300",
     success: "bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300",
     warning: "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300",
     destructive: "bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300"
@@ -202,9 +202,9 @@ export default function LearningPathPage() {
       case 'overdue':
         return <AlertCircle className="h-5 w-5 text-red-600" />
       case 'locked':
-        return <Lock className="h-5 w-5 text-gray-400" />
+        return <Lock className="h-5 w-5 text-slate-400" />
       default:
-        return <Circle className="h-5 w-5 text-gray-400" />
+        return <Circle className="h-5 w-5 text-slate-400" />
     }
   }
 
@@ -309,8 +309,8 @@ export default function LearningPathPage() {
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="text-center py-12">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No Learning Path Available</h3>
-            <p className="text-gray-600 dark:text-slate-400 mb-4">
+            <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">No Learning Path Available</h3>
+            <p className="text-slate-600 dark:text-slate-400 mb-4">
               This internship doesn&apos;t have an associated learning path yet.
             </p>
             <Button 
@@ -336,7 +336,7 @@ export default function LearningPathPage() {
               <Button 
                 variant="ghost" 
                 onClick={() => router.push('/applications')}
-                className="mb-4 text-gray-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                className="mb-4 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Applications
@@ -344,13 +344,13 @@ export default function LearningPathPage() {
               
               <div className="flex items-start justify-between">
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                  <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
                     {learningPath.title}
                   </h1>
-                  <p className="text-gray-600 dark:text-slate-400 mb-4">
+                  <p className="text-slate-600 dark:text-slate-400 mb-4">
                     {learningPath.description}
                   </p>
-                  <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-slate-400">
+                  <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
                     <div className="flex items-center gap-1">
                       <Target className="h-4 w-4" />
                       {internship.title}
@@ -370,14 +370,14 @@ export default function LearningPathPage() {
                   <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                     {calculateProgress()}%
                   </div>
-                  <div className="text-sm text-gray-500 dark:text-slate-400">Complete</div>
+                  <div className="text-sm text-slate-500 dark:text-slate-400">Complete</div>
                 </div>
               </div>
               
               {/* Progress Bar */}
               <div className="mt-6">
                 <Progress value={calculateProgress()} className="h-3" />
-                <p className="text-sm text-gray-600 dark:text-slate-400 mt-2">
+                <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">
                   {userProgress.completedTasks || 0} of {userProgress.totalTasks || tasks.length} tasks completed
                 </p>
               </div>
@@ -424,7 +424,7 @@ export default function LearningPathPage() {
                         status === 'pending' ? 'border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-950/50' :
                         status === 'requires_changes' ? 'border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/50' :
                         status === 'overdue' ? 'border-red-300 dark:border-red-700 bg-red-100 dark:bg-red-950/60' :
-                        status === 'locked' ? 'border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900/50 opacity-60' :
+                        status === 'locked' ? 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 opacity-60' :
                         'border-blue-200 dark:border-blue-800 bg-white dark:bg-slate-950/50 hover:shadow-lg dark:hover:shadow-slate-800/50'
                       }`}
                     >
@@ -448,7 +448,7 @@ export default function LearningPathPage() {
                             {getStatusBadge(status)}
                             {deadline && (
                               <div className={`text-xs flex items-center gap-1 ${
-                                isTaskOverdue(task) ? 'text-red-600' : 'text-gray-500'
+                                isTaskOverdue(task) ? 'text-red-600' : 'text-slate-500'
                               }`}>
                                 <Calendar className="h-3 w-3" />
                                 Due {formatDate(deadline)}
@@ -508,12 +508,12 @@ export default function LearningPathPage() {
                         ) : (
                           /* Legacy task content rendering */
                           task.content && (
-                            <div className="mb-4 p-4 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-600">
-                              <h4 className="font-medium mb-2 flex items-center gap-2 text-gray-900 dark:text-white">
+                            <div className="mb-4 p-4 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-600">
+                              <h4 className="font-medium mb-2 flex items-center gap-2 text-slate-900 dark:text-white">
                                 {getContentTypeIcon(task.contentType)}
                                 Task Instructions
                               </h4>
-                              <div className="text-sm text-gray-700 dark:text-slate-300 whitespace-pre-wrap">
+                              <div className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
                                 {task.content}
                               </div>
                             </div>
@@ -522,13 +522,13 @@ export default function LearningPathPage() {
 
                         {/* Submission Status */}
                         {submission && (
-                          <div className="mb-4 p-4 bg-gray-50 dark:bg-slate-800/50 rounded-lg border border-gray-200 dark:border-slate-600">
+                          <div className="mb-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-600">
                             <div className="flex items-center justify-between mb-2">
-                              <h4 className="font-medium text-gray-900 dark:text-white">Your Submission</h4>
+                              <h4 className="font-medium text-slate-900 dark:text-white">Your Submission</h4>
                               {getStatusBadge(status)}
                             </div>
                             <div className="flex items-center gap-2 text-sm">
-                              <Github className="h-4 w-4 text-gray-500 dark:text-slate-400" />
+                              <Github className="h-4 w-4 text-slate-500 dark:text-slate-400" />
                               <a 
                                 href={submission.githubUrl} 
                                 target="_blank" 
@@ -538,7 +538,7 @@ export default function LearningPathPage() {
                                 {submission.githubUrl}
                               </a>
                             </div>
-                            <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                               Submitted on {formatDate(submission.submittedAt)}
                             </p>
                             {submission.feedback && (
@@ -556,7 +556,7 @@ export default function LearningPathPage() {
                             <h4 className="font-medium mb-3 text-blue-900 dark:text-blue-100">Submit Your Work</h4>
                             <div className="space-y-3">
                               <div>
-                                <Label htmlFor={`github-${task.id}`} className="text-sm font-medium text-gray-900 dark:text-white">
+                                <Label htmlFor={`github-${task.id}`} className="text-sm font-medium text-slate-900 dark:text-white">
                                   GitHub Repository URL
                                 </Label>
                                 <Input
@@ -565,7 +565,7 @@ export default function LearningPathPage() {
                                   placeholder="https://github.com/username/repository"
                                   value={formData.githubUrl || ''}
                                   onChange={(e) => handleSubmissionChange(task.id, 'githubUrl', e.target.value)}
-                                  className="mt-1 bg-white dark:bg-slate-800 border-gray-300 dark:border-slate-600"
+                                  className="mt-1 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600"
                                 />
                               </div>
                               <Button 
@@ -592,7 +592,7 @@ export default function LearningPathPage() {
                             <h4 className="font-medium mb-3 text-red-900 dark:text-red-100">Resubmit Your Work</h4>
                             <div className="space-y-3">
                               <div>
-                                <Label htmlFor={`github-resubmit-${task.id}`} className="text-sm font-medium text-gray-900 dark:text-white">
+                                <Label htmlFor={`github-resubmit-${task.id}`} className="text-sm font-medium text-slate-900 dark:text-white">
                                   Updated GitHub Repository URL
                                 </Label>
                                 <Input
@@ -601,7 +601,7 @@ export default function LearningPathPage() {
                                   placeholder="https://github.com/username/repository"
                                   value={formData.githubUrl || ''}
                                   onChange={(e) => handleSubmissionChange(task.id, 'githubUrl', e.target.value)}
-                                  className="mt-1 bg-white dark:bg-slate-800 border-gray-300 dark:border-slate-600"
+                                  className="mt-1 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600"
                                 />
                               </div>
                               <Button 
@@ -625,9 +625,9 @@ export default function LearningPathPage() {
 
                         {/* Locked Task Message */}
                         {!isAvailable && !submission && (
-                          <div className="p-4 bg-gray-100 dark:bg-slate-800/50 rounded-lg text-center border border-gray-200 dark:border-slate-600">
-                            <Lock className="h-8 w-8 mx-auto text-gray-400 dark:text-slate-500 mb-2" />
-                            <p className="text-sm text-gray-600 dark:text-slate-400">
+                          <div className="p-4 bg-slate-100 dark:bg-slate-800/50 rounded-lg text-center border border-slate-200 dark:border-slate-600">
+                            <Lock className="h-8 w-8 mx-auto text-slate-400 dark:text-slate-500 mb-2" />
+                            <p className="text-sm text-slate-600 dark:text-slate-400">
                               Complete the previous task to unlock this one
                             </p>
                           </div>

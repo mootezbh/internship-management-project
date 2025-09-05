@@ -32,7 +32,7 @@ const Badge = ({ children, variant = "default", className = "" }) => {
   const baseClasses = "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
   const variantClasses = {
     default: "bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300",
-    secondary: "bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-slate-300",
+    secondary: "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300",
     success: "bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300",
     warning: "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300",
     destructive: "bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300"
@@ -150,7 +150,7 @@ export default function AdminSubmissionReviewPage() {
       case 'REQUIRES_CHANGES':
         return <AlertCircle className="h-5 w-5 text-orange-600" />
       default:
-        return <FileText className="h-5 w-5 text-gray-400" />
+        return <FileText className="h-5 w-5 text-slate-400" />
     }
   }
 
@@ -202,9 +202,9 @@ export default function AdminSubmissionReviewPage() {
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="text-center py-12">
-            <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Submission Not Found</h3>
-            <p className="text-gray-600 mb-4">
+            <FileText className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-slate-900 mb-2">Submission Not Found</h3>
+            <p className="text-slate-600 mb-4">
               The submission you&apos;re looking for doesn&apos;t exist or you don&apos;t have permission to view it.
             </p>
             <Button onClick={() => router.push('/admin/submissions')}>
@@ -234,10 +234,10 @@ export default function AdminSubmissionReviewPage() {
               
               <div className="flex items-start justify-between">
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                  <h1 className="text-3xl font-bold text-slate-900 mb-2">
                     Review Submission
                   </h1>
-                  <p className="text-gray-600">
+                  <p className="text-slate-600">
                     {submission.task.title} • Task {submission.task.order}
                   </p>
                 </div>
@@ -262,7 +262,7 @@ export default function AdminSubmissionReviewPage() {
                   <CardContent>
                     <div className="space-y-4">
                       <div>
-                        <Label className="text-sm font-medium text-gray-700">GitHub Repository</Label>
+                        <Label className="text-sm font-medium text-slate-700">GitHub Repository</Label>
                         <div className="mt-1 flex items-center gap-2">
                           <a 
                             href={submission.githubUrl}
@@ -282,18 +282,18 @@ export default function AdminSubmissionReviewPage() {
 
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <Label className="text-sm font-medium text-gray-700">Submitted</Label>
+                          <Label className="text-sm font-medium text-slate-700">Submitted</Label>
                           <div className="mt-1 flex items-center gap-2 text-sm">
-                            <Calendar className="h-4 w-4 text-gray-400" />
+                            <Calendar className="h-4 w-4 text-slate-400" />
                             {formatDate(submission.submittedAt)}
                           </div>
                         </div>
 
                         {submission.reviewedAt && (
                           <div>
-                            <Label className="text-sm font-medium text-gray-700">Last Reviewed</Label>
+                            <Label className="text-sm font-medium text-slate-700">Last Reviewed</Label>
                             <div className="mt-1 flex items-center gap-2 text-sm">
-                              <Calendar className="h-4 w-4 text-gray-400" />
+                              <Calendar className="h-4 w-4 text-slate-400" />
                               {formatDate(submission.reviewedAt)}
                             </div>
                           </div>
@@ -302,7 +302,7 @@ export default function AdminSubmissionReviewPage() {
 
                       {submission.feedback && (
                         <div>
-                          <Label className="text-sm font-medium text-gray-700">Previous Feedback</Label>
+                          <Label className="text-sm font-medium text-slate-700">Previous Feedback</Label>
                           <div className="mt-1 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                             <p className="text-sm text-yellow-800">{submission.feedback}</p>
                           </div>
@@ -311,7 +311,7 @@ export default function AdminSubmissionReviewPage() {
 
                       {submission.grade && (
                         <div>
-                          <Label className="text-sm font-medium text-gray-700">Grade</Label>
+                          <Label className="text-sm font-medium text-slate-700">Grade</Label>
                           <div className="mt-1 flex items-center gap-2">
                             <Star className="h-4 w-4 text-yellow-500" />
                             <span className="font-medium">{submission.grade}</span>
@@ -333,22 +333,22 @@ export default function AdminSubmissionReviewPage() {
                   <CardContent>
                     <div className="space-y-4">
                       <div>
-                        <Label className="text-sm font-medium text-gray-700">Task Title</Label>
+                        <Label className="text-sm font-medium text-slate-700">Task Title</Label>
                         <p className="mt-1 text-sm">{submission.task.title}</p>
                       </div>
 
                       <div>
-                        <Label className="text-sm font-medium text-gray-700">Task Order</Label>
+                        <Label className="text-sm font-medium text-slate-700">Task Order</Label>
                         <p className="mt-1 text-sm">Task {submission.task.order}</p>
                       </div>
 
                       <div>
-                        <Label className="text-sm font-medium text-gray-700">Learning Path</Label>
+                        <Label className="text-sm font-medium text-slate-700">Learning Path</Label>
                         <p className="mt-1 text-sm">{submission.task.learningPath.title}</p>
                       </div>
 
                       <div>
-                        <Label className="text-sm font-medium text-gray-700">Internship</Label>
+                        <Label className="text-sm font-medium text-slate-700">Internship</Label>
                         <p className="mt-1 text-sm">
                           {submission.task.learningPath.internships[0]?.title} - {submission.task.learningPath.internships[0]?.company}
                         </p>
@@ -356,8 +356,8 @@ export default function AdminSubmissionReviewPage() {
 
                       {submission.task.content && (
                         <div>
-                          <Label className="text-sm font-medium text-gray-700">Task Instructions</Label>
-                          <div className="mt-1 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                          <Label className="text-sm font-medium text-slate-700">Task Instructions</Label>
+                          <div className="mt-1 p-3 bg-slate-50 border border-slate-200 rounded-lg">
                             <p className="text-sm whitespace-pre-wrap">{submission.task.content}</p>
                           </div>
                         </div>
@@ -397,7 +397,7 @@ export default function AdminSubmissionReviewPage() {
                             placeholder="e.g., A+, 95/100, Excellent"
                             value={reviewForm.grade}
                             onChange={(e) => setReviewForm(prev => ({ ...prev, grade: e.target.value }))}
-                            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                            className="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                           />
                         </div>
 
@@ -462,32 +462,32 @@ export default function AdminSubmissionReviewPage() {
                   <CardContent>
                     <div className="space-y-3">
                       <div>
-                        <Label className="text-sm font-medium text-gray-700">Name</Label>
+                        <Label className="text-sm font-medium text-slate-700">Name</Label>
                         <p className="mt-1 text-sm">{submission.user.fullName || submission.user.firstName || 'Unknown'}</p>
                       </div>
 
                       <div>
-                        <Label className="text-sm font-medium text-gray-700">Email</Label>
+                        <Label className="text-sm font-medium text-slate-700">Email</Label>
                         <p className="mt-1 text-sm">{submission.user.email}</p>
                       </div>
 
                       {submission.user.education && (
                         <div>
-                          <Label className="text-sm font-medium text-gray-700">Education</Label>
+                          <Label className="text-sm font-medium text-slate-700">Education</Label>
                           <p className="mt-1 text-sm">{submission.user.education}</p>
                         </div>
                       )}
 
                       {submission.user.skills && (
                         <div>
-                          <Label className="text-sm font-medium text-gray-700">Skills</Label>
+                          <Label className="text-sm font-medium text-slate-700">Skills</Label>
                           <p className="mt-1 text-sm">{submission.user.skills}</p>
                         </div>
                       )}
 
                       {submission.user.cvUrl && (
                         <div>
-                          <Label className="text-sm font-medium text-gray-700">CV</Label>
+                          <Label className="text-sm font-medium text-slate-700">CV</Label>
                           <div className="mt-1">
                             <Button size="sm" variant="outline" asChild>
                               <a href={submission.user.cvUrl} target="_blank" rel="noopener noreferrer">
@@ -515,7 +515,7 @@ export default function AdminSubmissionReviewPage() {
                       <div className="space-y-4">
                         <div className="text-center">
                           <div className="text-2xl font-bold text-blue-600">{calculateUserProgress()}%</div>
-                          <div className="text-sm text-gray-500">Overall Progress</div>
+                          <div className="text-sm text-slate-500">Overall Progress</div>
                         </div>
 
                         <div className="space-y-2">
@@ -523,7 +523,7 @@ export default function AdminSubmissionReviewPage() {
                             <span>Approved Tasks</span>
                             <span>{userSubmissions.filter(s => s.status === 'APPROVED').length}/{userSubmissions.length}</span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="w-full bg-slate-200 rounded-full h-2">
                             <div 
                               className="bg-blue-600 h-2 rounded-full" 
                               style={{ width: `${calculateUserProgress()}%` }}

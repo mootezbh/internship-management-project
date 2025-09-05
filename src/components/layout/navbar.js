@@ -119,7 +119,7 @@ export function Navbar() {
   const navigationItems = getNavigationItems()
 
   return (
-    <nav className="bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl shadow-sm border-b border-gray-200/60 dark:border-slate-800/60 sticky top-0 z-50">
+    <nav className="bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl shadow-sm border-b border-slate-200/60 dark:border-slate-800/60 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo/Brand */}
@@ -146,7 +146,7 @@ export function Navbar() {
                         className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                           item.active
                             ? 'bg-blue-50 dark:bg-slate-800/80 text-blue-700 dark:text-blue-300 shadow-sm border border-blue-200/50 dark:border-slate-700/50'
-                            : 'text-gray-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-slate-800/60'
+                            : 'text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800/60'
                         }`}
                       >
                         <IconComponent className="h-4 w-4" />
@@ -180,7 +180,7 @@ export function Navbar() {
                 mode="modal"
                 forceRedirectUrl="/api/auth/redirect"
               >
-                <button className="text-gray-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer">
+                <button className="text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer">
                   Sign In
                 </button>
               </SignInButton>
@@ -198,7 +198,7 @@ export function Navbar() {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden p-2 rounded-lg text-gray-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-slate-800/60 transition-colors"
+                className="lg:hidden p-2 rounded-lg text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors"
               >
                 {isMobileMenuOpen ? (
                   <X className="h-5 w-5" />
@@ -217,7 +217,7 @@ export function Navbar() {
       {/* Mobile Navigation Menu */}
       <SignedIn>
         {isMobileMenuOpen && (
-          <div className="lg:hidden border-t border-gray-200/60 dark:border-slate-800/60 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl">
+          <div className="lg:hidden border-t border-slate-200/60 dark:border-slate-800/60 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl">
             <div className="px-4 py-3 space-y-1">
               {!isLoading && navigationItems.map((item) => {
                 const IconComponent = item.icon
@@ -229,7 +229,7 @@ export function Navbar() {
                     className={`flex items-center space-x-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                       item.active
                         ? 'bg-blue-50 dark:bg-slate-800/80 text-blue-700 dark:text-blue-300 shadow-sm border border-blue-200/50 dark:border-slate-700/50'
-                        : 'text-gray-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-slate-800/60'
+                        : 'text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800/60'
                     }`}
                   >
                     <IconComponent className="h-5 w-5" />

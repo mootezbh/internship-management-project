@@ -65,21 +65,21 @@ export default function CreateLearningPathPage() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Learning Paths
           </Button>
-          <span className="text-2xl font-bold text-gray-900 dark:text-white">Create Learning Path</span>
+          <span className="text-2xl font-bold text-slate-900 dark:text-white">Create Learning Path</span>
         </div>
-        <p className="text-sm text-gray-600 dark:text-gray-300 mb-8">Add a new learning path for internships</p>
+        <p className="text-sm text-slate-600 dark:text-slate-300 mb-8">Add a new learning path for internships</p>
         {/* Main Content */}
-        <Card className="border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+        <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="text-gray-900 dark:text-white">Learning Path Details</CardTitle>
-            <CardDescription className="text-gray-600 dark:text-gray-300">
+            <CardTitle className="text-slate-900 dark:text-white">Learning Path Details</CardTitle>
+            <CardDescription className="text-slate-600 dark:text-slate-300">
               Create a structured learning path to guide interns through their journey
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <Label htmlFor="title" className="text-gray-900 dark:text-white">
+                <Label htmlFor="title" className="text-slate-900 dark:text-white">
                   Title <span className="text-red-500">*</span>
                 </Label>
                 <Input
@@ -88,11 +88,11 @@ export default function CreateLearningPathPage() {
                   onChange={(e) => handleInputChange('title', e.target.value)}
                   placeholder="Enter learning path title"
                   required
-                  className="mt-1 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400"
+                  className="mt-1 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400"
                 />
               </div>
               <div>
-                <Label htmlFor="description" className="text-gray-900 dark:text-white">
+                <Label htmlFor="description" className="text-slate-900 dark:text-white">
                   Description
                 </Label>
                 <Textarea
@@ -101,7 +101,7 @@ export default function CreateLearningPathPage() {
                   onChange={(e) => handleInputChange('description', e.target.value)}
                   placeholder="Enter learning path description (optional)"
                   rows={4}
-                  className="mt-1 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400"
+                  className="mt-1 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400"
                 />
               </div>
               <div className="flex justify-end space-x-4 pt-6">
@@ -110,7 +110,7 @@ export default function CreateLearningPathPage() {
                   variant="outline"
                   onClick={() => router.push('/admin/learning-paths')}
                   disabled={isSubmitting}
-                  className="border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                  className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                 >
                   Cancel
                 </Button>

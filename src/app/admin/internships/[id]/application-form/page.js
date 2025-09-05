@@ -128,10 +128,10 @@ export default function SetupApplicationFormPage() {
 
   if (!internship) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Internship Not Found</h2>
-          <p className="text-gray-600 dark:text-slate-400 mb-4">The internship you&apos;re looking for doesn&apos;t exist.</p>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Internship Not Found</h2>
+          <p className="text-slate-600 dark:text-slate-400 mb-4">The internship you&apos;re looking for doesn&apos;t exist.</p>
           <Button onClick={() => router.push('/admin/internships')} variant="outline">
             Back to Internships
           </Button>
@@ -154,7 +154,7 @@ export default function SetupApplicationFormPage() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Internships
           </Button>
-          <span className="text-2xl font-bold text-gray-900 dark:text-white">Setup Application Form</span>
+          <span className="text-2xl font-bold text-slate-900 dark:text-white">Setup Application Form</span>
           <Button 
             onClick={saveFormConfiguration}
             disabled={isSaving}
@@ -173,12 +173,12 @@ export default function SetupApplicationFormPage() {
             )}
           </Button>
         </div>
-        <p className="text-sm text-gray-600 dark:text-gray-300 mb-8">Configure application form for: {internship.title}</p>
+        <p className="text-sm text-slate-600 dark:text-slate-300 mb-8">Configure application form for: {internship.title}</p>
         {/* Drag-and-drop Form Builder */}
         <Card className="border-slate-800 dark:border-slate-800 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="text-gray-900 dark:text-white">Application Form Fields</CardTitle>
-            <CardDescription className="text-gray-600 dark:text-slate-400">
+            <CardTitle className="text-slate-900 dark:text-white">Application Form Fields</CardTitle>
+            <CardDescription className="text-slate-600 dark:text-slate-400">
               Customize the application form that candidates will fill out when applying for this internship.
             </CardDescription>
           </CardHeader>
@@ -195,19 +195,19 @@ export default function SetupApplicationFormPage() {
         {/* Preview */}
         <Card className="border-slate-800 dark:border-slate-800 bg-white dark:bg-slate-900/50 backdrop-blur-sm mt-8">
           <CardHeader>
-            <CardTitle className="text-gray-900 dark:text-white">Form Preview</CardTitle>
-            <CardDescription className="text-gray-600 dark:text-slate-400">
+            <CardTitle className="text-slate-900 dark:text-white">Form Preview</CardTitle>
+            <CardDescription className="text-slate-600 dark:text-slate-400">
               This is how the application form will appear to candidates.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4 p-4 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800/30">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
                 Apply for: {internship.title}
               </h3>
               {formFields.map((field) => (
                 <div key={field.id}>
-                  <Label className="text-gray-900 dark:text-white">
+                  <Label className="text-slate-900 dark:text-white">
                     {field.label}
                     {field.required && <span className="text-red-500 ml-1">*</span>}
                   </Label>
@@ -215,14 +215,14 @@ export default function SetupApplicationFormPage() {
                     <Textarea
                       placeholder={`Enter your ${field.label.toLowerCase()}`}
                       disabled
-                      className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                      className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                     />
                   ) : (
                     <Input
                       type={field.type === 'EMAIL' ? 'email' : 'text'}
                       placeholder={`Enter your ${field.label.toLowerCase()}`}
                       disabled
-                      className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                      className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                     />
                   )}
                 </div>

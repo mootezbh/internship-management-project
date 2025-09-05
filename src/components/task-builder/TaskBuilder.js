@@ -23,7 +23,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import Switch from '@/components/Switch';
+import Switch from '@/components/ui/switch';
 import { toast } from 'sonner';
 import { LoadingSpinner, ContentLoading } from '@/components/ui/loading-spinner';
 
@@ -39,11 +39,11 @@ const ContentEditor = React.memo(({
 
   return (
     <div>
-      <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Content Properties</h3>
+      <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Content Properties</h3>
       
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Title
           </label>
           <input
@@ -51,13 +51,13 @@ const ContentEditor = React.memo(({
             value={selectedContent.title || ''}
             onChange={onTitleChange}
             placeholder="Content title..."
-            className="w-full p-2 border border-gray-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+            className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
           />
         </div>
 
         {(selectedContent.type === 'TEXT' || selectedContent.type === 'TEXTAREA' || selectedContent.type === 'CODE') && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
               {selectedContent.type === 'CODE' ? 'Code' : 'Content'}
             </label>
             <textarea
@@ -69,7 +69,7 @@ const ContentEditor = React.memo(({
                   : 'Enter your content here...'
               }
               rows={selectedContent.type === 'TEXTAREA' ? 6 : 4}
-              className={`w-full p-2 border border-gray-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white ${
+              className={`w-full p-2 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white ${
                 selectedContent.type === 'CODE' ? 'font-mono' : ''
               }`}
             />
@@ -78,7 +78,7 @@ const ContentEditor = React.memo(({
 
         {(selectedContent.type === 'VIDEO' || selectedContent.type === 'URL' || selectedContent.type === 'FILE' || selectedContent.type === 'IMAGE') && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
               {selectedContent.type === 'VIDEO' ? 'Video URL' : 
                selectedContent.type === 'FILE' ? 'File URL' :
                selectedContent.type === 'IMAGE' ? 'Image URL' : 'URL'}
@@ -93,7 +93,7 @@ const ContentEditor = React.memo(({
                 selectedContent.type === 'IMAGE' ? 'https://example.com/image.jpg' :
                 'https://example.com'
               }
-              className="w-full p-2 border border-gray-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+              className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
             />
           </div>
         )}
@@ -104,9 +104,9 @@ const ContentEditor = React.memo(({
             id="content-required"
             checked={selectedContent.required || false}
             onChange={(e) => onRequiredChange(e.target.checked)}
-            className="text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            className="text-blue-600 focus:ring-blue-500 border-slate-300 rounded"
           />
-          <label htmlFor="content-required" className="ml-2 text-sm text-gray-700 dark:text-slate-300">
+          <label htmlFor="content-required" className="ml-2 text-sm text-slate-700 dark:text-slate-300">
             Required for task completion
           </label>
         </div>
@@ -233,7 +233,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
   // Early return after all hooks
   if (!isMounted) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
         <ContentLoading title="Initializing Task Builder" subtitle="Setting up your workspace..." icon={Settings} />
       </div>
     );
@@ -264,19 +264,19 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
       switch (item.type) {
         case 'TEXT':
           return (
-            <div className="text-sm text-gray-700 dark:text-slate-300">
+            <div className="text-sm text-slate-700 dark:text-slate-300">
               {item.content || 'No content yet...'}
             </div>
           );
         case 'TEXTAREA':
           return (
-            <div className="text-sm text-gray-700 dark:text-slate-300 whitespace-pre-wrap">
+            <div className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
               {item.content || 'No content yet...'}
             </div>
           );
         case 'VIDEO':
           return (
-            <div className="text-sm text-gray-700 dark:text-slate-300">
+            <div className="text-sm text-slate-700 dark:text-slate-300">
               {item.url ? (
                 <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
                   {item.url}
@@ -288,7 +288,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
           );
         case 'URL':
           return (
-            <div className="text-sm text-gray-700 dark:text-slate-300">
+            <div className="text-sm text-slate-700 dark:text-slate-300">
               {item.url ? (
                 <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
                   {item.title || item.url}
@@ -300,7 +300,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
           );
         case 'FILE':
           return (
-            <div className="text-sm text-gray-700 dark:text-slate-300">
+            <div className="text-sm text-slate-700 dark:text-slate-300">
               {item.url ? (
                 <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
                   📎 {item.title || 'Attached file'}
@@ -312,7 +312,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
           );
         case 'IMAGE':
           return (
-            <div className="text-sm text-gray-700 dark:text-slate-300">
+            <div className="text-sm text-slate-700 dark:text-slate-300">
               {item.url ? (
                 <div className="relative">
                   <NextImage 
@@ -331,7 +331,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
           );
         case 'CODE':
           return (
-            <pre className="text-sm text-gray-700 dark:text-slate-300 bg-gray-100 dark:bg-slate-900 p-2 rounded font-mono">
+            <pre className="text-sm text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-900 p-2 rounded font-mono">
               {item.content || '// No code yet...'}
             </pre>
           );
@@ -351,7 +351,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
             } ${
               selectedContent?.id === item.id && !isPreviewMode
                 ? 'border-blue-500 dark:border-blue-400 ring-2 ring-blue-200 dark:ring-blue-800'
-                : 'border-gray-200 dark:border-slate-600'
+                : 'border-slate-200 dark:border-slate-600'
             }`}
             onClick={() => !isPreviewMode && setSelectedContent(item)}
           >
@@ -360,13 +360,13 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
                 {!isPreviewMode && (
                   <div
                     {...provided.dragHandleProps}
-                    className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300 cursor-grab"
+                    className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 cursor-grab"
                   >
                     <GripVertical className="w-4 h-4" />
                   </div>
                 )}
-                <ContentIcon className="w-4 h-4 text-gray-500 dark:text-slate-400" />
-                <label className="font-medium text-gray-900 dark:text-white">
+                <ContentIcon className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+                <label className="font-medium text-slate-900 dark:text-white">
                   {item.title}
                   {item.required && <span className="text-red-500 ml-1">*</span>}
                 </label>
@@ -378,7 +378,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
                       e.stopPropagation();
                       setSelectedContent(item);
                     }}
-                    className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300"
+                    className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
                   >
                     <Settings className="w-4 h-4" />
                   </button>
@@ -387,7 +387,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
                       e.stopPropagation();
                       removeContent(item.id);
                     }}
-                    className="text-gray-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400"
+                    className="text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -406,9 +406,9 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
   ContentBlock.displayName = 'ContentBlock';
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="flex h-screen bg-slate-50 dark:bg-slate-900">
       {/* Header - Always show as overlay */}
-      <div className="absolute top-0 left-0 right-0 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 px-6 py-4 z-50">
+      <div className="absolute top-0 left-0 right-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4 z-50">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             {onBack ? (
@@ -416,7 +416,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
                 variant="ghost"
                 size="sm"
                 onClick={onBack}
-                className="text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white"
+                className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Tasks
@@ -426,18 +426,18 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
                 variant="ghost"
                 size="sm"
                 onClick={() => window.history.back()}
-                className="text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white"
+                className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back
               </Button>
             )}
             <div>
-              <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
                 {isEditMode ? `Edit Task: ${editTaskTitle}` : 'Create New Task'}
               </h1>
               {learningPathTitle && (
-                <p className="text-sm text-gray-600 dark:text-gray-300">
+                <p className="text-sm text-slate-600 dark:text-slate-300">
                   Learning Path: <span className="font-medium">{learningPathTitle}</span>
                 </p>
               )}
@@ -449,13 +449,13 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
       {/* Main Content - with top padding for header */}
       <div className="flex flex-1 pt-20">
         {/* Sidebar - Content Types */}
-        <div className="w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 p-4 overflow-y-auto">
+        <div className="w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 p-4 overflow-y-auto">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-900 dark:text-white">Content Elements</h3>
+            <h3 className="font-semibold text-slate-900 dark:text-white">Content Elements</h3>
             <button
               onClick={() => setIsPreviewMode(!isPreviewMode)}
               className={`p-2 rounded-md transition-colors ${
-                isPreviewMode ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300' : 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300'
+                isPreviewMode ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
               }`}
             >
               <Eye className="w-4 h-4" />
@@ -470,9 +470,9 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
                   key={contentType.type}
                   onClick={() => addContent(contentType.type)}
                   disabled={isPreviewMode}
-                  className="w-full flex items-center space-x-3 p-3 text-left text-sm border border-gray-200 dark:border-slate-600 rounded-md hover:bg-gray-50 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-gray-900 dark:text-white"
+                  className="w-full flex items-center space-x-3 p-3 text-left text-sm border border-slate-200 dark:border-slate-600 rounded-md hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-slate-900 dark:text-white"
                 >
-                  <Icon className="w-4 h-4 text-gray-500 dark:text-slate-400" />
+                  <Icon className="w-4 h-4 text-slate-500 dark:text-slate-400" />
                   <span>{contentType.label}</span>
                 </button>
               );
@@ -480,11 +480,11 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
           </div>
 
           {/* Task Information Section */}
-          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-slate-700">
-            <h4 className="font-medium text-gray-900 dark:text-white mb-3">Task Settings</h4>
+          <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+            <h4 className="font-medium text-slate-900 dark:text-white mb-3">Task Settings</h4>
             <div className="space-y-3">
               <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
                   Title
                 </label>
                 <input
@@ -492,11 +492,11 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
                   value={taskInfo.title}
                   onChange={(e) => handleTaskInfoChange('title', e.target.value)}
                   placeholder="Task title..."
-                  className="w-full p-2 text-sm border border-gray-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+                  className="w-full p-2 text-sm border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
                   Description
                 </label>
                 <textarea
@@ -504,12 +504,12 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
                   onChange={(e) => handleTaskInfoChange('description', e.target.value)}
                   placeholder="Task description..."
                   rows={2}
-                  className="w-full p-2 text-sm border border-gray-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+                  className="w-full p-2 text-sm border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-slate-300 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
                     Order
                   </label>
                   <input
@@ -517,11 +517,11 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
                     value={taskInfo.order}
                     onChange={(e) => handleTaskInfoChange('order', parseInt(e.target.value) || 1)}
                     min="1"
-                    className="w-full p-2 text-sm border border-gray-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+                    className="w-full p-2 text-sm border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-slate-300 mb-1">
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
                     Deadline (days)
                   </label>
                   <input
@@ -530,7 +530,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
                     onChange={(e) => handleTaskInfoChange('deadlineOffset', parseInt(e.target.value) || 1)}
                     min="1"
                     placeholder="7"
-                    className="w-full p-2 text-sm border border-gray-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+                    className="w-full p-2 text-sm border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                   />
                 </div>
               </div>
@@ -538,7 +538,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
           </div>
 
           {!isPreviewMode && (
-            <div className="mt-6 pt-6 border-t border-gray-200 dark:border-slate-700">
+            <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
               <button
                 onClick={handleSave}
                 className="w-full bg-blue-600 dark:bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
@@ -555,13 +555,13 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
           {/* Task Canvas */}
           <div className="flex-1 p-6 overflow-auto bg-white dark:bg-slate-900">
             <div className="max-w-2xl mx-auto">
-              <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">
+              <h2 className="text-xl font-semibold mb-6 text-slate-900 dark:text-white">
                 {isPreviewMode ? 'Task Preview' : 'Task Builder'}
               </h2>
               
               {content.length === 0 ? (
-                <div className="text-center py-12 text-gray-500 dark:text-slate-400">
-                  <Plus className="mx-auto h-12 w-12 text-gray-300 dark:text-slate-600 mb-4" />
+                <div className="text-center py-12 text-slate-500 dark:text-slate-400">
+                  <Plus className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600 mb-4" />
                   <p>Add content elements from the sidebar to get started</p>
                 </div>
               ) : (
@@ -589,7 +589,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
 
           {/* Right Sidebar - Content Properties */}
           {selectedContent && !isPreviewMode && (
-            <div className="w-80 bg-white dark:bg-slate-800 border-l border-gray-200 dark:border-slate-700 p-4 overflow-auto">
+            <div className="w-80 bg-white dark:bg-slate-800 border-l border-slate-200 dark:border-slate-700 p-4 overflow-auto">
               <ContentEditor 
                 selectedContent={selectedContent}
                 onTitleChange={handleTitleChange}

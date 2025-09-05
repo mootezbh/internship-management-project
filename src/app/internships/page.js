@@ -167,10 +167,10 @@ export default function InternshipsPage() {
             {/* Header */}
             <div className="mb-8 flex justify-between items-start">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
                   {isAdmin ? 'Manage Internships' : 'Available Internships'}
                 </h1>
-                <p className="text-gray-600 dark:text-slate-300">
+                <p className="text-slate-600 dark:text-slate-300">
                   {isAdmin 
                     ? 'Manage and oversee all internship opportunities in the system.'
                     : 'Discover internship opportunities that match your interests and skills.'
@@ -196,12 +196,12 @@ export default function InternshipsPage() {
             {/* Search and Filters */}
             <div className="mb-8 space-y-4">
               <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-slate-500" />
+                <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400 dark:text-slate-500" />
                 <Input
                   placeholder="Search internships..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400"
+                  className="pl-10 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400"
                 />
               </div>
               
@@ -210,7 +210,7 @@ export default function InternshipsPage() {
                   variant={selectedField === 'all' ? 'default' : 'outline'}
                   onClick={() => setSelectedField('all')}
                   size="sm"
-                  className={selectedField === 'all' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60'}
+                  className={selectedField === 'all' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'}
                 >
                   All Fields
                 </Button>
@@ -218,7 +218,7 @@ export default function InternshipsPage() {
                   variant={selectedField === 'technology' ? 'default' : 'outline'}
                   onClick={() => setSelectedField('technology')}
                   size="sm"
-                  className={selectedField === 'technology' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60'}
+                  className={selectedField === 'technology' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'}
                 >
                   Technology
                 </Button>
@@ -226,7 +226,7 @@ export default function InternshipsPage() {
                   variant={selectedField === 'design' ? 'default' : 'outline'}
                   onClick={() => setSelectedField('design')}
                   size="sm"
-                  className={selectedField === 'design' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60'}
+                  className={selectedField === 'design' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'}
                 >
                   Design
                 </Button>
@@ -234,7 +234,7 @@ export default function InternshipsPage() {
                   variant={selectedField === 'marketing' ? 'default' : 'outline'}
                   onClick={() => setSelectedField('marketing')}
                   size="sm"
-                  className={selectedField === 'marketing' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60'}
+                  className={selectedField === 'marketing' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'}
                 >
                   Marketing
                 </Button>
@@ -242,7 +242,7 @@ export default function InternshipsPage() {
                   variant={selectedField === 'data' ? 'default' : 'outline'}
                   onClick={() => setSelectedField('data')}
                   size="sm"
-                  className={selectedField === 'data' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60'}
+                  className={selectedField === 'data' ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' : 'border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60'}
                 >
                   Data & Analytics
                 </Button>
@@ -251,7 +251,7 @@ export default function InternshipsPage() {
 
             {/* Results Count */}
             <div className="mb-6">
-              <p className="text-gray-600 dark:text-slate-400">
+              <p className="text-slate-600 dark:text-slate-400">
                 {filteredInternships.length} {filteredInternships.length === 1 ? 'internship' : 'internships'} found
               </p>
             </div>
@@ -260,14 +260,14 @@ export default function InternshipsPage() {
             {filteredInternships.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredInternships.map((internship) => (
-                  <Card key={internship.id} className="flex flex-col h-full hover:shadow-lg dark:hover:shadow-slate-800/50 transition-shadow border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+                  <Card key={internship.id} className="flex flex-col h-full hover:shadow-lg dark:hover:shadow-slate-800/50 transition-shadow border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
                     <CardHeader>
                       <div className="flex justify-between items-start mb-2">
-                        <CardTitle className="text-lg leading-tight text-gray-900 dark:text-white">{internship.title}</CardTitle>
+                        <CardTitle className="text-lg leading-tight text-slate-900 dark:text-white">{internship.title}</CardTitle>
                         <Badge variant={internship.spotsRemaining > 0 ? 'default' : 'secondary'} className={
                           internship.spotsRemaining > 0 
                             ? "bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300"
-                            : "bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-slate-300"
+                            : "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300"
                         }>
                           {internship.spotsRemaining > 0 ? 'Open' : 'Full'}
                         </Badge>
@@ -275,7 +275,7 @@ export default function InternshipsPage() {
                     </CardHeader>
                     
                     <CardContent className="flex-1 flex flex-col">
-                      <CardDescription className="text-sm text-gray-600 dark:text-slate-400 mb-4 flex-1">
+                      <CardDescription className="text-sm text-slate-600 dark:text-slate-400 mb-4 flex-1">
                         {internship.description.length > 150 
                           ? `${internship.description.substring(0, 150)}...` 
                           : internship.description
@@ -284,25 +284,25 @@ export default function InternshipsPage() {
                       
                       {/* Internship Details */}
                       <div className="space-y-2 mb-4">
-                        <div className="flex items-center text-sm text-gray-500 dark:text-slate-400">
+                        <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
                           <Clock className="h-4 w-4 mr-2" />
                           {internship.duration} weeks
                         </div>
                         
-                        <div className="flex items-center text-sm text-gray-500 dark:text-slate-400">
+                        <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
                           <Users className="h-4 w-4 mr-2" />
                           {internship.spotsRemaining} of {internship.capacity} spots available
                         </div>
                         
                         {internship.startDate && (
-                          <div className="flex items-center text-sm text-gray-500 dark:text-slate-400">
+                          <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
                             <Calendar className="h-4 w-4 mr-2" />
                             Starts {formatDate(internship.startDate)}
                           </div>
                         )}
                         
                         {internship.tasksCount > 0 && (
-                          <div className="flex items-center text-sm text-gray-500 dark:text-slate-400">
+                          <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
                             <BookOpen className="h-4 w-4 mr-2" />
                             {internship.tasksCount} learning tasks
                           </div>
@@ -349,8 +349,8 @@ export default function InternshipsPage() {
               </div>
             ) : (
               <div className="text-center py-12">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No internships found</h3>
-                <p className="text-gray-600 dark:text-slate-400 mb-4">
+                <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">No internships found</h3>
+                <p className="text-slate-600 dark:text-slate-400 mb-4">
                   Try adjusting your search criteria or check back later for new opportunities.
                 </p>
                 <Button 
@@ -359,7 +359,7 @@ export default function InternshipsPage() {
                     setSearchTerm('')
                     setSelectedField('all')
                   }}
-                  className="border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                  className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                 >
                   Clear Filters
                 </Button>
