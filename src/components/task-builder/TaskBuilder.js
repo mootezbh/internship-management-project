@@ -133,6 +133,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
   const [selectedContent, setSelectedContent] = useState(null);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [taskInfo, setTaskInfo] = useState({
     title: taskData.title || '',
     description: taskData.description || '',
@@ -175,23 +176,31 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
     );
   }, []);
 
-  const handleSave = useCallback(() => {
+  const handleSave = useCallback(async () => {
     // Validate required fields
     if (!taskInfo.title || !taskInfo.description) {
       toast.error('Please fill in both title and description');
       return;
     }
 
-    const taskWithContent = {
-      title: taskInfo.title || '',
-      description: taskInfo.description || '',
-      order: taskInfo.order || 1,
-      deadlineOffset: taskInfo.deadlineOffset || 1,
-      content: content || []
-    };
-    
-    console.log('Sending task data:', taskWithContent); // Debug log
-    onSave(taskWithContent);
+    setIsSaving(true);
+    try {
+      const taskWithContent = {
+        title: taskInfo.title || '',
+        description: taskInfo.description || '',
+        order: taskInfo.order || 1,
+        deadlineOffset: taskInfo.deadlineOffset || 1,
+        content: content || []
+      };
+      
+      console.log('Sending task data:', taskWithContent); // Debug log
+      await onSave(taskWithContent);
+    } catch (error) {
+      console.error('Error saving task:', error);
+      toast.error('Failed to save task');
+    } finally {
+      setIsSaving(false);
+    }
   }, [taskInfo, content, onSave]);
 
   const handleTaskInfoChange = useCallback((field, value) => {
@@ -577,10 +586,20 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
             <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
               <button
                 onClick={handleSave}
-                className="w-full bg-blue-600 dark:bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                disabled={isSaving}
+                className="w-full bg-blue-600 dark:bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                <Save className="w-4 h-4 mr-2 inline" />
-                {isEditMode ? 'Update Task' : 'Save Task'}
+                {isSaving ? (
+                  <>
+                    <LoadingSpinner size="sm" className="mr-2" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4 mr-2 inline" />
+                    {isEditMode ? 'Update Task' : 'Save Task'}
+                  </>
+                )}
               </button>
             </div>
           )}

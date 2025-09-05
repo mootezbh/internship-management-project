@@ -215,44 +215,6 @@ export default function SetupApplicationFormPage() {
             </div>
           </CardContent>
         </Card>
-        {/* Preview */}
-        <Card className="border-slate-800 dark:border-slate-800 bg-white dark:bg-slate-900/50 backdrop-blur-sm mt-8">
-          <CardHeader>
-            <CardTitle className="text-slate-900 dark:text-white">Form Preview</CardTitle>
-            <CardDescription className="text-slate-600 dark:text-slate-400">
-              This is how the application form will appear to candidates.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4 p-4 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800/30">
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
-                Apply for: {internship.title}
-              </h3>
-              {formFields.map((field) => (
-                <div key={field.id}>
-                  <Label className="text-slate-900 dark:text-white">
-                    {field.label}
-                    {field.required && <span className="text-red-500 ml-1">*</span>}
-                  </Label>
-                  {field.type === 'TEXTAREA' ? (
-                    <Textarea
-                      placeholder={`Enter your ${field.label.toLowerCase()}`}
-                      disabled
-                      className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                    />
-                  ) : (
-                    <Input
-                      type={field.type === 'EMAIL' ? 'email' : 'text'}
-                      placeholder={`Enter your ${field.label.toLowerCase()}`}
-                      disabled
-                      className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   )
