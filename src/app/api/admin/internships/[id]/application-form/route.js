@@ -18,13 +18,13 @@ export async function PUT(request, { params }) {
       where: { clerkId: userId }
     })
 
-  if (!user || (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN')) {
+    if (!user || (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN')) {
       return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 })
     }
 
     const internshipId = params.id
     const body = await request.json()
-    const { applicationFormFields } = body
+    const { fields, title = "Application Form", description } = body
 
     // Check if internship exists
     const existingInternship = await prisma.internship.findUnique({
@@ -35,17 +35,47 @@ export async function PUT(request, { params }) {
       return NextResponse.json({ error: 'Internship not found' }, { status: 404 })
     }
 
-    // Update the internship with new form fields
-    const updatedInternship = await prisma.internship.update({
-      where: { id: internshipId },
+    // Delete existing form and fields if they exist
+    await prisma.formField.deleteMany({
+      where: {
+        form: {
+          internshipId: internshipId
+        }
+      }
+    })
+    
+    await prisma.applicationForm.deleteMany({
+      where: { internshipId: internshipId }
+    })
+
+    // Create new form with fields
+    const applicationForm = await prisma.applicationForm.create({
       data: {
-        applicationFormFields: applicationFormFields
+        title,
+        description,
+        internshipId,
+        fields: {
+          create: fields.map((field, index) => ({
+            label: field.label,
+            type: field.type,
+            placeholder: field.placeholder || '',
+            helpText: field.helpText || '',
+            required: field.required || false,
+            options: field.options || [],
+            order: index
+          }))
+        }
+      },
+      include: {
+        fields: {
+          orderBy: { order: 'asc' }
+        }
       }
     })
 
     return NextResponse.json({ 
       message: 'Application form updated successfully',
-      internship: updatedInternship 
+      form: applicationForm 
     })
   } catch (error) {
     console.error('Error updating application form:', error)
@@ -70,7 +100,7 @@ export async function GET(request, { params }) {
       where: { clerkId: userId }
     })
 
-    if (!user || user.role !== 'ADMIN') {
+    if (!user || (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN')) {
       return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 })
     }
 
@@ -78,10 +108,14 @@ export async function GET(request, { params }) {
 
     const internship = await prisma.internship.findUnique({
       where: { id: internshipId },
-      select: {
-        id: true,
-        title: true,
-        applicationFormFields: true
+      include: {
+        applicationForm: {
+          include: {
+            fields: {
+              orderBy: { order: 'asc' }
+            }
+          }
+        }
       }
     })
 
@@ -89,7 +123,13 @@ export async function GET(request, { params }) {
       return NextResponse.json({ error: 'Internship not found' }, { status: 404 })
     }
 
-    return NextResponse.json({ internship })
+    return NextResponse.json({ 
+      internship: {
+        id: internship.id,
+        title: internship.title,
+        applicationForm: internship.applicationForm
+      }
+    })
   } catch (error) {
     console.error('Error fetching application form:', error)
     return NextResponse.json(

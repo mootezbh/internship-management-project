@@ -21,33 +21,37 @@ export default function SetupApplicationFormPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [internship, setInternship] = useState(null)
-  const [formFields, setFormFields] = useState([
-    { id: 'name', label: 'Full Name', type: 'TEXT', required: true, builtin: true },
-    { id: 'email', label: 'Email Address', type: 'EMAIL', required: true, builtin: true },
-    { id: 'phone', label: 'Phone Number', type: 'TEXT', required: false, builtin: true },
-    { id: 'education', label: 'Education Background', type: 'TEXTAREA', required: false, builtin: true },
-    { id: 'skills', label: 'Skills & Experience', type: 'TEXTAREA', required: false, builtin: true }
-  ])
+  const [formFields, setFormFields] = useState([])
 
   useEffect(() => {
     const fetchInternship = async () => {
       try {
-        const response = await fetch(`/api/admin/internships/${internshipId}`)
+        const response = await fetch(`/api/admin/internships/${internshipId}/application-form`)
         if (response.ok) {
           const data = await response.json()
           setInternship(data.internship)
           
-          // Load custom form fields if they exist
-          if (data.internship.applicationFormFields) {
-            try {
-              const customFields = JSON.parse(data.internship.applicationFormFields)
-              setFormFields(prev => [
-                ...prev.filter(field => field.builtin),
-                ...customFields.filter(field => !field.builtin)
-              ])
-            } catch (error) {
-              console.error('Error parsing form fields:', error)
-            }
+          // Load existing form fields if they exist
+          if (data.internship.applicationForm && data.internship.applicationForm.fields) {
+            setFormFields(data.internship.applicationForm.fields.map(field => ({
+              id: field.id,
+              label: field.label,
+              type: field.type,
+              placeholder: field.placeholder,
+              helpText: field.helpText,
+              required: field.required,
+              options: field.options || [],
+              order: field.order
+            })))
+          } else {
+            // Set default fields if no custom form exists
+            setFormFields([
+              { id: 'temp_name', label: 'Full Name', type: 'TEXT', required: true, placeholder: 'Enter your full name' },
+              { id: 'temp_email', label: 'Email Address', type: 'EMAIL', required: true, placeholder: 'Enter your email address' },
+              { id: 'temp_phone', label: 'Phone Number', type: 'TEXT', required: false, placeholder: 'Enter your phone number' },
+              { id: 'temp_education', label: 'Education Background', type: 'TEXTAREA', required: false, placeholder: 'Describe your educational background' },
+              { id: 'temp_experience', label: 'Relevant Experience', type: 'TEXTAREA', required: false, placeholder: 'Describe your relevant experience' }
+            ])
           }
         } else {
           toast.error('Failed to load internship')
@@ -92,22 +96,41 @@ export default function SetupApplicationFormPage() {
   const saveFormConfiguration = async () => {
     setIsSaving(true)
     try {
-      // Separate builtin and custom fields
-      const customFields = formFields.filter(field => !field.builtin)
-      
       const response = await fetch(`/api/admin/internships/${internshipId}/application-form`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          applicationFormFields: JSON.stringify(customFields),
-          allFields: formFields
+          fields: formFields.map(field => ({
+            label: field.label,
+            type: field.type,
+            placeholder: field.placeholder || '',
+            helpText: field.helpText || '',
+            required: field.required || false,
+            options: field.options || []
+          })),
+          title: `Application Form - ${internship.title}`,
+          description: `Please fill out this form to apply for the ${internship.title} internship.`
         })
       })
 
       if (response.ok) {
         toast.success('Application form updated successfully!')
+        // Refresh the data
+        const data = await response.json()
+        if (data.form) {
+          setFormFields(data.form.fields.map(field => ({
+            id: field.id,
+            label: field.label,
+            type: field.type,
+            placeholder: field.placeholder,
+            helpText: field.helpText,
+            required: field.required,
+            options: field.options || [],
+            order: field.order
+          })))
+        }
       } else {
         const error = await response.json()
         toast.error(error.error || 'Failed to update application form')
