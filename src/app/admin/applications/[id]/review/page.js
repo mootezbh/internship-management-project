@@ -19,11 +19,35 @@ export default function ApplicationReviewPage() {
   const [application, setApplication] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [adminCheck, setAdminCheck] = useState(null);
   const [reviewForm, setReviewForm] = useState({
     status: '',
     feedback: ''
   });
 
+  // Check admin status first
+  useEffect(() => {
+    checkAdminStatus();
+  }, []);
+
+  const checkAdminStatus = async () => {
+    try {
+      const response = await fetch('/api/admin/check');
+      const data = await response.json();
+      setAdminCheck(data);
+      
+      if (!data.isAdmin) {
+        router.push('/dashboard');
+        return;
+      }
+      
+      // If admin check passes, fetch the application
+      fetchApplication();
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+      router.push('/dashboard');
+    }
+  };
   const fetchApplication = useCallback(async () => {
     try {
       const response = await fetch(`/api/admin/applications/${applicationId}`);

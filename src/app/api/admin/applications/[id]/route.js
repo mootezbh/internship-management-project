@@ -86,7 +86,7 @@ export async function PATCH(request, { params }) {
       where: { clerkId: userId }
     })
 
-    if (!adminUser || adminUser.role !== 'ADMIN') {
+    if (!adminUser || (adminUser.role !== 'ADMIN' && adminUser.role !== 'SUPER_ADMIN')) {
       return NextResponse.json({ error: 'Admin access required' }, { status: 403 })
     }
 
@@ -158,7 +158,7 @@ export async function PUT(request, { params }) {
       where: { clerkId: userId }
     })
 
-    if (!adminUser || adminUser.role !== 'ADMIN') {
+    if (!adminUser || (adminUser.role !== 'ADMIN' && adminUser.role !== 'SUPER_ADMIN')) {
       return NextResponse.json({ error: 'Admin access required' }, { status: 403 })
     }
 
