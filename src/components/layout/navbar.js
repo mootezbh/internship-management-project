@@ -22,6 +22,7 @@ import {
 export function Navbar() {
   const pathname = usePathname()
   const [isAdmin, setIsAdmin] = useState(false)
+  const [userRole, setUserRole] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
@@ -42,6 +43,7 @@ export function Navbar() {
         if (response.ok) {
           const data = await response.json()
           setIsAdmin(data.isAdmin)
+          setUserRole(data.role)
         }
       } catch (error) {} finally {
         setIsLoading(false)
@@ -166,7 +168,7 @@ export function Navbar() {
               {isAdmin && (
                 <div className="hidden md:flex items-center space-x-2 px-3 py-1 bg-gradient-to-r from-emerald-500 to-teal-500 dark:from-emerald-600 dark:to-teal-600 text-white text-xs font-medium rounded-full shadow-lg">
                   <ShieldCheck className="h-3 w-3" />
-                  <span>Admin</span>
+                  <span>{userRole === 'SUPER_ADMIN' ? 'Super Admin' : 'Admin'}</span>
                 </div>
               )}
             </SignedIn>
@@ -243,7 +245,7 @@ export function Navbar() {
                 <div className="flex items-center justify-center mt-4 mb-2">
                   <div className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 dark:from-emerald-600 dark:to-teal-600 text-white text-sm font-medium rounded-full shadow-lg">
                     <ShieldCheck className="h-4 w-4" />
-                    <span>Admin Access</span>
+                    <span>{userRole === 'SUPER_ADMIN' ? 'Super Admin Access' : 'Admin Access'}</span>
                   </div>
                 </div>
               )}
