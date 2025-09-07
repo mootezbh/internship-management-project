@@ -91,13 +91,16 @@ export default function UserProfilePage() {
     const from = searchParams.get('from');
     if (from === 'admin-applications') {
       router.push('/admin/applications');
+    } else if (from === 'admin-users') {
+      router.push('/admin/users');
     } else {
+      // Default fallback to users page
       router.push('/admin/users');
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-8">
+    <div className="min-h-screen bg-white dark:bg-slate-950 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button and Title */}
         <div className="mb-8">
@@ -119,7 +122,7 @@ export default function UserProfilePage() {
           {/* Profile Information */}
           <div className="lg:col-span-2 space-y-6">
             {/* Basic Info */}
-            <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+            <Card className="border-slate-200 dark:border-slate-700">
               <CardHeader>
                 <CardTitle className="flex items-center text-slate-900 dark:text-white">
                   <User className="w-5 h-5 mr-2" />
@@ -166,7 +169,7 @@ export default function UserProfilePage() {
             </Card>
 
             {/* Education */}
-            <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+            <Card className="border-slate-800 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-md">
               <CardHeader>
                 <CardTitle className="flex items-center text-slate-900 dark:text-white">
                   <GraduationCap className="w-5 h-5 mr-2" />
@@ -211,7 +214,7 @@ export default function UserProfilePage() {
             </Card>
 
             {/* Skills and Interests */}
-            <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+            <Card className="border-slate-800 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-md">
               <CardHeader>
                 <CardTitle className="text-slate-900 dark:text-white">Skills & Interests</CardTitle>
               </CardHeader>
@@ -261,7 +264,7 @@ export default function UserProfilePage() {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Quick Actions */}
-            <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+            <Card className="border-slate-800 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-md">
               <CardHeader>
                 <CardTitle className="text-slate-900 dark:text-white">Actions</CardTitle>
               </CardHeader>
@@ -298,7 +301,7 @@ export default function UserProfilePage() {
             </Card>
 
             {/* Application Summary */}
-            <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+            <Card className="border-slate-800 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-md">
               <CardHeader>
                 <CardTitle className="text-slate-900 dark:text-white">Application Summary</CardTitle>
               </CardHeader>
@@ -332,7 +335,7 @@ export default function UserProfilePage() {
 
             {/* Recent Applications */}
             {applications.length > 0 && (
-              <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+              <Card className="border-slate-800 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-md">
                 <CardHeader>
                   <CardTitle className="text-slate-900 dark:text-white">Recent Applications</CardTitle>
                 </CardHeader>

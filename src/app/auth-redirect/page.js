@@ -11,46 +11,51 @@ export default function AuthRedirect() {
   const [isChecking, setIsChecking] = useState(true)
 
   useEffect(() => {
+    // Don't do anything until both isLoaded is true AND we have checked for user
     if (!isLoaded) return
-
-    if (!user) {
-      router.push('/sign-in')
+    
+    // If loaded but no user, they're definitely not authenticated
+    if (isLoaded && !user) {
+      router.push('/')
       return
     }
-
-    const checkUserRoleAndRedirect = async () => {
-      try {
-        // Fetch user profile to get role
-        const response = await fetch('/api/profile')
-        
-        if (response.ok) {
-          const userData = await response.json()
+    
+    // If we have a user, proceed with role checking
+    if (user) {
+      const checkUserRoleAndRedirect = async () => {
+        try {
+          // Fetch user profile to get role
+          const response = await fetch('/api/profile')
           
-          if (userData.role === 'ADMIN' || userData.role === 'SUPER_ADMIN') {
-            router.push('/admin')
-            return
-          } else if (!userData.profileComplete) {
-            router.push('/onboarding')
-            return
+          if (response.ok) {
+            const userData = await response.json()
+            
+            if (userData.role === 'ADMIN' || userData.role === 'SUPER_ADMIN') {
+              router.push('/admin')
+              return
+            } else if (!userData.profileComplete) {
+              router.push('/onboarding')
+              return
+            } else {
+              router.push('/dashboard')
+              return
+            }
           } else {
-            router.push('/dashboard')
-            return
+            // Default to onboarding if profile not found
+            router.push('/onboarding')
           }
-        } else {
-          // Default to onboarding if profile not found
-          router.push('/onboarding')
+        } catch (error) {
+          // Default to dashboard on error
+          router.push('/dashboard')
+        } finally {
+          setIsChecking(false)
         }
-      } catch (error) {
-        // Default to dashboard on error
-        router.push('/dashboard')
-      } finally {
-        setIsChecking(false)
       }
+      checkUserRoleAndRedirect()
     }
-    checkUserRoleAndRedirect()
   }, [user, isLoaded, router])
 
-  if (!isLoaded || isChecking) {
+  if (!isLoaded || (isLoaded && user && isChecking)) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">

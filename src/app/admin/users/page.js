@@ -154,8 +154,8 @@ export default function AdminUsersPage() {
 
   const handleViewUser = (user) => {
     if (user && typeof user === 'object' && user.id) {
-      // Navigate to user profile page instead of opening dialog
-      router.push(`/admin/users/${user.id}/profile`)
+      // Navigate to user profile page with proper back navigation
+      router.push(`/admin/users/${user.id}/profile?from=admin-users`)
     } else {
       toast.error('Invalid user data')
     }
