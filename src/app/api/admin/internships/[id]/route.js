@@ -106,7 +106,7 @@ export async function DELETE(request, { params }) {
       where: { clerkId: userId }
     })
 
-    if (!user || user.role !== 'ADMIN') {
+    if (!user || (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN')) {
       return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 })
     }
 
