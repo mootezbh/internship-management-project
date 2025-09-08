@@ -3,8 +3,6 @@ import { NextResponse } from 'next/server';
 
 const isPublicRoute = createRouteMatcher([
   '/',
-  '/sign-in',
-  '/sign-up',
   '/onboarding',
   '/auth-redirect',
   '/api/webhooks/clerk(.*)'
@@ -22,7 +20,7 @@ export default clerkMiddleware(async (auth, req) => {
 
   // Protect private routes
   if (!isPublicRoute(req) && !userId) {
-    url.pathname = '/sign-in';
+    url.pathname = '/';
     return NextResponse.redirect(url);
   }
 });
