@@ -10,6 +10,15 @@ export default function AuthRedirect() {
   const router = useRouter()
   const [isChecking, setIsChecking] = useState(true)
 
+  // Log that we reached this page
+  useEffect(() => {
+    console.log('🔄 AUTH-REDIRECT PAGE LOADED')
+    console.log('Current URL:', typeof window !== 'undefined' ? window.location.href : 'Server-side')
+    console.log('Environment check:')
+    console.log('- AFTER_SIGN_IN_URL:', process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL)
+    console.log('- AFTER_SIGN_UP_URL:', process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL)
+  }, [])
+
   useEffect(() => {
     // Don't do anything until both isLoaded is true AND we have checked for user
     if (!isLoaded) return
@@ -24,59 +33,41 @@ export default function AuthRedirect() {
     if (user) {
       const checkUserRoleAndRedirect = async () => {
         try {
-          console.log('Checking user role for:', user.emailAddresses[0]?.emailAddress)
+          console.log('=== AUTH REDIRECT DEBUG ===')
+          console.log('User email:', user.emailAddresses[0]?.emailAddress)
+          console.log('User ID:', user.id)
           
-          // Fetch user profile to get role
+          // Fetch user profile from PostgreSQL database
+          console.log('Fetching user profile from database...')
           const response = await fetch('/api/profile')
+          console.log('Profile API response status:', response.status)
           
           if (response.ok) {
             const userData = await response.json()
-            console.log('User data received:', userData)
+            console.log('✅ Database user data:', userData)
+            console.log('🔍 User role in database:', userData.role)
             
             if (userData.role === 'ADMIN' || userData.role === 'SUPER_ADMIN') {
-              console.log('Redirecting to /admin')
+              console.log('🎯 ADMIN ROLE FOUND - Redirecting to /admin')
               router.push('/admin')
               return
             } else if (!userData.profileComplete) {
-              console.log('Redirecting to /onboarding - profile incomplete')
+              console.log('📝 Profile incomplete - redirecting to /onboarding')
               router.push('/onboarding')
               return
             } else {
-              console.log('Redirecting to /dashboard - regular user')
+              console.log('👤 Regular user - redirecting to /dashboard')
               router.push('/dashboard')
               return
             }
-          } else if (response.status === 404) {
-            // Profile not found - this might be a new user, redirect to onboarding
-            console.log('Profile not found, redirecting to onboarding')
-            router.push('/onboarding')
           } else {
-            // Other API error - check the user's role from Clerk directly as fallback
-            console.log('API error, checking Clerk metadata')
-            const publicMetadata = user.publicMetadata || {}
-            const role = publicMetadata.role || 'INTERN'
-            
-            if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
-              console.log('Found admin role in Clerk metadata, redirecting to /admin')
-              router.push('/admin')
-            } else {
-              console.log('Defaulting to onboarding due to API error')
-              router.push('/onboarding')
-            }
+            console.log('❌ Profile API failed - redirecting to /onboarding')
+            router.push('/onboarding')
           }
         } catch (error) {
           console.error('Error in auth redirect:', error)
-          // Check Clerk metadata as fallback
-          const publicMetadata = user.publicMetadata || {}
-          const role = publicMetadata.role || 'INTERN'
-          
-          if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
-            console.log('Using Clerk metadata fallback - redirecting to /admin')
-            router.push('/admin')
-          } else {
-            console.log('Fallback to onboarding due to error')
-            router.push('/onboarding')
-          }
+          console.log('Falling back to onboarding due to error')
+          router.push('/onboarding')
         } finally {
           setIsChecking(false)
         }
