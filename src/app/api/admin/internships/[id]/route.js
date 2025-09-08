@@ -126,10 +126,24 @@ export async function DELETE(request, { params }) {
 
     // Check if there are any applications
     if (existingInternship.applications.length > 0) {
-      return NextResponse.json(
-        { error: 'Cannot delete internship with existing applications' },
-        { status: 400 }
-      )
+      // Only SUPER_ADMIN can delete internships with applications
+      if (user.role !== 'SUPER_ADMIN') {
+        return NextResponse.json(
+          { 
+            error: 'Cannot delete internship with existing applications',
+            details: `This internship has ${existingInternship.applications.length} application(s). Only SUPER_ADMIN can delete internships with applications.`
+          },
+          { status: 400 }
+        )
+      }
+      
+      // For SUPER_ADMIN, delete applications first (cascade delete)
+      console.log(`SUPER_ADMIN deleting internship ${internshipId} with ${existingInternship.applications.length} applications`)
+      
+      // Delete all applications first
+      await prisma.application.deleteMany({
+        where: { internshipId: internshipId }
+      })
     }
 
     // Delete internship
