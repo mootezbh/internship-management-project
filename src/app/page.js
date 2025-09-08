@@ -14,7 +14,7 @@ export default function HomePage() {
   useEffect(() => {
     if (isSignedIn && user) {
       // Redirect signed-in users to their appropriate dashboard
-      router.push('/api/auth/redirect');
+      router.push('/auth-redirect');
     }
   }, [isSignedIn, user, router]);
   return (
@@ -37,7 +37,7 @@ export default function HomePage() {
             <SignedOut>
               <SignUpButton 
                 mode="modal"
-                forceRedirectUrl="/api/auth/redirect"
+                forceRedirectUrl="/auth-redirect"
               >
                 <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-500 dark:to-purple-500 hover:from-blue-700 hover:to-purple-700 dark:hover:from-blue-600 dark:hover:to-purple-600 text-white px-8 py-3 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
                   Get Started Today
@@ -45,7 +45,7 @@ export default function HomePage() {
               </SignUpButton>
               <SignInButton 
                 mode="modal"
-                forceRedirectUrl="/api/auth/redirect"
+                forceRedirectUrl="/auth-redirect"
               >
                 <Button variant="outline" size="lg" className="px-8 py-3 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors">
                   Sign In
@@ -143,7 +143,7 @@ export default function HomePage() {
             <SignedOut>
               <SignUpButton 
                 mode="modal"
-                forceRedirectUrl="/api/auth/redirect"
+                forceRedirectUrl="/auth-redirect"
               >
                 <Button size="lg" className="bg-white text-blue-600 hover:bg-slate-50 dark:bg-slate-100 dark:text-blue-700 dark:hover:bg-white px-8 py-3 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
                   Create Your Account

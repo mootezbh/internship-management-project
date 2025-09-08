@@ -180,7 +180,7 @@ export function Navbar() {
             <SignedOut>
               <SignInButton 
                 mode="modal"
-                forceRedirectUrl="/api/auth/redirect"
+                forceRedirectUrl="/auth-redirect"
               >
                 <button className="text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer">
                   Sign In
@@ -188,7 +188,7 @@ export function Navbar() {
               </SignInButton>
               <SignUpButton 
                 mode="modal"
-                forceRedirectUrl="/api/auth/redirect"
+                forceRedirectUrl="/auth-redirect"
               >
                 <button className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-500 dark:to-purple-500 text-white hover:from-blue-700 hover:to-purple-700 dark:hover:from-blue-600 dark:hover:to-purple-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer">
                   Get Started
