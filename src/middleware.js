@@ -12,13 +12,14 @@ export default clerkMiddleware(async (auth, req) => {
   const { userId } = await auth();
   const url = req.nextUrl.clone();
 
-  // Only redirect to /auth-redirect after login/signup, not on every visit to /
+  // If user is authenticated and visits root, redirect to auth-redirect for proper role-based routing
   if (userId && url.pathname === '/') {
-    url.pathname = '/dashboard';
+    url.pathname = '/auth-redirect';
     return NextResponse.redirect(url);
   }
 
-  // Protect private routes
+  // If user is not authenticated and tries to access private routes, redirect to root
+  // where they can use the Clerk modal to sign in
   if (!isPublicRoute(req) && !userId) {
     url.pathname = '/';
     return NextResponse.redirect(url);
