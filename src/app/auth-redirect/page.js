@@ -24,29 +24,59 @@ export default function AuthRedirect() {
     if (user) {
       const checkUserRoleAndRedirect = async () => {
         try {
+          console.log('Checking user role for:', user.emailAddresses[0]?.emailAddress)
+          
           // Fetch user profile to get role
           const response = await fetch('/api/profile')
           
           if (response.ok) {
             const userData = await response.json()
+            console.log('User data received:', userData)
             
             if (userData.role === 'ADMIN' || userData.role === 'SUPER_ADMIN') {
+              console.log('Redirecting to /admin')
               router.push('/admin')
               return
             } else if (!userData.profileComplete) {
+              console.log('Redirecting to /onboarding - profile incomplete')
               router.push('/onboarding')
               return
             } else {
+              console.log('Redirecting to /dashboard - regular user')
               router.push('/dashboard')
               return
             }
-          } else {
-            // Default to onboarding if profile not found
+          } else if (response.status === 404) {
+            // Profile not found - this might be a new user, redirect to onboarding
+            console.log('Profile not found, redirecting to onboarding')
             router.push('/onboarding')
+          } else {
+            // Other API error - check the user's role from Clerk directly as fallback
+            console.log('API error, checking Clerk metadata')
+            const publicMetadata = user.publicMetadata || {}
+            const role = publicMetadata.role || 'INTERN'
+            
+            if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
+              console.log('Found admin role in Clerk metadata, redirecting to /admin')
+              router.push('/admin')
+            } else {
+              console.log('Defaulting to onboarding due to API error')
+              router.push('/onboarding')
+            }
           }
         } catch (error) {
-          // Default to dashboard on error
-          router.push('/dashboard')
+          console.error('Error in auth redirect:', error)
+          // Check Clerk metadata as fallback
+          const publicMetadata = user.publicMetadata || {}
+          const role = publicMetadata.role || 'INTERN'
+          
+          if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
+            console.log('Using Clerk metadata fallback - redirecting to /admin')
+            router.push('/admin')
+          } else {
+            console.log('Fallback to onboarding due to error')
+            router.push('/onboarding')
+          }
         } finally {
           setIsChecking(false)
         }
