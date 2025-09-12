@@ -338,6 +338,10 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
   };
 
   const SubmissionSection = () => {
+    // Debug logging to see what we're getting
+    console.log('TaskRenderer - task.responseRequirements:', task.responseRequirements);
+    console.log('TaskRenderer - full task object:', task);
+    
     // Show submission section if responseRequirements exist, or if they're missing (for backward compatibility)
     if (!task.responseRequirements || task.responseRequirements.length === 0) {
       // For tasks without responseRequirements, show a default GitHub submission for backward compatibility
