@@ -585,20 +585,111 @@ export default function AdminTaskReviewPage() {
                     </div>
                   </div>
 
-                  {/* Repository Link */}
-                  {selectedSubmission.githubUrl && (
-                    <div>
-                      <h4 className="font-semibold text-slate-900 dark:text-white mb-3">Submission Repository</h4>
-                      <Button
-                        variant="outline"
-                        onClick={() => window.open(selectedSubmission.githubUrl, '_blank')}
-                        className="flex items-center space-x-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
-                      >
-                        <ExternalLink className="h-4 w-4" />
-                        <span>Open GitHub Repository</span>
-                      </Button>
-                    </div>
-                  )}
+                  {/* Submission Content */}
+                  <div>
+                    <h4 className="font-semibold text-slate-900 dark:text-white mb-3">Submission Content</h4>
+                    
+                    {/* GitHub Repository */}
+                    {selectedSubmission.githubUrl && (
+                      <div className="mb-4">
+                        <span className="text-slate-600 dark:text-slate-400 text-sm">GitHub Repository:</span>
+                        <div className="mt-1">
+                          <Button
+                            variant="outline"
+                            onClick={() => window.open(selectedSubmission.githubUrl, '_blank')}
+                            className="flex items-center space-x-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                            <span>Open GitHub Repository</span>
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Other Submission Data */}
+                    {selectedSubmission.feedback && (() => {
+                      try {
+                        const submissionData = JSON.parse(selectedSubmission.feedback);
+                        return (
+                          <div className="space-y-4">
+                            {submissionData.github && submissionData.github !== selectedSubmission.githubUrl && (
+                              <div>
+                                <span className="text-slate-600 dark:text-slate-400 text-sm">GitHub Link:</span>
+                                <div className="mt-1">
+                                  <Button
+                                    variant="outline"
+                                    onClick={() => window.open(submissionData.github, '_blank')}
+                                    className="flex items-center space-x-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                                  >
+                                    <ExternalLink className="h-4 w-4" />
+                                    <span>Open GitHub Link</span>
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+                            
+                            {submissionData.text && (
+                              <div>
+                                <span className="text-slate-600 dark:text-slate-400 text-sm">Text Response:</span>
+                                <div className="mt-1 p-3 bg-slate-50 dark:bg-slate-800 rounded-md border border-slate-200 dark:border-slate-700">
+                                  <p className="text-slate-900 dark:text-white whitespace-pre-wrap">{submissionData.text}</p>
+                                </div>
+                              </div>
+                            )}
+                            
+                            {submissionData.pdf && (
+                              <div>
+                                <span className="text-slate-600 dark:text-slate-400 text-sm">PDF Submission:</span>
+                                <div className="mt-1">
+                                  <Button
+                                    variant="outline"
+                                    onClick={() => window.open(submissionData.pdf, '_blank')}
+                                    className="flex items-center space-x-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                                  >
+                                    <FileText className="h-4 w-4" />
+                                    <span>View PDF</span>
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+                            
+                            {submissionData.image && (
+                              <div>
+                                <span className="text-slate-600 dark:text-slate-400 text-sm">Image Submission:</span>
+                                <div className="mt-1">
+                                  <Button
+                                    variant="outline"
+                                    onClick={() => window.open(submissionData.image, '_blank')}
+                                    className="flex items-center space-x-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                                  >
+                                    <ExternalLink className="h-4 w-4" />
+                                    <span>View Image</span>
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      } catch (e) {
+                        // If feedback is not JSON, display as text
+                        return selectedSubmission.feedback && (
+                          <div>
+                            <span className="text-slate-600 dark:text-slate-400 text-sm">Previous Feedback:</span>
+                            <div className="mt-1 p-3 bg-slate-50 dark:bg-slate-800 rounded-md border border-slate-200 dark:border-slate-700">
+                              <p className="text-slate-900 dark:text-white whitespace-pre-wrap">{selectedSubmission.feedback}</p>
+                            </div>
+                          </div>
+                        );
+                      }
+                    })()}
+                    
+                    {/* Show message if no submission content */}
+                    {!selectedSubmission.githubUrl && !selectedSubmission.feedback && (
+                      <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-md border border-slate-200 dark:border-slate-700">
+                        <p className="text-slate-600 dark:text-slate-400 text-sm">No submission content available</p>
+                      </div>
+                    )}
+                  </div>
 
                   {/* Task Description */}
                   <div>

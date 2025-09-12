@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { UploadButton } from "@uploadthing/react";
 import { 
   Video, 
   ExternalLink, 
@@ -308,22 +309,6 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleBlockComplete(content.id)}
-                className={`p-1 ${
-                  isBlockCompleted 
-                    ? 'text-green-600 dark:text-green-400' 
-                    : 'text-slate-400'
-                }`}
-              >
-                {isBlockCompleted ? (
-                  <CheckCircle className="h-5 w-5" />
-                ) : (
-                  <Circle className="h-5 w-5" />
-                )}
-              </Button>
               <div>
                 <CardTitle className="text-lg">{content.title}</CardTitle>
               </div>
@@ -425,72 +410,21 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
                 </label>
               </div>
               <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-6 text-center">
-                <Upload className="h-8 w-8 text-slate-400 mx-auto mb-2" />
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Drop an image here or click to browse
-                </p>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      handleSubmissionChange(type, file);
+                <UploadButton
+                  endpoint="taskImage"
+                  onClientUploadComplete={(res) => {
+                    if (res?.[0]?.url) {
+                      handleSubmissionChange(type, res[0].url);
                     }
                   }}
-                  className="hidden"
-                  id={`file-${type}`}
-                />
-                <label
-                  htmlFor={`file-${type}`}
-                  className="mt-2 inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer"
-                >
-                  Choose File
-                </label>
-                {submissions[type] && (
-                  <p className="mt-2 text-xs text-green-600 dark:text-green-400">
-                    ✓ {submissions[type].name || 'File selected'}
-                  </p>
-                )}
-              </div>
-            </div>
-          );
-
-        case 'video':
-          return (
-            <div key={type} className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Video className="h-4 w-4 text-slate-600 dark:text-slate-400" />
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                  Video Upload
-                </label>
-              </div>
-              <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-6 text-center">
-                <Upload className="h-8 w-8 text-slate-400 mx-auto mb-2" />
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Drop a video here or click to browse
-                </p>
-                <input
-                  type="file"
-                  accept="video/*"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      handleSubmissionChange(type, file);
-                    }
+                  onUploadError={(error) => {
+                    console.error('Image upload error:', error);
                   }}
-                  className="hidden"
-                  id={`file-${type}`}
+                  className="ut-button:bg-blue-600 ut-button:text-white ut-button:font-medium ut-button:rounded-md ut-button:px-4 ut-button:py-2 ut-button:hover:bg-blue-700"
                 />
-                <label
-                  htmlFor={`file-${type}`}
-                  className="mt-2 inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer"
-                >
-                  Choose File
-                </label>
                 {submissions[type] && (
                   <p className="mt-2 text-xs text-green-600 dark:text-green-400">
-                    ✓ {submissions[type].name || 'File selected'}
+                    ✓ Image uploaded successfully
                   </p>
                 )}
               </div>
@@ -507,31 +441,21 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
                 </label>
               </div>
               <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-6 text-center">
-                <Upload className="h-8 w-8 text-slate-400 mx-auto mb-2" />
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Drop a PDF here or click to browse
-                </p>
-                <input
-                  type="file"
-                  accept=".pdf"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      handleSubmissionChange(type, file);
+                <UploadButton
+                  endpoint="taskPdf"
+                  onClientUploadComplete={(res) => {
+                    if (res?.[0]?.url) {
+                      handleSubmissionChange(type, res[0].url);
                     }
                   }}
-                  className="hidden"
-                  id={`file-${type}`}
+                  onUploadError={(error) => {
+                    console.error('PDF upload error:', error);
+                  }}
+                  className="ut-button:bg-blue-600 ut-button:text-white ut-button:font-medium ut-button:rounded-md ut-button:px-4 ut-button:py-2 ut-button:hover:bg-blue-700"
                 />
-                <label
-                  htmlFor={`file-${type}`}
-                  className="mt-2 inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer"
-                >
-                  Choose File
-                </label>
                 {submissions[type] && (
                   <p className="mt-2 text-xs text-green-600 dark:text-green-400">
-                    ✓ {submissions[type].name || 'File selected'}
+                    ✓ PDF uploaded successfully
                   </p>
                 )}
               </div>

@@ -102,10 +102,9 @@ export default function LearningPathPage() {
             if (requirement === 'github' || requirement === 'text') {
               // Text-based submissions
               responseData[requirement] = value;
-            } else if (requirement === 'image' || requirement === 'video' || requirement === 'pdf') {
-              // File-based submissions - would need file upload handling
-              // For now, we'll just store the file name or a placeholder
-              responseData[requirement] = value.name || 'File uploaded';
+            } else if (requirement === 'image' || requirement === 'pdf') {
+              // File-based submissions - store the URL or file info
+              responseData[requirement] = value;
             }
           }
         }
@@ -125,13 +124,20 @@ export default function LearningPathPage() {
       });
 
       if (response.ok) {
-        const newSubmission = await response.json();
+        const result = await response.json();
         
-        // Update submissions state
+        // Update submissions state with the new submission
         setSubmissions(prev => ({
           ...prev,
-          [taskId]: newSubmission.submission
+          [taskId]: result.submission || result
         }));
+        
+        // Refresh progress to update completion percentage
+        const progressResponse = await fetch(`/api/progress/${internshipId}`)
+        if (progressResponse.ok) {
+          const progressData = await progressResponse.json()
+          setUserProgress(progressData)
+        }
         
         toast.success('Task submitted successfully!');
       } else {
