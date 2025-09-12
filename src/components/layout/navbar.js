@@ -13,7 +13,6 @@ import {
   Users, 
   BookOpen, 
   FileText, 
-  CheckSquare,
   LayoutDashboard,
   User,
   ShieldCheck
@@ -124,10 +123,10 @@ export function Navbar() {
           active: isActive('/admin/applications') 
         },
         { 
-          href: '/admin/task-review', 
-          label: 'Task Review', 
-          icon: CheckSquare,
-          active: isActive('/admin/task-review') 
+          href: '/admin/internship-management', 
+          label: 'Internship Management', 
+          icon: ShieldCheck,
+          active: isActive('/admin/internship-management') 
         }
       ]
     } else {

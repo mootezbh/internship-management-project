@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { SignedIn, useUser } from '@clerk/nextjs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -63,19 +63,17 @@ const Badge = ({ children, variant = "default", className = "" }) => {
 
 // Dialog components
 const Dialog = ({ open, onOpenChange, children }) => {
-  if (!open) return null
-  
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
       onOpenChange(false)
     }
   }
 
-  const handleEscapeKey = (e) => {
+  const handleEscapeKey = useCallback((e) => {
     if (e.key === 'Escape') {
       onOpenChange(false)
     }
-  }
+  }, [onOpenChange])
 
   // Add escape key listener
   useEffect(() => {
@@ -87,7 +85,9 @@ const Dialog = ({ open, onOpenChange, children }) => {
       document.removeEventListener('keydown', handleEscapeKey)
       document.body.style.overflow = 'auto'
     }
-  }, [open])
+  }, [open, handleEscapeKey])
+
+  if (!open) return null
 
   return (
     <div 
