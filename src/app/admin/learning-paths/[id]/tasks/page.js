@@ -167,21 +167,31 @@ export default function ManageTasksPage() {
                               <h5 className="text-lg font-semibold text-slate-900 dark:text-white flex-1">{task.title}</h5>
                               <div className="flex items-center gap-2">
                                 {getContentTypeIcon(task.contentType)}
-                                <Badge variant={
-                                  task.contentType === 'VIDEO' ? 'default' : 
-                                  task.contentType === 'IMAGE' ? 'secondary' :
-                                  task.contentType === 'FILE' ? 'outline' :
-                                  task.contentType === 'URL' ? 'secondary' :
-                                  task.contentType === 'CODE' ? 'destructive' :
-                                  'secondary'
-                                } className="text-xs">
-                                  {task.contentType === 'VIDEO' ? 'Video' :
-                                   task.contentType === 'IMAGE' ? 'Image' :
-                                   task.contentType === 'FILE' ? 'File' :
-                                   task.contentType === 'URL' ? 'Link' :
-                                   task.contentType === 'CODE' ? 'Code' :
-                                   task.contentType === 'TEXTAREA' ? 'Long Text' :
-                                   'Text'}
+                                <Badge variant="secondary" className="text-xs">
+                                  {(() => {
+                                    try {
+                                      // Try to parse as JSON to see if it's structured content
+                                      const parsed = JSON.parse(task.content || '[]');
+                                      if (Array.isArray(parsed) && parsed.length > 0) {
+                                        const types = [...new Set(parsed.map(block => block.type))];
+                                        if (types.length === 1) {
+                                          const type = types[0];
+                                          return type === 'VIDEO' ? 'Video' :
+                                                 type === 'IMAGE' ? 'Image' :
+                                                 type === 'FILE' ? 'File' :
+                                                 type === 'URL' ? 'Link' :
+                                                 type === 'CODE' ? 'Code' :
+                                                 type === 'TEXTAREA' ? 'Long Text' :
+                                                 'Text';
+                                        } else {
+                                          return `Mixed (${types.length} types)`;
+                                        }
+                                      }
+                                      return 'Text';
+                                    } catch {
+                                      return 'Text';
+                                    }
+                                  })()}
                                 </Badge>
                               </div>
                             </div>
@@ -193,11 +203,7 @@ export default function ManageTasksPage() {
                             {task.content && (
                               <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3 mb-4">
                                 <p className="text-xs text-slate-500 dark:text-slate-500 font-medium mb-1">
-                                  {task.contentType === 'VIDEO' ? 'Video URL:' :
-                                   task.contentType === 'IMAGE' ? 'Image URL:' :
-                                   task.contentType === 'FILE' ? 'File URL:' :
-                                   task.contentType === 'URL' ? 'Link URL:' :
-                                   'Content Preview:'}
+                                  Content Preview:
                                 </p>
                                 <p className="text-sm text-slate-700 dark:text-slate-300">
                                   {(() => {
@@ -205,7 +211,7 @@ export default function ManageTasksPage() {
                                       // Try to parse as JSON first (structured content)
                                       const parsed = JSON.parse(task.content);
                                       if (Array.isArray(parsed) && parsed.length > 0) {
-                                        return `Rich content with ${parsed.length} block(s)`;
+                                        return `Rich content with ${parsed.length} block(s): ${parsed.map(block => block.type).join(', ')}`;
                                       }
                                       return task.content.length > 150 ? task.content.substring(0, 150) + '...' : task.content;
                                     } catch {

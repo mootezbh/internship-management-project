@@ -54,21 +54,14 @@ export default function EditTaskPage() {
 
   const handleSaveTask = async (taskData) => {
     try {
-      // Determine content type from content structure
-      let contentType = 'TEXT'; // default
+      // Prepare content for storage
       let contentToSave = taskData.content || '';
       
       if (taskData.content && Array.isArray(taskData.content)) {
-        // JSON content from TaskBuilder - determine type from first content block
-        const firstBlock = taskData.content[0];
-        if (firstBlock && firstBlock.type) {
-          contentType = firstBlock.type;
-        }
+        // JSON content from TaskBuilder
         contentToSave = JSON.stringify(taskData.content);
       } else if (typeof taskData.content === 'string') {
-        // Simple string content - could be text, URL, etc.
-        // Keep the existing contentType or let admin specify it
-        contentType = task.contentType || 'TEXT';
+        // Simple string content
         contentToSave = taskData.content;
       }
 
@@ -81,7 +74,6 @@ export default function EditTaskPage() {
           title: taskData.title,
           description: taskData.description,
           content: contentToSave,
-          contentType: contentType,
           order: taskData.order,
           deadlineOffset: taskData.deadlineOffset
         })
@@ -131,10 +123,9 @@ export default function EditTaskPage() {
       // If parsing fails, create a single content block from the existing content
       initialContent = [{
         id: `content_${Date.now()}`,
-        type: task.contentType || 'TEXT',
+        type: 'TEXT',
         title: 'Existing Content',
-        content: (task.contentType === 'VIDEO' || task.contentType === 'IMAGE' || task.contentType === 'FILE' || task.contentType === 'URL') ? '' : task.content,
-        url: (task.contentType === 'VIDEO' || task.contentType === 'IMAGE' || task.contentType === 'FILE' || task.contentType === 'URL') ? task.content : '',
+        content: task.content,
         order: 0,
         required: false
       }]

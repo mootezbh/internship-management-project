@@ -26,6 +26,7 @@ import {
   Send,
   XCircle,
   Image,
+  Upload,
   Link
 } from 'lucide-react'
 import { toast } from "sonner"
@@ -65,23 +66,22 @@ export default function LearningPathPage() {
   const [submissionForm, setSubmissionForm] = useState({})
   const [submitting, setSubmitting] = useState({})
 
-  // Utility function to get content type icon
-  const getContentTypeIcon = (contentType) => {
-    switch (contentType) {
-      case 'VIDEO':
-        return <Video className="h-4 w-4" />
-      case 'IMAGE':
-        return <Image className="h-4 w-4" />
-      case 'FILE':
-        return <FileText className="h-4 w-4" />
-      case 'URL':
-        return <Link className="h-4 w-4" />
-      case 'CODE':
-        return <Code className="h-4 w-4" />
-      case 'TEXT':
-      case 'TEXTAREA':
-      default:
-        return <FileText className="h-4 w-4" />
+    // Utility function to get content type icon based on content analysis
+  const getContentTypeIcon = (task) => {
+    try {
+      // Try to parse as JSON to determine content types
+      const parsed = JSON.parse(task.content || '[]');
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        const types = parsed.map(block => block.type);
+        if (types.includes('VIDEO')) return <Video className="h-4 w-4" />;
+        if (types.includes('IMAGE')) return <Image className="h-4 w-4" />;
+        if (types.includes('FILE')) return <Upload className="h-4 w-4" />;
+        if (types.includes('URL')) return <Link className="h-4 w-4" />;
+        if (types.includes('CODE')) return <Code className="h-4 w-4" />;
+      }
+      return <FileText className="h-4 w-4" />;
+    } catch {
+      return <FileText className="h-4 w-4" />;
     }
   }
 
@@ -444,7 +444,7 @@ export default function LearningPathPage() {
                                 <CardTitle className="text-lg">
                                   {task.order}. {task.title}
                                 </CardTitle>
-                                {getContentTypeIcon(task.contentType)}
+                                {getContentTypeIcon(task)}
                               </div>
                               <CardDescription className="text-sm">
                                 {task.description}
@@ -476,13 +476,12 @@ export default function LearningPathPage() {
                                 try {
                                   taskContent = JSON.parse(task.content);
                                 } catch {
-                                  // If parsing fails, treat as simple content and create appropriate content block
+                                  // If parsing fails, treat as simple content and create a text content block
                                   taskContent = [{
                                     id: `task-${task.id}-content`,
-                                    type: task.contentType || 'TEXT',
+                                    type: 'TEXT',
                                     title: 'Task Content',
-                                    content: task.contentType === 'VIDEO' ? '' : task.content,
-                                    url: task.contentType === 'VIDEO' ? task.content : undefined,
+                                    content: task.content,
                                     required: true
                                   }];
                                 }

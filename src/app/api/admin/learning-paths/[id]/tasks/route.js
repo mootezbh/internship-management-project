@@ -58,20 +58,15 @@ export async function POST(request, { params }) {
       if (typeof content === 'string') {
         processedContent = content;
       } else {
-                // If content is an object or array (from task builder), stringify it
-        const contentToStore = typeof content === 'object' ? JSON.stringify(content) : content;
+        // If content is an object or array (from task builder), stringify it
+        processedContent = JSON.stringify(content);
       }
     }
-
-    // Validate contentType against allowed values
-    const allowedContentTypes = ['TEXT', 'TEXTAREA', 'VIDEO', 'IMAGE', 'FILE', 'URL', 'CODE'];
-    const validContentType = contentType && allowedContentTypes.includes(contentType) ? contentType : 'TEXT';
 
     const taskData = {
       title: String(title).trim(),
       description: String(description).trim(),
       content: processedContent,
-      contentType: validContentType,
       deadlineOffset: parseInt(deadlineOffset) || 1,
       order: parseInt(order) || 1,
       learningPathId: params.id

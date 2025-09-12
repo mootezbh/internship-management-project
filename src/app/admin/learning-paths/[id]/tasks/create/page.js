@@ -50,28 +50,21 @@ export default function CreateTaskPage() {
         return;
       }
 
-      // Determine content type based on task content
-      let contentType = 'TEXT'; // Default
+      // Prepare content for storage
       let contentToSave = taskData.content || '';
       
       if (taskData.content && Array.isArray(taskData.content)) {
-        // JSON content from TaskBuilder - determine type from first content block
-        const firstBlock = taskData.content[0];
-        if (firstBlock && firstBlock.type) {
-          contentType = firstBlock.type;
-        }
+        // JSON content from TaskBuilder
         contentToSave = JSON.stringify(taskData.content);
       } else if (typeof taskData.content === 'string') {
-        // Simple string content - could be text, URL, etc.
+        // Simple string content
         contentToSave = taskData.content;
-        // Could add URL detection logic here if needed
       }
 
       const payload = {
         title: taskData.title.trim(),
         description: taskData.description.trim(),
         content: contentToSave,
-        contentType: contentType,
         order: parseInt(taskData.order) || 1,
         deadlineOffset: parseInt(taskData.deadlineOffset) || 1
       };

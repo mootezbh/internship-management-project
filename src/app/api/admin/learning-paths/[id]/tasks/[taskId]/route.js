@@ -43,7 +43,6 @@ export async function PUT(request, { params }) {
     const updateData = {
       title,
       description,
-      contentType: contentType || 'TEXT',
     }
 
     // Add optional fields if provided
