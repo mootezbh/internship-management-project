@@ -33,7 +33,7 @@ export async function PUT(request, { params }) {
       where: { id },
       data: {
         status,
-        feedback: feedback || null,
+        feedback: adminFeedback || feedback || null,
         reviewedAt: new Date(),
         adminComment: adminFeedback || feedback || null
       },

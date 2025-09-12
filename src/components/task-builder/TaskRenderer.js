@@ -23,7 +23,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
-export default function TaskRenderer({ task, onComplete, isCompleted = false, userProgress = {} }) {
+export default function TaskRenderer({ task, onComplete, isCompleted = false, userProgress = {}, showSubmissionForm = false }) {
   const [submissions, setSubmissions] = useState(userProgress.submissions || {});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -542,8 +542,8 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
         )}
       </div>
 
-      {/* Submission Section */}
-      <SubmissionSection />
+      {/* Submission Section - Only show if explicitly requested */}
+      {showSubmissionForm && <SubmissionSection />}
     </div>
   );
 }

@@ -207,8 +207,8 @@ export async function PATCH(request, { params }) {
       where: { id: submissionId },
       data: {
         status: newStatus,
-        feedback: feedback || null,
-        adminComment: adminComment || null,
+        feedback: feedback || adminComment || null,
+        adminComment: feedback || adminComment || null,
         reviewedAt: new Date()
       },
       include: {

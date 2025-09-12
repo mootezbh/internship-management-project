@@ -363,6 +363,100 @@ export default function LearningPathPage() {
     }
   }
 
+  // New function to handle submissions with response requirements
+  const handleSubmitNewTask = async (taskId) => {
+    const formData = submissionForm[taskId]
+    
+    if (!canSubmitTask(taskId, formData)) {
+      toast.error('Please fill in all required fields')
+      return
+    }
+
+    setSubmitting(prev => ({ ...prev, [taskId]: true }))
+    
+    try {
+      const task = tasks.find(t => t.id === taskId)
+      const submissionData = {}
+      
+      // Build submission data based on response requirements
+      if (task?.responseRequirements) {
+        for (const requirement of task.responseRequirements) {
+          switch (requirement) {
+            case 'github':
+              submissionData.github = formData.githubUrl?.trim()
+              break
+            case 'text':
+              submissionData.text = formData.textResponse?.trim()
+              break
+            // Add support for other types as needed
+          }
+        }
+      }
+      
+      const response = await fetch('/api/submissions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          taskId,
+          submissionData,
+          githubUrl: submissionData.github || '', // For backward compatibility
+        }),
+      })
+
+      if (response.ok) {
+        const newSubmission = await response.json()
+        setSubmissions(prev => ({
+          ...prev,
+          [taskId]: newSubmission
+        }))
+        
+        // Clear form
+        setSubmissionForm(prev => ({
+          ...prev,
+          [taskId]: {}
+        }))
+        
+        toast.success('Task submitted successfully!')
+        
+        // Refresh progress
+        const progressResponse = await fetch(`/api/progress/${internshipId}`)
+        if (progressResponse.ok) {
+          const progressData = await progressResponse.json()
+          setUserProgress(progressData)
+        }
+      } else {
+        const error = await response.json()
+        toast.error(error.error || 'Failed to submit task')
+      }
+    } catch (error) {
+      toast.error('Failed to submit task. Please try again.')
+    } finally {
+      setSubmitting(prev => ({ ...prev, [taskId]: false }))
+    }
+  }
+
+  // Helper function to check if task can be submitted
+  const canSubmitTask = (taskId, formData) => {
+    const task = tasks.find(t => t.id === taskId)
+    if (!task?.responseRequirements || task.responseRequirements.length === 0) {
+      return formData?.githubUrl?.trim() // Legacy tasks just need GitHub URL
+    }
+    
+    // Check if all required fields are filled
+    return task.responseRequirements.every(requirement => {
+      switch (requirement) {
+        case 'github':
+          return formData?.githubUrl?.trim()
+        case 'text':
+          return formData?.textResponse?.trim()
+        default:
+          return true
+      }
+    })
+  }
+
   const calculateProgress = () => {
     if (!userProgress.totalTasks || userProgress.totalTasks === 0) return 0
     return userProgress.progressPercentage || 0
@@ -663,11 +757,11 @@ export default function LearningPathPage() {
                                     <p className="text-sm text-red-700 dark:text-red-300 mb-3">
                                       Your submission needs some improvements. Please review the feedback below and resubmit.
                                     </p>
-                                    {submission.adminFeedback && (
+                                    {(submission.adminComment || submission.feedback) && (
                                       <div className="p-3 bg-red-100 dark:bg-red-800/50 rounded border border-red-200 dark:border-red-700">
                                         <h5 className="font-medium text-red-900 dark:text-red-100 mb-1">Admin Feedback:</h5>
                                         <p className="text-sm text-red-800 dark:text-red-200 whitespace-pre-wrap">
-                                          {submission.adminFeedback}
+                                          {submission.adminComment || submission.feedback}
                                         </p>
                                       </div>
                                     )}
@@ -714,6 +808,95 @@ export default function LearningPathPage() {
                                       </>
                                     )}
                                   </Button>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Initial Submission Form for Available Tasks */}
+                            {isAvailable && !submission && (
+                              <div className="border border-blue-200 dark:border-blue-700 rounded-lg p-4 bg-blue-50 dark:bg-blue-900/30">
+                                <h4 className="font-medium mb-3 text-blue-900 dark:text-blue-100">Submit Your Work</h4>
+                                <div className="space-y-3">
+                                  {/* Handle different response requirements */}
+                                  {task.responseRequirements && task.responseRequirements.length > 0 ? (
+                                    <>
+                                      {task.responseRequirements.includes('github') && (
+                                        <div>
+                                          <Label htmlFor={`github-${task.id}`} className="text-sm font-medium text-slate-900 dark:text-white">
+                                            GitHub Repository URL
+                                          </Label>
+                                          <Input
+                                            id={`github-${task.id}`}
+                                            type="url"
+                                            placeholder="https://github.com/username/repository"
+                                            value={formData.githubUrl || ''}
+                                            onChange={(e) => handleSubmissionChange(task.id, 'githubUrl', e.target.value)}
+                                            className="mt-1 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600"
+                                          />
+                                        </div>
+                                      )}
+                                      {task.responseRequirements.includes('text') && (
+                                        <div>
+                                          <Label htmlFor={`text-${task.id}`} className="text-sm font-medium text-slate-900 dark:text-white">
+                                            Text Response
+                                          </Label>
+                                          <textarea
+                                            id={`text-${task.id}`}
+                                            placeholder="Enter your response here..."
+                                            value={formData.textResponse || ''}
+                                            onChange={(e) => handleSubmissionChange(task.id, 'textResponse', e.target.value)}
+                                            rows={4}
+                                            className="mt-1 w-full bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 rounded-md p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                          />
+                                        </div>
+                                      )}
+                                      <Button 
+                                        onClick={() => handleSubmitNewTask(task.id)}
+                                        disabled={submitting[task.id] || !canSubmitTask(task.id, formData)}
+                                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                                      >
+                                        {submitting[task.id] ? (
+                                          'Submitting...'
+                                        ) : (
+                                          <>
+                                            <Send className="h-4 w-4 mr-2" />
+                                            Submit Task
+                                          </>
+                                        )}
+                                      </Button>
+                                    </>
+                                  ) : (
+                                    // Legacy support for tasks without response requirements
+                                    <>
+                                      <div>
+                                        <Label htmlFor={`github-legacy-${task.id}`} className="text-sm font-medium text-slate-900 dark:text-white">
+                                          GitHub Repository URL
+                                        </Label>
+                                        <Input
+                                          id={`github-legacy-${task.id}`}
+                                          type="url"
+                                          placeholder="https://github.com/username/repository"
+                                          value={formData.githubUrl || ''}
+                                          onChange={(e) => handleSubmissionChange(task.id, 'githubUrl', e.target.value)}
+                                          className="mt-1 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600"
+                                        />
+                                      </div>
+                                      <Button 
+                                        onClick={() => handleSubmitTask(task.id)}
+                                        disabled={submitting[task.id] || !formData.githubUrl?.trim()}
+                                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                                      >
+                                        {submitting[task.id] ? (
+                                          'Submitting...'
+                                        ) : (
+                                          <>
+                                            <Send className="h-4 w-4 mr-2" />
+                                            Submit Task
+                                          </>
+                                        )}
+                                      </Button>
+                                    </>
+                                  )}
                                 </div>
                               </div>
                             )}
