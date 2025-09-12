@@ -1039,21 +1039,13 @@ export default function LearningPathPage() {
                                   })()}
                                 </div>
                                 
-                                {/* Submission Details and Feedback */}
+                                {/* Submission Details */}
                                 {submission && (
                                   <div className="bg-green-50 dark:bg-green-900/30 rounded-lg p-4 border border-green-200 dark:border-green-700">
                                     <div className="flex items-center gap-2 mb-2">
                                       <CheckCircle className="h-4 w-4 text-green-600" />
                                       <h4 className="font-medium text-green-900 dark:text-green-100">Task Completed</h4>
                                     </div>
-                                    {(submission.adminComment || submission.feedback) && (
-                                      <div className="mt-3 p-3 bg-green-100 dark:bg-green-800/50 rounded border border-green-200 dark:border-green-700">
-                                        <h5 className="font-medium text-green-900 dark:text-green-100 mb-1">Admin Feedback:</h5>
-                                        <p className="text-sm text-green-800 dark:text-green-200 whitespace-pre-wrap">
-                                          {submission.adminComment || submission.feedback}
-                                        </p>
-                                      </div>
-                                    )}
                                     <p className="text-xs text-green-600 dark:text-green-400 mt-2">
                                       {submission.reviewedAt ? (
                                         <>Approved on {formatDate(submission.reviewedAt)}</>
