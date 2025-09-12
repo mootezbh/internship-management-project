@@ -28,7 +28,10 @@ import {
   Image,
   Upload,
   Link,
-  ExternalLink
+  ExternalLink,
+  ChevronDown,
+  ChevronRight,
+  ChevronUp
 } from 'lucide-react'
 import { toast } from "sonner"
 import { PageLoading } from '@/components/ui/loading-spinner'
@@ -66,6 +69,7 @@ export default function LearningPathPage() {
   const [submissions, setSubmissions] = useState({})
   const [submissionForm, setSubmissionForm] = useState({})
   const [submitting, setSubmitting] = useState({})
+  const [expandedCompletedTasks, setExpandedCompletedTasks] = useState({})
 
     // Utility function to get content type icon based on content analysis
   const getContentTypeIcon = (task) => {
@@ -455,6 +459,14 @@ export default function LearningPathPage() {
           return true
       }
     })
+  }
+
+  // Toggle expansion for completed tasks
+  const toggleCompletedTask = (taskId) => {
+    setExpandedCompletedTasks(prev => ({
+      ...prev,
+      [taskId]: !prev[taskId]
+    }))
   }
 
   const calculateProgress = () => {
@@ -912,7 +924,7 @@ export default function LearningPathPage() {
                             )}
                           </>
                         ) : (
-                          /* Minimized view for completed tasks */
+                          /* Minimized view for completed tasks with expand option */
                           <div className="py-2">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
@@ -924,18 +936,135 @@ export default function LearningPathPage() {
                                   }
                                 </span>
                               </div>
-                              {submission?.githubUrl && (
+                              <div className="flex items-center gap-2">
+                                {submission?.githubUrl && (
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => window.open(submission.githubUrl, '_blank')}
+                                    className="text-xs"
+                                  >
+                                    <ExternalLink className="h-3 w-3 mr-1" />
+                                    View Submission
+                                  </Button>
+                                )}
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  onClick={() => window.open(submission.githubUrl, '_blank')}
+                                  onClick={() => toggleCompletedTask(task.id)}
                                   className="text-xs"
                                 >
-                                  <ExternalLink className="h-3 w-3 mr-1" />
-                                  View Submission
+                                  {expandedCompletedTasks[task.id] ? (
+                                    <>
+                                      <ChevronUp className="h-3 w-3 mr-1" />
+                                      Collapse
+                                    </>
+                                  ) : (
+                                    <>
+                                      <ChevronDown className="h-3 w-3 mr-1" />
+                                      Expand
+                                    </>
+                                  )}
                                 </Button>
-                              )}
+                              </div>
                             </div>
+                            
+                            {/* Expanded content for completed tasks */}
+                            {expandedCompletedTasks[task.id] && (
+                              <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+                                {/* Task Content */}
+                                <div className="mb-4">
+                                  {(() => {
+                                    try {
+                                      // Try to parse content as JSON first (structured tasks)
+                                      let taskContent;
+                                      
+                                      if (task.content && typeof task.content === 'string') {
+                                        try {
+                                          taskContent = JSON.parse(task.content);
+                                        } catch (parseError) {
+                                          // If parsing fails, treat as simple content and create a text content block
+                                          taskContent = [{
+                                            id: `task-${task.id}-content`,
+                                            type: 'TEXT',
+                                            title: 'Task Content',
+                                            content: task.content,
+                                            required: true
+                                          }];
+                                        }
+                                      } else if (Array.isArray(task.content)) {
+                                        // Already an array
+                                        taskContent = task.content;
+                                      } else {
+                                        // No content or invalid content
+                                        taskContent = [];
+                                      }
+                                      
+                                      // Ensure we have valid content array
+                                      if (!Array.isArray(taskContent) || taskContent.length === 0) {
+                                        taskContent = [{
+                                          id: `task-${task.id}-default`,
+                                          type: 'TEXT',
+                                          title: 'Task Information',
+                                          content: task.description || 'No content provided for this task.',
+                                          required: false
+                                        }];
+                                      }
+                                      
+                                      return (
+                                        <TaskRenderer 
+                                          task={{
+                                            ...task,
+                                            content: taskContent,
+                                            responseRequirements: task.responseRequirements || []
+                                          }}
+                                          isCompleted={true}
+                                          showSubmissionForm={false}
+                                          userProgress={{
+                                            completedBlocks: [],
+                                          }}
+                                        />
+                                      );
+                                    } catch (error) {
+                                      console.error('Error rendering completed task content:', error);
+                                      return (
+                                        <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/30 rounded-lg border border-red-200 dark:border-red-700">
+                                          <h4 className="font-medium mb-2 text-red-800 dark:text-red-200">Task Content Error</h4>
+                                          <p className="text-sm text-red-700 dark:text-red-300">
+                                            Unable to load task content. Please contact support if this persists.
+                                          </p>
+                                        </div>
+                                      );
+                                    }
+                                  })()}
+                                </div>
+                                
+                                {/* Submission Details and Feedback */}
+                                {submission && (
+                                  <div className="bg-green-50 dark:bg-green-900/30 rounded-lg p-4 border border-green-200 dark:border-green-700">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <CheckCircle className="h-4 w-4 text-green-600" />
+                                      <h4 className="font-medium text-green-900 dark:text-green-100">Task Completed</h4>
+                                    </div>
+                                    {(submission.adminComment || submission.feedback) && (
+                                      <div className="mt-3 p-3 bg-green-100 dark:bg-green-800/50 rounded border border-green-200 dark:border-green-700">
+                                        <h5 className="font-medium text-green-900 dark:text-green-100 mb-1">Admin Feedback:</h5>
+                                        <p className="text-sm text-green-800 dark:text-green-200 whitespace-pre-wrap">
+                                          {submission.adminComment || submission.feedback}
+                                        </p>
+                                      </div>
+                                    )}
+                                    <p className="text-xs text-green-600 dark:text-green-400 mt-2">
+                                      {submission.reviewedAt ? (
+                                        <>Approved on {formatDate(submission.reviewedAt)}</>
+                                      ) : (
+                                        <>Submitted on {formatDate(submission.submittedAt)}</>
+                                      )}
+                                    </p>
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </div>
                         )}
                       </CardContent>
