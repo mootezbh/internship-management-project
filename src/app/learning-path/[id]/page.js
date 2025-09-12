@@ -505,11 +505,53 @@ export default function LearningPathPage() {
                       </CardHeader>
 
                       <CardContent>
+                        {/* Debug: Log task content type to see which path is taken */}
+                        {console.log('Task rendering decision:', {
+                          taskId: task.id,
+                          title: task.title,
+                          contentType: task.contentType,
+                          isBuilder: task.contentType === 'BUILDER',
+                          content: task.content
+                        })}
+                        
                         {/* Task Content - Use TaskRenderer for builder tasks */}
                         {task.contentType === 'BUILDER' ? (
                           <div className="mb-4">
                             {(() => {
                               try {
+                                // Check if this is a simple YouTube URL (not JSON content)
+                                if (task.content && typeof task.content === 'string' && !task.content.trim().startsWith('[') && !task.content.trim().startsWith('{')) {
+                                  const youtubeVideoId = getYouTubeVideoId(task.content);
+                                  console.log('Simple content detected in BUILDER task:', {
+                                    content: task.content,
+                                    youtubeVideoId: youtubeVideoId
+                                  });
+                                  
+                                  if (youtubeVideoId) {
+                                    return (
+                                      <div className="mb-4">
+                                        <YouTubeEmbed 
+                                          videoId={youtubeVideoId} 
+                                          title={task.title}
+                                        />
+                                        <div className="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                                          Video URL: {task.content}
+                                        </div>
+                                      </div>
+                                    );
+                                  } else {
+                                    // Simple text content
+                                    return (
+                                      <div className="mb-4 p-4 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-600">
+                                        <div className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
+                                          {task.content}
+                                        </div>
+                                      </div>
+                                    );
+                                  }
+                                }
+                                
+                                // Regular JSON content for TaskRenderer
                                 const taskContent = task.content ? JSON.parse(task.content) : [];
                                 return (
                                   <TaskRenderer 
