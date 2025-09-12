@@ -68,18 +68,32 @@ export async function GET(request, { params }) {
       }
     })
 
+    // Get all deadline adjustments for tasks in this learning path
+    const deadlineAdjustments = await prisma.deadlineAdjustment.findMany({
+      where: {
+        taskId: { in: taskIds },
+        userId: { in: userIds }
+      }
+    })
+
     // Calculate progress for each intern
     const interns = internship.applications.map(application => {
       const intern = application.user
       const internTasks = internship.learningPath?.tasks || []
       const internSubmissions = submissions.filter(sub => sub.userId === intern.id)
+      const internDeadlineAdjustments = deadlineAdjustments.filter(adj => adj.userId === intern.id)
 
       // Calculate task statuses and deadlines
       const tasksWithStatus = internTasks.map(task => {
         const submission = internSubmissions.find(sub => sub.taskId === task.id)
+        const deadlineAdjustment = internDeadlineAdjustments.find(adj => adj.taskId === task.id)
+        
         const startDate = new Date(internship.startDate || new Date())
         const deadline = new Date(startDate)
-        deadline.setDate(deadline.getDate() + task.deadlineOffset)
+        
+        // Use adjusted deadline if it exists, otherwise use default
+        const deadlineOffset = deadlineAdjustment ? deadlineAdjustment.newDeadlineOffset : task.deadlineOffset
+        deadline.setDate(deadline.getDate() + deadlineOffset)
 
         let status = 'pending'
         if (submission) {
@@ -114,6 +128,9 @@ export async function GET(request, { params }) {
           ...task,
           status,
           deadline: deadline.toISOString().split('T')[0],
+          deadlineOffset: deadlineOffset, // Include the actual deadline offset used
+          isDeadlineAdjusted: !!deadlineAdjustment,
+          deadlineAdjustment: deadlineAdjustment || null,
           submission: submission || null
         }
       })

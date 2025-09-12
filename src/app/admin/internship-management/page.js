@@ -64,8 +64,36 @@ const Badge = ({ children, variant = "default", className = "" }) => {
 // Dialog components
 const Dialog = ({ open, onOpenChange, children }) => {
   if (!open) return null
+  
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onOpenChange(false)
+    }
+  }
+
+  const handleEscapeKey = (e) => {
+    if (e.key === 'Escape') {
+      onOpenChange(false)
+    }
+  }
+
+  // Add escape key listener
+  useEffect(() => {
+    if (open) {
+      document.addEventListener('keydown', handleEscapeKey)
+      document.body.style.overflow = 'hidden'
+    }
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey)
+      document.body.style.overflow = 'auto'
+    }
+  }, [open])
+
   return (
-    <div className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div 
+      className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+      onClick={handleOverlayClick}
+    >
       <div className="bg-white dark:bg-slate-900 rounded-lg max-w-6xl w-full max-h-[90vh] overflow-auto border border-slate-200 dark:border-slate-700 shadow-2xl">
         {children}
       </div>
@@ -73,7 +101,21 @@ const Dialog = ({ open, onOpenChange, children }) => {
   )
 }
 
-const DialogHeader = ({ children }) => <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700">{children}</div>
+const DialogHeader = ({ children, onClose }) => (
+  <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+    <div>{children}</div>
+    {onClose && (
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={onClose}
+        className="h-8 w-8 p-0"
+      >
+        <X className="h-4 w-4" />
+      </Button>
+    )}
+  </div>
+)
 const DialogTitle = ({ children }) => <h2 className="text-xl font-semibold text-slate-900 dark:text-white">{children}</h2>
 const DialogContent = ({ children }) => <div className="px-6 py-4">{children}</div>
 
@@ -232,6 +274,15 @@ export default function InternshipManagementPage() {
     newDeadlineOffset: '',
     reason: ''
   })
+  const [reviewFeedback, setReviewFeedback] = useState('')
+
+  // Effect to populate feedback when task is selected for review
+  useEffect(() => {
+    if (selectedTask && selectedTask.submission && showSubmissionDialog) {
+      // Use adminComment field from the database
+      setReviewFeedback(selectedTask.submission.adminComment || '')
+    }
+  }, [selectedTask, showSubmissionDialog])
 
   useEffect(() => {
     if (!user) return
@@ -292,6 +343,19 @@ export default function InternshipManagementPage() {
 
   const handleAdjustDeadline = (intern) => {
     setSelectedIntern(intern)
+    // Find the current task or default to first task
+    const currentTask = intern.tasks?.find(task => task.status === 'in-progress') || 
+                       intern.tasks?.find(task => task.status === 'pending') ||
+                       intern.tasks?.[0]
+    
+    if (currentTask) {
+      setSelectedTask(currentTask)
+      setDeadlineForm({
+        taskId: currentTask.id,
+        newDeadlineOffset: currentTask.deadlineOffset?.toString() || '7',
+        reason: ''
+      })
+    }
     setShowDeadlineDialog(true)
   }
 
@@ -568,7 +632,7 @@ export default function InternshipManagementPage() {
         {/* Intern Details Modal */}
         <Dialog open={showInternDetails} onOpenChange={setShowInternDetails}>
           <DialogContent>
-            <DialogHeader>
+            <DialogHeader onClose={() => setShowInternDetails(false)}>
               <DialogTitle>Intern Progress Details</DialogTitle>
             </DialogHeader>
             {selectedIntern && (
@@ -630,6 +694,11 @@ export default function InternshipManagementPage() {
                             <div className="flex items-center space-x-1">
                               <CalendarIcon className="h-3 w-3" />
                               <span>Due: {task.deadline}</span>
+                              {task.isDeadlineAdjusted && (
+                                <Badge variant="warning" className="ml-2 text-xs">
+                                  Adjusted
+                                </Badge>
+                              )}
                             </div>
                             {task.submission && (
                               <div className="flex items-center space-x-1">
@@ -680,45 +749,97 @@ export default function InternshipManagementPage() {
         </Dialog>
 
         {/* Deadline Adjustment Modal */}
-        <Dialog open={showDeadlineDialog} onOpenChange={setShowDeadlineDialog}>
+        <Dialog open={showDeadlineDialog} onOpenChange={(open) => {
+          setShowDeadlineDialog(open)
+          if (!open) {
+            setSelectedTask(null)
+            setDeadlineForm({ taskId: '', newDeadlineOffset: '', reason: '' })
+          }
+        }}>
           <DialogContent>
-            <DialogHeader>
+            <DialogHeader onClose={() => {
+              setShowDeadlineDialog(false)
+              setSelectedTask(null)
+              setDeadlineForm({ taskId: '', newDeadlineOffset: '', reason: '' })
+            }}>
               <DialogTitle>Adjust Task Deadline</DialogTitle>
             </DialogHeader>
-            {selectedTask && selectedIntern && (
-              <form onSubmit={async (e) => {
-                e.preventDefault()
-                try {
-                  const response = await fetch(`/api/admin/deadlines/${selectedIntern.id}/${selectedTask.id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      deadlineOffset: parseInt(deadlineForm.newDeadlineOffset),
-                      reason: deadlineForm.reason
-                    })
-                  })
-
-                  if (response.ok) {
-                    toast.success('Deadline adjusted successfully!')
-                    setShowDeadlineDialog(false)
-                    // Refresh data
-                    handleInternshipSelect(selectedInternship)
-                  } else {
-                    const error = await response.json()
-                    toast.error(error.error || 'Failed to adjust deadline')
-                  }
-                } catch (error) {
-                  toast.error('Failed to adjust deadline')
-                }
-              }} className="space-y-4">
-                <div>
-                  <h4 className="font-medium text-slate-900 dark:text-white mb-2">Task Details</h4>
-                  <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                    <p className="font-medium text-slate-900 dark:text-white">{selectedTask.title}</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Current deadline: {selectedTask.deadline}</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Current offset: {selectedTask.deadlineOffset} days from start</p>
+            {selectedIntern && (
+              <div className="space-y-4">
+                {!selectedTask && selectedIntern.tasks && selectedIntern.tasks.length > 0 && (
+                  <div>
+                    <Label htmlFor="task-select">Select Task</Label>
+                    <select
+                      id="task-select"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                      onChange={(e) => {
+                        const task = selectedIntern.tasks.find(t => t.id === e.target.value)
+                        if (task) {
+                          setSelectedTask(task)
+                          setDeadlineForm({
+                            taskId: task.id,
+                            newDeadlineOffset: task.deadlineOffset?.toString() || '7',
+                            reason: ''
+                          })
+                        }
+                      }}
+                      value={selectedTask?.id || ''}
+                    >
+                      <option value="">Select a task to adjust...</option>
+                      {selectedIntern.tasks.map(task => (
+                        <option key={task.id} value={task.id}>
+                          {task.title} (Due: {task.deadline})
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                </div>
+                )}
+
+                {selectedTask && (
+                  <form onSubmit={async (e) => {
+                    e.preventDefault()
+                    try {
+                      const response = await fetch(`/api/admin/deadlines/${selectedIntern.id}/${selectedTask.id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          deadlineOffset: parseInt(deadlineForm.newDeadlineOffset),
+                          reason: deadlineForm.reason
+                        })
+                      })
+
+                      if (response.ok) {
+                        toast.success('Deadline adjusted successfully!')
+                        setShowDeadlineDialog(false)
+                        setSelectedTask(null)
+                        // Refresh data
+                        handleInternshipSelect(selectedInternship)
+                      } else {
+                        const error = await response.json()
+                        toast.error(error.error || 'Failed to adjust deadline')
+                      }
+                    } catch (error) {
+                      toast.error('Failed to adjust deadline')
+                    }
+                  }} className="space-y-4">
+                    <div>
+                      <h4 className="font-medium text-slate-900 dark:text-white mb-2">Task Details</h4>
+                      <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                        <p className="font-medium text-slate-900 dark:text-white">{selectedTask.title}</p>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">Current deadline: {selectedTask.deadline}</p>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                          Current offset: {selectedTask.deadlineOffset} days from start
+                          {selectedTask.isDeadlineAdjusted && (
+                            <Badge variant="warning" className="ml-2">Previously Adjusted</Badge>
+                          )}
+                        </p>
+                        {selectedTask.deadlineAdjustment?.reason && (
+                          <p className="text-sm text-amber-600 dark:text-amber-400 mt-1">
+                            Previous adjustment reason: {selectedTask.deadlineAdjustment.reason}
+                          </p>
+                        )}
+                      </div>
+                    </div>
 
                 <div>
                   <Label htmlFor="deadline-offset">New Deadline (days from internship start)</Label>
@@ -751,21 +872,53 @@ export default function InternshipManagementPage() {
                   <Button 
                     type="button" 
                     variant="outline" 
-                    onClick={() => setShowDeadlineDialog(false)}
+                    onClick={() => {
+                      setShowDeadlineDialog(false)
+                      setSelectedTask(null)
+                      setDeadlineForm({ taskId: '', newDeadlineOffset: '', reason: '' })
+                    }}
                     className="flex-1"
                   >
                     Cancel
                   </Button>
                 </div>
               </form>
+                )}
+
+                {!selectedTask && selectedIntern && selectedIntern.tasks && selectedIntern.tasks.length === 0 && (
+                  <div className="text-center py-6">
+                    <p className="text-slate-600 dark:text-slate-400">This intern has no tasks to adjust deadlines for.</p>
+                    <Button 
+                      onClick={() => {
+                        setShowDeadlineDialog(false)
+                        setSelectedTask(null)
+                        setDeadlineForm({ taskId: '', newDeadlineOffset: '', reason: '' })
+                      }}
+                      className="mt-4"
+                    >
+                      Close
+                    </Button>
+                  </div>
+                )}
+              </div>
             )}
           </DialogContent>
         </Dialog>
 
         {/* Submission Review Modal */}
-        <Dialog open={showSubmissionDialog} onOpenChange={setShowSubmissionDialog}>
+        <Dialog open={showSubmissionDialog} onOpenChange={(open) => {
+          setShowSubmissionDialog(open)
+          if (!open) {
+            setReviewFeedback('')
+            setSelectedTask(null)
+          }
+        }}>
           <DialogContent>
-            <DialogHeader>
+            <DialogHeader onClose={() => {
+              setShowSubmissionDialog(false)
+              setReviewFeedback('')
+              setSelectedTask(null)
+            }}>
               <DialogTitle>Review Submission</DialogTitle>
             </DialogHeader>
             {selectedTask && selectedIntern && (
@@ -875,6 +1028,29 @@ export default function InternshipManagementPage() {
                   </div>
                 )}
 
+                {/* Existing Admin Feedback */}
+                {selectedTask.submission && selectedTask.submission.adminComment && (
+                  <div>
+                    <h4 className="font-medium text-slate-900 dark:text-white mb-2">Previous Admin Feedback</h4>
+                    <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                      <p className="text-amber-800 dark:text-amber-200 whitespace-pre-wrap">{selectedTask.submission.adminComment}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Review Feedback */}
+                <div>
+                  <Label htmlFor="review-feedback">Admin Feedback (optional for approval, required for changes)</Label>
+                  <textarea
+                    id="review-feedback"
+                    className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                    rows={4}
+                    value={reviewFeedback}
+                    onChange={(e) => setReviewFeedback(e.target.value)}
+                    placeholder="Provide feedback for the intern..."
+                  />
+                </div>
+
                 {/* Review Actions */}
                 <div className="flex space-x-3 pt-4 border-t border-slate-200 dark:border-slate-700">
                   <Button
@@ -883,11 +1059,15 @@ export default function InternshipManagementPage() {
                         const response = await fetch(`/api/admin/task-submissions/${selectedTask.submission.id}`, {
                           method: 'PUT',
                           headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ status: 'APPROVED', feedback: '' })
+                          body: JSON.stringify({ 
+                            status: 'APPROVED', 
+                            adminFeedback: reviewFeedback || 'Submission approved by admin.' 
+                          })
                         })
                         if (response.ok) {
                           toast.success('Submission approved!')
                           setShowSubmissionDialog(false)
+                          setReviewFeedback('')
                           handleInternshipSelect(selectedInternship)
                         }
                       } catch (error) {
@@ -902,15 +1082,24 @@ export default function InternshipManagementPage() {
                   <Button
                     variant="destructive"
                     onClick={async () => {
+                      if (!reviewFeedback.trim()) {
+                        toast.error('Please provide feedback explaining what changes are needed.')
+                        return
+                      }
+                      
                       try {
                         const response = await fetch(`/api/admin/task-submissions/${selectedTask.submission.id}`, {
                           method: 'PUT',
                           headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ status: 'REQUIRES_CHANGES', feedback: 'Please review and resubmit.' })
+                          body: JSON.stringify({ 
+                            status: 'REQUIRES_CHANGES', 
+                            adminFeedback: reviewFeedback 
+                          })
                         })
                         if (response.ok) {
                           toast.success('Submission marked as requiring changes!')
                           setShowSubmissionDialog(false)
+                          setReviewFeedback('')
                           handleInternshipSelect(selectedInternship)
                         }
                       } catch (error) {

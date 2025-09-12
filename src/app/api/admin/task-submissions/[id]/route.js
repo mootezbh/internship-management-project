@@ -22,7 +22,7 @@ export async function PUT(request, { params }) {
 
     const { id } = await params
     const body = await request.json()
-    const { status, feedback } = body
+    const { status, feedback, adminFeedback } = body
 
     // Validate status - use correct enum values from schema
     if (!['PENDING', 'APPROVED', 'REQUIRES_CHANGES'].includes(status)) {
@@ -35,7 +35,7 @@ export async function PUT(request, { params }) {
         status,
         feedback: feedback || null,
         reviewedAt: new Date(),
-        adminComment: feedback || null
+        adminComment: adminFeedback || feedback || null
       },
       include: {
         user: {

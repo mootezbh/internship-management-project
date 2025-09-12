@@ -63,12 +63,8 @@ export async function PUT(request, { params }) {
       return NextResponse.json({ error: 'Intern not enrolled in this learning path' }, { status: 403 })
     }
 
-    // For now, we'll store deadline adjustments in a custom table or update the task directly
-    // Since we don't have a deadline adjustments table, we'll create a simple solution
-    // by storing the adjustment in the submission feedback or creating a new approach
-
-    // Check if there's an existing submission for this intern and task
-    let submission = await prisma.submission.findUnique({
+    // Check if there's an existing deadline adjustment for this intern and task
+    let deadlineAdjustment = await prisma.deadlineAdjustment.findUnique({
       where: {
         userId_taskId: {
           userId: internId,
@@ -77,37 +73,32 @@ export async function PUT(request, { params }) {
       }
     })
 
-    if (submission) {
-      // Update existing submission with deadline info in adminComment
-      const adminComment = `Deadline adjusted to ${deadlineOffset} days from start. ${reason ? `Reason: ${reason}` : ''}`
-      await prisma.submission.update({
-        where: { id: submission.id },
+    if (deadlineAdjustment) {
+      // Update existing deadline adjustment
+      deadlineAdjustment = await prisma.deadlineAdjustment.update({
+        where: { id: deadlineAdjustment.id },
         data: {
-          adminComment: adminComment
+          newDeadlineOffset: deadlineOffset,
+          reason: reason,
+          adjustedAt: new Date()
         }
       })
     } else {
-      // Create a placeholder submission with the deadline adjustment
-      submission = await prisma.submission.create({
+      // Create new deadline adjustment
+      deadlineAdjustment = await prisma.deadlineAdjustment.create({
         data: {
           userId: internId,
           taskId: taskId,
-          githubUrl: '', // Empty for deadline adjustment
-          status: 'PENDING',
-          adminComment: `Deadline adjusted to ${deadlineOffset} days from start. ${reason ? `Reason: ${reason}` : ''}`
+          newDeadlineOffset: deadlineOffset,
+          reason: reason
         }
       })
     }
 
-    // In a real implementation, you might want to create a separate DeadlineAdjustment table
-    // For now, we'll update the task's deadlineOffset for this specific intern
-    // This is a simplified approach - in production, you'd want per-intern deadline tracking
-
     return NextResponse.json({
       success: true,
       message: 'Deadline adjusted successfully',
-      newDeadlineOffset: deadlineOffset,
-      submission: submission
+      deadlineAdjustment: deadlineAdjustment
     })
 
   } catch (error) {

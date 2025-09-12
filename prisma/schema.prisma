@@ -86,6 +86,7 @@ model User {
   // Relations
   applications Application[]
   submissions  Submission[]
+  deadlineAdjustments DeadlineAdjustment[]
 
   @@map("users")
 }
@@ -144,6 +145,7 @@ model Task {
   learningPath   LearningPath @relation(fields: [learningPathId], references: [id], onDelete: Cascade)
   learningPathId String
   submissions    Submission[]
+  deadlineAdjustments DeadlineAdjustment[]
 
   @@map("tasks")
 }
@@ -185,6 +187,23 @@ model Submission {
 
   @@unique([userId, taskId])
   @@map("submissions")
+}
+
+// Deadline adjustments for specific interns
+model DeadlineAdjustment {
+  id               String   @id @default(cuid())
+  newDeadlineOffset Int     // New deadline offset in days from internship start
+  reason           String?  // Reason for adjustment
+  adjustedAt       DateTime @default(now())
+  
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId String
+  
+  @@unique([userId, taskId])
+  @@map("deadline_adjustments")
 }
 
 // Custom application forms for internships
