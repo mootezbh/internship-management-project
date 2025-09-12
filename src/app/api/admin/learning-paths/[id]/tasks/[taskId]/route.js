@@ -23,7 +23,7 @@ export async function PUT(request, { params }) {
     }
 
     const body = await request.json()
-    const { title, description, content, contentType, deadlineOffset, order } = body
+    const { title, description, content, contentType, deadlineOffset, order, responseRequirements } = body
 
     // Validate required fields
     if (!title || !description) {
@@ -56,6 +56,10 @@ export async function PUT(request, { params }) {
     
     if (order !== undefined) {
       updateData.order = parseInt(order) || 1
+    }
+
+    if (responseRequirements !== undefined) {
+      updateData.responseRequirements = responseRequirements || []
     }
 
     const task = await prisma.task.update({

@@ -25,7 +25,7 @@ export async function POST(request, { params }) {
     const body = await request.json()
     console.log('Received request body:', JSON.stringify(body, null, 2))
     
-    const { title, description, content, contentType, deadlineOffset, order } = body
+    const { title, description, content, contentType, deadlineOffset, order, responseRequirements } = body
 
     // Validate required fields
     if (!title || !description) {
@@ -67,6 +67,7 @@ export async function POST(request, { params }) {
       title: String(title).trim(),
       description: String(description).trim(),
       content: processedContent,
+      responseRequirements: responseRequirements || [],
       deadlineOffset: parseInt(deadlineOffset) || 1,
       order: parseInt(order) || 1,
       learningPathId: params.id

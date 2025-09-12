@@ -10,7 +10,13 @@ import {
   CheckCircle,
   Circle,
   Play,
-  FileText
+  FileText,
+  Upload,
+  Github,
+  MessageSquare,
+  Send,
+  Link,
+  Image as ImageIcon
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,21 +24,43 @@ import { Badge } from '@/components/ui/badge';
 
 export default function TaskRenderer({ task, onComplete, isCompleted = false, userProgress = {} }) {
   const [completedBlocks, setCompletedBlocks] = useState(userProgress.completedBlocks || []);
+  const [submissions, setSubmissions] = useState(userProgress.submissions || {});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleBlockComplete = (blockId) => {
     if (!completedBlocks.includes(blockId)) {
       const newCompleted = [...completedBlocks, blockId];
       setCompletedBlocks(newCompleted);
       
-      // Check if all required blocks are completed
-      const requiredBlocks = task.content?.filter(block => block.required) || [];
-      const allRequiredCompleted = requiredBlocks.every(block => 
-        newCompleted.includes(block.id)
-      );
-      
-      if (allRequiredCompleted && onComplete) {
+      // Optional: trigger completion callback if needed
+      if (onComplete) {
         onComplete(task.id, { completedBlocks: newCompleted });
       }
+    }
+  };
+
+  const handleSubmissionChange = (type, value) => {
+    setSubmissions(prev => ({
+      ...prev,
+      [type]: value
+    }));
+  };
+
+  const handleTaskSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      // Call the onComplete callback with both completed blocks and submissions
+      if (onComplete) {
+        await onComplete(task.id, { 
+          completedBlocks, 
+          submissions,
+          isSubmitted: true 
+        });
+      }
+    } catch (error) {
+      console.error('Error submitting task:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -298,11 +326,6 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
               </Button>
               <div>
                 <CardTitle className="text-lg">{content.title}</CardTitle>
-                {content.required && (
-                  <Badge variant="secondary" className="mt-1">
-                    Required
-                  </Badge>
-                )}
               </div>
             </div>
           </div>
@@ -314,13 +337,231 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
     );
   };
 
-  const requiredBlocks = task.content?.filter(block => block.required) || [];
-  const completedRequiredBlocks = requiredBlocks.filter(block => 
-    completedBlocks.includes(block.id)
-  );
-  const progress = requiredBlocks.length > 0 
-    ? (completedRequiredBlocks.length / requiredBlocks.length) * 100 
-    : 0;
+  const SubmissionSection = () => {
+    if (!task.responseRequirements || task.responseRequirements.length === 0) {
+      return null;
+    }
+
+    const getSubmissionComponent = (type) => {
+      switch (type) {
+        case 'github':
+          return (
+            <div key={type} className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <Github className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  GitHub Link
+                </label>
+              </div>
+              <input
+                type="url"
+                placeholder="https://github.com/username/repository"
+                value={submissions[type] || ''}
+                onChange={(e) => handleSubmissionChange(type, e.target.value)}
+                className="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+              />
+            </div>
+          );
+
+        case 'text':
+          return (
+            <div key={type} className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <MessageSquare className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Text Response
+                </label>
+              </div>
+              <textarea
+                placeholder="Enter your response here..."
+                value={submissions[type] || ''}
+                onChange={(e) => handleSubmissionChange(type, e.target.value)}
+                rows={4}
+                className="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+              />
+            </div>
+          );
+
+        case 'image':
+          return (
+            <div key={type} className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <ImageIcon className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Image Upload
+                </label>
+              </div>
+              <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-6 text-center">
+                <Upload className="h-8 w-8 text-slate-400 mx-auto mb-2" />
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Drop an image here or click to browse
+                </p>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      handleSubmissionChange(type, file);
+                    }
+                  }}
+                  className="hidden"
+                  id={`file-${type}`}
+                />
+                <label
+                  htmlFor={`file-${type}`}
+                  className="mt-2 inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer"
+                >
+                  Choose File
+                </label>
+                {submissions[type] && (
+                  <p className="mt-2 text-xs text-green-600 dark:text-green-400">
+                    ✓ {submissions[type].name || 'File selected'}
+                  </p>
+                )}
+              </div>
+            </div>
+          );
+
+        case 'video':
+          return (
+            <div key={type} className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <Video className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Video Upload
+                </label>
+              </div>
+              <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-6 text-center">
+                <Upload className="h-8 w-8 text-slate-400 mx-auto mb-2" />
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Drop a video here or click to browse
+                </p>
+                <input
+                  type="file"
+                  accept="video/*"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      handleSubmissionChange(type, file);
+                    }
+                  }}
+                  className="hidden"
+                  id={`file-${type}`}
+                />
+                <label
+                  htmlFor={`file-${type}`}
+                  className="mt-2 inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer"
+                >
+                  Choose File
+                </label>
+                {submissions[type] && (
+                  <p className="mt-2 text-xs text-green-600 dark:text-green-400">
+                    ✓ {submissions[type].name || 'File selected'}
+                  </p>
+                )}
+              </div>
+            </div>
+          );
+
+        case 'pdf':
+          return (
+            <div key={type} className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <FileText className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  PDF Document
+                </label>
+              </div>
+              <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-6 text-center">
+                <Upload className="h-8 w-8 text-slate-400 mx-auto mb-2" />
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Drop a PDF here or click to browse
+                </p>
+                <input
+                  type="file"
+                  accept=".pdf"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      handleSubmissionChange(type, file);
+                    }
+                  }}
+                  className="hidden"
+                  id={`file-${type}`}
+                />
+                <label
+                  htmlFor={`file-${type}`}
+                  className="mt-2 inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer"
+                >
+                  Choose File
+                </label>
+                {submissions[type] && (
+                  <p className="mt-2 text-xs text-green-600 dark:text-green-400">
+                    ✓ {submissions[type].name || 'File selected'}
+                  </p>
+                )}
+              </div>
+            </div>
+          );
+
+        default:
+          return null;
+      }
+    };
+
+    const hasRequiredSubmissions = task.responseRequirements.every(type => 
+      submissions[type] && (
+        typeof submissions[type] === 'string' ? submissions[type].trim() : true
+      )
+    );
+
+    return (
+      <Card className="mt-6 border-slate-200 dark:border-slate-700">
+        <CardHeader>
+          <CardTitle className="text-lg text-slate-900 dark:text-white flex items-center">
+            <Send className="h-5 w-5 mr-2" />
+            Submit Your Work
+          </CardTitle>
+          <p className="text-sm text-slate-600 dark:text-slate-400">
+            Please provide the following to complete this task:
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {task.responseRequirements.map(type => getSubmissionComponent(type))}
+          
+          <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
+            <Button
+              onClick={handleTaskSubmit}
+              disabled={!hasRequiredSubmissions || isSubmitting}
+              className="w-full"
+            >
+              {isSubmitting ? (
+                <>
+                  <Circle className="h-4 w-4 mr-2 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                <>
+                  <Send className="h-4 w-4 mr-2" />
+                  Submit Task
+                </>
+              )}
+            </Button>
+            {!hasRequiredSubmissions && (
+              <p className="text-xs text-orange-600 dark:text-orange-400 mt-2 text-center">
+                Please fill in all required fields before submitting
+              </p>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
+
+  // Simple progress calculation based on completed blocks vs total blocks
+  const totalBlocks = task.content?.length || 0;
+  const progress = totalBlocks > 0 ? (completedBlocks.length / totalBlocks) * 100 : 0;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -354,7 +595,7 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
           </div>
           
           {/* Progress Bar */}
-          {requiredBlocks.length > 0 && (
+          {totalBlocks > 0 && (
             <div className="mt-4">
               <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
                 <div 
@@ -363,7 +604,7 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
                 />
               </div>
               <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                {completedRequiredBlocks.length} of {requiredBlocks.length} required items completed
+                {completedBlocks.length} of {totalBlocks} items completed
               </div>
             </div>
           )}
@@ -388,6 +629,9 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
           </Card>
         )}
       </div>
+
+      {/* Submission Section */}
+      <SubmissionSection />
     </div>
   );
 }

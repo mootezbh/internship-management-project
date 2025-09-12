@@ -130,14 +130,15 @@ model LearningPath {
 
 // Individual tasks within a learning path
 model Task {
-  id             String   @id @default(cuid())
-  title          String
-  description    String
-  content        String?  // JSON content with multiple content blocks
-  order          Int      // Order in the learning path
-  deadlineOffset Int      // Days from start of internship
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id                   String   @id @default(cuid())
+  title                String
+  description          String
+  content              String?  // JSON content with multiple content blocks
+  responseRequirements String[] // Array of required response types: github, image, video, pdf, text
+  order                Int      // Order in the learning path
+  deadlineOffset       Int      // Days from start of internship
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
   // Relations
   learningPath   LearningPath @relation(fields: [learningPathId], references: [id], onDelete: Cascade)

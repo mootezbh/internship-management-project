@@ -35,8 +35,7 @@ const ContentEditor = React.memo(({
   selectedContent, 
   onTitleChange, 
   onContentChange, 
-  onUrlChange, 
-  onRequiredChange 
+  onUrlChange
 }) => {
   const [isUploading, setIsUploading] = React.useState(false);
 
@@ -281,19 +280,6 @@ const ContentEditor = React.memo(({
           </div>
         )}
 
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            id="content-required"
-            checked={selectedContent.required || false}
-            onChange={(e) => onRequiredChange(e.target.checked)}
-            className="text-blue-600 focus:ring-blue-500 border-slate-300 rounded"
-          />
-          <label htmlFor="content-required" className="ml-2 text-sm text-slate-700 dark:text-slate-300">
-            Required for task completion
-          </label>
-        </div>
-
         {isUploading && (
           <div className="flex items-center space-x-2 text-blue-600">
             <LoadingSpinner size="sm" />
@@ -329,6 +315,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
     description: taskData.description || '',
     order: taskData.order || 1,
     required: taskData.required || false,
+    responseRequirements: taskData.responseRequirements || [],
     ...taskData
   });
 
@@ -340,7 +327,6 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
       title: `New ${CONTENT_TYPES.find(c => c.type === contentType)?.label || 'Content'}`,
       content: '',
       url: '',
-      required: false,
       order: content.length,
     };
     setContent(prevContent => [...prevContent, newContent]);
@@ -380,6 +366,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
         description: taskInfo.description || '',
         order: taskInfo.order || 1,
         deadlineOffset: taskInfo.deadlineOffset || 1,
+        responseRequirements: taskInfo.responseRequirements || [],
         content: content || []
       };
       
@@ -416,12 +403,6 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
     const value = e.target.value;
     if (selectedContent) {
       updateContent(selectedContent.id, { url: value });
-    }
-  }, [selectedContent, updateContent]);
-
-  const handleRequiredChange = useCallback((checked) => {
-    if (selectedContent) {
-      updateContent(selectedContent.id, { required: checked });
     }
   }, [selectedContent, updateContent]);
 
@@ -567,7 +548,6 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
                 <ContentIcon className="w-4 h-4 text-slate-500 dark:text-slate-400" />
                 <label className="font-medium text-slate-900 dark:text-white">
                   {item.title}
-                  {item.required && <span className="text-red-500 ml-1">*</span>}
                 </label>
               </div>
               {!isPreviewMode && (
@@ -769,6 +749,52 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
                   />
                 </div>
               </div>
+              
+              {/* Response Requirements Section */}
+              <div className="mt-4">
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Required Response Types
+                </label>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
+                  Select what type of submission you expect from interns
+                </p>
+                <div className="space-y-2">
+                  {[
+                    { type: 'github', label: 'GitHub Link', icon: '🔗', description: 'Repository or file link' },
+                    { type: 'image', label: 'Image Upload', icon: '🖼️', description: 'Screenshots, diagrams, etc.' },
+                    { type: 'video', label: 'Video Upload', icon: '🎥', description: 'Screen recordings, demos' },
+                    { type: 'pdf', label: 'PDF Document', icon: '📄', description: 'Reports, documentation' },
+                    { type: 'text', label: 'Text Response', icon: '📝', description: 'Written explanation' }
+                  ].map(({ type, label, icon, description }) => (
+                    <div key={type} className="flex items-center space-x-2 p-2 border border-slate-200 dark:border-slate-600 rounded-md">
+                      <input
+                        type="checkbox"
+                        id={`response-${type}`}
+                        checked={taskInfo.responseRequirements.includes(type)}
+                        onChange={(e) => {
+                          const newRequirements = e.target.checked
+                            ? [...taskInfo.responseRequirements, type]
+                            : taskInfo.responseRequirements.filter(req => req !== type);
+                          handleTaskInfoChange('responseRequirements', newRequirements);
+                        }}
+                        className="text-blue-600 focus:ring-blue-500 border-slate-300 rounded"
+                      />
+                      <span className="text-sm">{icon}</span>
+                      <div className="flex-1">
+                        <label htmlFor={`response-${type}`} className="text-xs font-medium text-slate-700 dark:text-slate-300 cursor-pointer">
+                          {label}
+                        </label>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">{description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {taskInfo.responseRequirements.length === 0 && (
+                  <p className="text-xs text-orange-600 dark:text-orange-400 mt-1">
+                    ⚠️ No response types selected. Interns will only be able to mark the task as complete.
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 
@@ -865,7 +891,6 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
                 onTitleChange={handleTitleChange}
                 onContentChange={handleContentChange}
                 onUrlChange={handleUrlChange}
-                onRequiredChange={handleRequiredChange}
               />
             </div>
           )}
