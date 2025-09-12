@@ -511,7 +511,8 @@ export default function LearningPathPage() {
                           title: task.title,
                           contentType: task.contentType,
                           isBuilder: task.contentType === 'BUILDER',
-                          content: task.content
+                          content: task.content,
+                          hasContent: !!task.content
                         })}
                         
                         {/* Task Content - Use TaskRenderer for builder tasks */}
@@ -595,6 +596,7 @@ export default function LearningPathPage() {
                           </div>
                         ) : (
                           /* Legacy task content rendering */
+                          console.log('LEGACY RENDERING PATH REACHED for task:', task.id),
                           task.content && (
                             <div className="mb-4 p-4 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-600">
                               <h4 className="font-medium mb-2 flex items-center gap-2 text-slate-900 dark:text-white">
