@@ -278,15 +278,15 @@ export default function AdminDashboardPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow cursor-pointer border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm" onClick={() => router.push('/admin/task-review')}>
+                <Card className="hover:shadow-md dark:hover:shadow-slate-800/50 transition-shadow cursor-pointer border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm" onClick={() => router.push('/admin/internship-management')}>
                   <CardContent className="p-6">
                     <div className="flex items-center">
-                      <div className="p-3 bg-red-100 dark:bg-red-900/50 rounded-lg">
-                        <CheckCircle className="h-6 w-6 text-red-600 dark:text-red-400" />
+                      <div className="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
+                        <Target className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                       </div>
                       <div className="ml-4">
-                        <h3 className="font-semibold text-slate-900 dark:text-white">Task Review</h3>
-                        <p className="text-sm text-slate-600 dark:text-slate-400">Review task submissions</p>
+                        <h3 className="font-semibold text-slate-900 dark:text-white">Internship Management</h3>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">Monitor progress, manage deadlines, review submissions</p>
                       </div>
                     </div>
                   </CardContent>
