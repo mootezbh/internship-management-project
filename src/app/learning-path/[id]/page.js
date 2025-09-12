@@ -472,20 +472,11 @@ export default function LearningPathPage() {
                             try {
                               // Try to parse content as JSON first (structured tasks)
                               let taskContent;
-                              console.log('Processing task content:', {
-                                taskId: task.id,
-                                title: task.title,
-                                contentType: typeof task.content,
-                                contentLength: task.content?.length,
-                                content: task.content
-                              });
                               
                               if (task.content && typeof task.content === 'string') {
                                 try {
                                   taskContent = JSON.parse(task.content);
-                                  console.log('Successfully parsed JSON content:', taskContent);
                                 } catch (parseError) {
-                                  console.log('Failed to parse as JSON, treating as simple content:', parseError);
                                   // If parsing fails, treat as simple content and create a text content block
                                   taskContent = [{
                                     id: `task-${task.id}-content`,
@@ -500,15 +491,11 @@ export default function LearningPathPage() {
                                 taskContent = task.content;
                               } else {
                                 // No content or invalid content
-                                console.log('No valid content found, using empty array');
                                 taskContent = [];
                               }
                               
-                              console.log('Final taskContent for TaskRenderer:', taskContent);
-                              
                               // Ensure we have valid content array
                               if (!Array.isArray(taskContent) || taskContent.length === 0) {
-                                console.log('No valid content blocks, creating default text block');
                                 taskContent = [{
                                   id: `task-${task.id}-default`,
                                   type: 'TEXT',

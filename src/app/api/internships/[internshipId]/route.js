@@ -20,7 +20,11 @@ export async function GET(request, { params }) {
                 id: true,
                 title: true,
                 order: true,
-                description: true
+                description: true,
+                content: true,
+                deadlineOffset: true,
+                createdAt: true,
+                updatedAt: true
               },
               orderBy: { order: 'asc' }
             }
