@@ -92,6 +92,104 @@ export async function GET(request, { params }) {
   }
 }
 
+// PUT /api/admin/internships/[id] - Update internship
+export async function PUT(request, { params }) {
+  try {
+    const { userId } = await auth()
+    
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    // Check if user is admin
+    const user = await prisma.user.findUnique({
+      where: { clerkId: userId }
+    })
+
+    if (!user || (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN')) {
+      return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 })
+    }
+
+    const internshipId = params.id
+    const body = await request.json()
+    
+    const {
+      title,
+      description,
+      duration,
+      capacity,
+      location,
+      requirements,
+      benefits,
+      applicationDeadline,
+      startDate,
+      endDate,
+      isActive,
+      learningPathId,
+      applicationFormFields
+    } = body
+
+    // Check if internship exists
+    const existingInternship = await prisma.internship.findUnique({
+      where: { id: internshipId }
+    })
+
+    if (!existingInternship) {
+      return NextResponse.json({ error: 'Internship not found' }, { status: 404 })
+    }
+
+    // If learningPathId is provided, verify it exists
+    if (learningPathId) {
+      const learningPath = await prisma.learningPath.findUnique({
+        where: { id: learningPathId }
+      })
+
+      if (!learningPath) {
+        return NextResponse.json({ error: 'Learning path not found' }, { status: 400 })
+      }
+    }
+
+    // Update internship
+    const updatedInternship = await prisma.internship.update({
+      where: { id: internshipId },
+      data: {
+        title,
+        description,
+        duration,
+        capacity,
+        location,
+        requirements,
+        benefits,
+        applicationDeadline: applicationDeadline ? new Date(applicationDeadline) : undefined,
+        startDate: startDate ? new Date(startDate) : undefined,
+        endDate: endDate ? new Date(endDate) : undefined,
+        isActive,
+        learningPathId,
+        applicationFormFields
+      },
+      include: {
+        learningPath: {
+          select: {
+            id: true,
+            title: true
+          }
+        }
+      }
+    })
+
+    return NextResponse.json({ 
+      message: 'Internship updated successfully',
+      internship: updatedInternship 
+    })
+  } catch (error) {
+    console.error('Error updating internship:', error)
+    return NextResponse.json(
+      { error: 'Internal server error', details: error.message },
+      { status: 500 }
+    )
+  }
+}
+
 // DELETE /api/admin/internships/[id] - Delete internship
 export async function DELETE(request, { params }) {
   try {
