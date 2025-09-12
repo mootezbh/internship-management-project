@@ -25,29 +25,6 @@ export default function ApplicationReviewPage() {
     feedback: ''
   });
 
-  // Check admin status first
-  useEffect(() => {
-    checkAdminStatus();
-  }, []);
-
-  const checkAdminStatus = async () => {
-    try {
-      const response = await fetch('/api/admin/check');
-      const data = await response.json();
-      setAdminCheck(data);
-      
-      if (!data.isAdmin) {
-        router.push('/dashboard');
-        return;
-      }
-      
-      // If admin check passes, fetch the application
-      fetchApplication();
-    } catch (error) {
-      console.error('Error checking admin status:', error);
-      router.push('/dashboard');
-    }
-  };
   const fetchApplication = useCallback(async () => {
     try {
       const response = await fetch(`/api/admin/applications/${applicationId}`);
@@ -71,11 +48,29 @@ export default function ApplicationReviewPage() {
     }
   }, [applicationId, router]);
 
+  // Check admin status first
   useEffect(() => {
-    if (applicationId) {
-      fetchApplication();
-    }
-  }, [applicationId, fetchApplication]);
+    const checkAdminStatus = async () => {
+      try {
+        const response = await fetch('/api/admin/check');
+        const data = await response.json();
+        setAdminCheck(data);
+        
+        if (!data.isAdmin) {
+          router.push('/dashboard');
+          return;
+        }
+        
+        // If admin check passes, fetch the application
+        fetchApplication();
+      } catch (error) {
+        console.error('Error checking admin status:', error);
+        router.push('/dashboard');
+      }
+    };
+
+    checkAdminStatus();
+  }, [router, fetchApplication]);
 
   const handleSubmitReview = async () => {
     if (!reviewForm.status) {

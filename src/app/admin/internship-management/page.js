@@ -36,7 +36,8 @@ import {
   MapPin,
   Timer,
   UserCheck,
-  AlertTriangle
+  AlertTriangle,
+  X
 } from 'lucide-react'
 import { toast } from "sonner"
 import { PageLoading } from '@/components/ui/loading-spinner'

@@ -78,7 +78,7 @@ export function Navbar() {
     }
 
     checkAdminStatus()
-  }, [user?.id, isLoaded]) // Re-run when user ID specifically changes
+  }, [user, isLoaded]) // Re-run when user or isLoaded changes
 
   // Reset state when user signs out
   useEffect(() => {
