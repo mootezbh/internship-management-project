@@ -24,21 +24,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
 export default function TaskRenderer({ task, onComplete, isCompleted = false, userProgress = {} }) {
-  const [completedBlocks, setCompletedBlocks] = useState(userProgress.completedBlocks || []);
   const [submissions, setSubmissions] = useState(userProgress.submissions || {});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleBlockComplete = (blockId) => {
-    if (!completedBlocks.includes(blockId)) {
-      const newCompleted = [...completedBlocks, blockId];
-      setCompletedBlocks(newCompleted);
-      
-      // Optional: trigger completion callback if needed
-      if (onComplete) {
-        onComplete(task.id, { completedBlocks: newCompleted });
-      }
-    }
-  };
 
   const handleSubmissionChange = (type, value) => {
     setSubmissions(prev => ({
@@ -50,10 +37,9 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
   const handleTaskSubmit = async () => {
     setIsSubmitting(true);
     try {
-      // Call the onComplete callback with both completed blocks and submissions
+      // Call the onComplete callback with submissions
       if (onComplete) {
         await onComplete(task.id, { 
-          completedBlocks, 
           submissions,
           isSubmitted: true 
         });
@@ -66,8 +52,6 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
   };
 
   const ContentBlock = ({ content }) => {
-    const isBlockCompleted = completedBlocks.includes(content.id);
-    
     const renderContent = () => {
       switch (content.type) {
         case 'TEXT':
@@ -301,11 +285,7 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
     };
 
     return (
-      <Card className={`mb-4 transition-all duration-200 ${
-        isBlockCompleted 
-          ? 'border-green-200 dark:border-green-700 bg-green-50 dark:bg-green-900/20' 
-          : 'border-slate-200 dark:border-slate-700'
-      }`}>
+      <Card className="mb-4 transition-all duration-200 border-slate-200 dark:border-slate-700">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -516,10 +496,6 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
     );
   };
 
-  // Simple progress calculation based on completed blocks vs total blocks
-  const totalBlocks = task.content?.length || 0;
-  const progress = totalBlocks > 0 ? (completedBlocks.length / totalBlocks) * 100 : 0;
-
   return (
     <div className="max-w-4xl mx-auto">
       {/* Task Header */}
@@ -537,34 +513,13 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
               )}
             </div>
             <div className="text-right">
-              <div className="text-sm text-slate-500 dark:text-slate-400 mb-1">
-                Progress
-              </div>
-              <div className="text-2xl font-bold text-slate-900 dark:text-white">
-                {Math.round(progress)}%
-              </div>
               {isCompleted && (
-                <Badge variant="default" className="mt-2 bg-green-600">
+                <Badge variant="default" className="bg-green-600">
                   Completed
                 </Badge>
               )}
             </div>
           </div>
-          
-          {/* Progress Bar */}
-          {totalBlocks > 0 && (
-            <div className="mt-4">
-              <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
-                <div 
-                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                {completedBlocks.length} of {totalBlocks} items completed
-              </div>
-            </div>
-          )}
         </CardHeader>
       </Card>
 

@@ -27,7 +27,8 @@ import {
   XCircle,
   Image,
   Upload,
-  Link
+  Link,
+  ExternalLink
 } from 'lucide-react'
 import { toast } from "sonner"
 import { PageLoading } from '@/components/ui/loading-spinner'
@@ -533,122 +534,153 @@ export default function LearningPathPage() {
                       </CardHeader>
 
                       <CardContent>
-                        {/* Task Content - Always use TaskRenderer for consistent rendering */}
-                        <div className="mb-4">
-                          {(() => {
-                            try {
-                              // Try to parse content as JSON first (structured tasks)
-                              let taskContent;
-                              
-                              if (task.content && typeof task.content === 'string') {
+                        {/* Show full content for non-completed tasks */}
+                        {status !== 'completed' ? (
+                          <>
+                            {/* Task Content - Always use TaskRenderer for consistent rendering */}
+                            <div className="mb-4">
+                              {(() => {
                                 try {
-                                  taskContent = JSON.parse(task.content);
-                                } catch (parseError) {
-                                  // If parsing fails, treat as simple content and create a text content block
-                                  taskContent = [{
-                                    id: `task-${task.id}-content`,
-                                    type: 'TEXT',
-                                    title: 'Task Content',
-                                    content: task.content,
-                                    required: true
-                                  }];
-                                }
-                              } else if (Array.isArray(task.content)) {
-                                // Already an array
-                                taskContent = task.content;
-                              } else {
-                                // No content or invalid content
-                                taskContent = [];
-                              }
-                              
-                              // Ensure we have valid content array
-                              if (!Array.isArray(taskContent) || taskContent.length === 0) {
-                                taskContent = [{
-                                  id: `task-${task.id}-default`,
-                                  type: 'TEXT',
-                                  title: 'Task Information',
-                                  content: task.description || 'No content provided for this task.',
-                                  required: false
-                                }];
-                              }
-                              
-                              return (
-                                <TaskRenderer 
-                                  task={{
-                                    ...task,
-                                    content: taskContent,
-                                    responseRequirements: task.responseRequirements || []
-                                  }}
-                                  onComplete={(taskId, progressData) => {
-                                    console.log('Task submission:', taskId, progressData);
-                                    if (progressData.isSubmitted) {
-                                      handleTaskSubmission(taskId, progressData);
+                                  // Try to parse content as JSON first (structured tasks)
+                                  let taskContent;
+                                  
+                                  if (task.content && typeof task.content === 'string') {
+                                    try {
+                                      taskContent = JSON.parse(task.content);
+                                    } catch (parseError) {
+                                      // If parsing fails, treat as simple content and create a text content block
+                                      taskContent = [{
+                                        id: `task-${task.id}-content`,
+                                        type: 'TEXT',
+                                        title: 'Task Content',
+                                        content: task.content,
+                                        required: true
+                                      }];
                                     }
-                                  }}
-                                  isCompleted={status === 'completed'}
-                                  userProgress={{
-                                    completedBlocks: [],
-                                  }}
-                                />
-                              );
-                            } catch (error) {
-                              console.error('Error rendering task content:', error);
-                              return (
-                                <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/30 rounded-lg border border-red-200 dark:border-red-700">
-                                  <h4 className="font-medium mb-2 text-red-800 dark:text-red-200">Task Content Error</h4>
-                                  <p className="text-sm text-red-700 dark:text-red-300">
-                                    Unable to load task content. Please contact support if this persists.
-                                  </p>
-                                </div>
-                              );
-                            }
-                          })()}
-                        </div>
-
-                        {/* Resubmission for requires changes */}
-                        {submission && submission.status === 'REQUIRES_CHANGES' && (
-                          <div className="border border-red-200 dark:border-red-700 rounded-lg p-4 bg-red-50 dark:bg-red-900/30">
-                            <h4 className="font-medium mb-3 text-red-900 dark:text-red-100">Resubmit Your Work</h4>
-                            <div className="space-y-3">
-                              <div>
-                                <Label htmlFor={`github-resubmit-${task.id}`} className="text-sm font-medium text-slate-900 dark:text-white">
-                                  Updated GitHub Repository URL
-                                </Label>
-                                <Input
-                                  id={`github-resubmit-${task.id}`}
-                                  type="url"
-                                  placeholder="https://github.com/username/repository"
-                                  value={formData.githubUrl || ''}
-                                  onChange={(e) => handleSubmissionChange(task.id, 'githubUrl', e.target.value)}
-                                  className="mt-1 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600"
-                                />
-                              </div>
-                              <Button 
-                                onClick={() => handleSubmitTask(task.id)}
-                                disabled={submitting[task.id] || !formData.githubUrl?.trim()}
-                                className="w-full border-red-300 dark:border-red-600 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/50"
-                                variant="outline"
-                              >
-                                {submitting[task.id] ? (
-                                  'Resubmitting...'
-                                ) : (
-                                  <>
-                                    <Send className="h-4 w-4 mr-2" />
-                                    Resubmit Task
-                                  </>
-                                )}
-                              </Button>
+                                  } else if (Array.isArray(task.content)) {
+                                    // Already an array
+                                    taskContent = task.content;
+                                  } else {
+                                    // No content or invalid content
+                                    taskContent = [];
+                                  }
+                                  
+                                  // Ensure we have valid content array
+                                  if (!Array.isArray(taskContent) || taskContent.length === 0) {
+                                    taskContent = [{
+                                      id: `task-${task.id}-default`,
+                                      type: 'TEXT',
+                                      title: 'Task Information',
+                                      content: task.description || 'No content provided for this task.',
+                                      required: false
+                                    }];
+                                  }
+                                  
+                                  return (
+                                    <TaskRenderer 
+                                      task={{
+                                        ...task,
+                                        content: taskContent,
+                                        responseRequirements: task.responseRequirements || []
+                                      }}
+                                      onComplete={(taskId, progressData) => {
+                                        console.log('Task submission:', taskId, progressData);
+                                        if (progressData.isSubmitted) {
+                                          handleTaskSubmission(taskId, progressData);
+                                        }
+                                      }}
+                                      isCompleted={status === 'completed'}
+                                      userProgress={{
+                                        completedBlocks: [],
+                                      }}
+                                    />
+                                  );
+                                } catch (error) {
+                                  console.error('Error rendering task content:', error);
+                                  return (
+                                    <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/30 rounded-lg border border-red-200 dark:border-red-700">
+                                      <h4 className="font-medium mb-2 text-red-800 dark:text-red-200">Task Content Error</h4>
+                                      <p className="text-sm text-red-700 dark:text-red-300">
+                                        Unable to load task content. Please contact support if this persists.
+                                      </p>
+                                    </div>
+                                  );
+                                }
+                              })()}
                             </div>
-                          </div>
-                        )}
 
-                        {/* Locked Task Message */}
-                        {!isAvailable && !submission && (
-                          <div className="p-4 bg-slate-100 dark:bg-slate-800/50 rounded-lg text-center border border-slate-200 dark:border-slate-600">
-                            <Lock className="h-8 w-8 mx-auto text-slate-400 dark:text-slate-500 mb-2" />
-                            <p className="text-sm text-slate-600 dark:text-slate-400">
-                              Complete the previous task to unlock this one
-                            </p>
+                            {/* Resubmission for requires changes */}
+                            {submission && submission.status === 'REQUIRES_CHANGES' && (
+                              <div className="border border-red-200 dark:border-red-700 rounded-lg p-4 bg-red-50 dark:bg-red-900/30">
+                                <h4 className="font-medium mb-3 text-red-900 dark:text-red-100">Resubmit Your Work</h4>
+                                <div className="space-y-3">
+                                  <div>
+                                    <Label htmlFor={`github-resubmit-${task.id}`} className="text-sm font-medium text-slate-900 dark:text-white">
+                                      Updated GitHub Repository URL
+                                    </Label>
+                                    <Input
+                                      id={`github-resubmit-${task.id}`}
+                                      type="url"
+                                      placeholder="https://github.com/username/repository"
+                                      value={formData.githubUrl || ''}
+                                      onChange={(e) => handleSubmissionChange(task.id, 'githubUrl', e.target.value)}
+                                      className="mt-1 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600"
+                                    />
+                                  </div>
+                                  <Button 
+                                    onClick={() => handleSubmitTask(task.id)}
+                                    disabled={submitting[task.id] || !formData.githubUrl?.trim()}
+                                    className="w-full border-red-300 dark:border-red-600 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/50"
+                                    variant="outline"
+                                  >
+                                    {submitting[task.id] ? (
+                                      'Resubmitting...'
+                                    ) : (
+                                      <>
+                                        <Send className="h-4 w-4 mr-2" />
+                                        Resubmit Task
+                                      </>
+                                    )}
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Locked Task Message */}
+                            {!isAvailable && !submission && (
+                              <div className="p-4 bg-slate-100 dark:bg-slate-800/50 rounded-lg text-center border border-slate-200 dark:border-slate-600">
+                                <Lock className="h-8 w-8 mx-auto text-slate-400 dark:text-slate-500 mb-2" />
+                                <p className="text-sm text-slate-600 dark:text-slate-400">
+                                  Complete the previous task to unlock this one
+                                </p>
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          /* Minimized view for completed tasks */
+                          <div className="py-2">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <CheckCircle className="h-4 w-4 text-green-600" />
+                                <span className="text-sm text-slate-600 dark:text-slate-400">
+                                  Completed on {submission?.reviewedAt ? 
+                                    formatDate(submission.reviewedAt) : 
+                                    formatDate(submission?.submittedAt || new Date())
+                                  }
+                                </span>
+                              </div>
+                              {submission?.githubUrl && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => window.open(submission.githubUrl, '_blank')}
+                                  className="text-xs"
+                                >
+                                  <ExternalLink className="h-3 w-3 mr-1" />
+                                  View Submission
+                                </Button>
+                              )}
+                            </div>
                           </div>
                         )}
                       </CardContent>
