@@ -609,6 +609,78 @@ export default function LearningPathPage() {
                               })()}
                             </div>
 
+                            {/* Submission Status and Feedback */}
+                            {submission && (
+                              <div className="mb-4">
+                                {submission.status === 'PENDING' && (
+                                  <div className="border border-yellow-200 dark:border-yellow-700 rounded-lg p-4 bg-yellow-50 dark:bg-yellow-900/30">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <Clock className="h-4 w-4 text-yellow-600" />
+                                      <h4 className="font-medium text-yellow-900 dark:text-yellow-100">Submission Under Review</h4>
+                                    </div>
+                                    <p className="text-sm text-yellow-700 dark:text-yellow-300">
+                                      Your submission has been received and is being reviewed by an admin.
+                                    </p>
+                                    {submission.submittedAt && (
+                                      <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">
+                                        Submitted on {formatDate(submission.submittedAt)}
+                                      </p>
+                                    )}
+                                  </div>
+                                )}
+
+                                {submission.status === 'APPROVED' && (
+                                  <div className="border border-green-200 dark:border-green-700 rounded-lg p-4 bg-green-50 dark:bg-green-900/30">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <CheckCircle className="h-4 w-4 text-green-600" />
+                                      <h4 className="font-medium text-green-900 dark:text-green-100">Task Approved</h4>
+                                    </div>
+                                    <p className="text-sm text-green-700 dark:text-green-300">
+                                      Congratulations! Your submission has been approved.
+                                    </p>
+                                    {submission.adminFeedback && (
+                                      <div className="mt-3 p-3 bg-green-100 dark:bg-green-800/50 rounded border border-green-200 dark:border-green-700">
+                                        <h5 className="font-medium text-green-900 dark:text-green-100 mb-1">Admin Feedback:</h5>
+                                        <p className="text-sm text-green-800 dark:text-green-200 whitespace-pre-wrap">
+                                          {submission.adminFeedback}
+                                        </p>
+                                      </div>
+                                    )}
+                                    {submission.reviewedAt && (
+                                      <p className="text-xs text-green-600 dark:text-green-400 mt-2">
+                                        Approved on {formatDate(submission.reviewedAt)}
+                                      </p>
+                                    )}
+                                  </div>
+                                )}
+
+                                {submission.status === 'REQUIRES_CHANGES' && (
+                                  <div className="border border-red-200 dark:border-red-700 rounded-lg p-4 bg-red-50 dark:bg-red-900/30 mb-4">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <XCircle className="h-4 w-4 text-red-600" />
+                                      <h4 className="font-medium text-red-900 dark:text-red-100">Changes Required</h4>
+                                    </div>
+                                    <p className="text-sm text-red-700 dark:text-red-300 mb-3">
+                                      Your submission needs some improvements. Please review the feedback below and resubmit.
+                                    </p>
+                                    {submission.adminFeedback && (
+                                      <div className="p-3 bg-red-100 dark:bg-red-800/50 rounded border border-red-200 dark:border-red-700">
+                                        <h5 className="font-medium text-red-900 dark:text-red-100 mb-1">Admin Feedback:</h5>
+                                        <p className="text-sm text-red-800 dark:text-red-200 whitespace-pre-wrap">
+                                          {submission.adminFeedback}
+                                        </p>
+                                      </div>
+                                    )}
+                                    {submission.reviewedAt && (
+                                      <p className="text-xs text-red-600 dark:text-red-400 mt-2">
+                                        Reviewed on {formatDate(submission.reviewedAt)}
+                                      </p>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+
                             {/* Resubmission for requires changes */}
                             {submission && submission.status === 'REQUIRES_CHANGES' && (
                               <div className="border border-red-200 dark:border-red-700 rounded-lg p-4 bg-red-50 dark:bg-red-900/30">
