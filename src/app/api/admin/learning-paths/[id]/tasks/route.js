@@ -26,6 +26,9 @@ export async function POST(request, { params }) {
     console.log('Received request body:', JSON.stringify(body, null, 2))
     
     const { title, description, content, contentType, deadlineOffset, order, responseRequirements } = body
+    console.log('Destructured responseRequirements:', responseRequirements)
+    console.log('Type of responseRequirements:', typeof responseRequirements)
+    console.log('Is Array:', Array.isArray(responseRequirements))
 
     // Validate required fields
     if (!title || !description) {
@@ -74,6 +77,7 @@ export async function POST(request, { params }) {
     }
     
     console.log('Creating task with processed data:', JSON.stringify(taskData, null, 2))
+    console.log('Final responseRequirements value:', taskData.responseRequirements)
 
     const task = await prisma.task.create({
       data: taskData

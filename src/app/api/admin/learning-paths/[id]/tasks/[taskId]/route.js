@@ -24,6 +24,10 @@ export async function PUT(request, { params }) {
 
     const body = await request.json()
     const { title, description, content, contentType, deadlineOffset, order, responseRequirements } = body
+    
+    console.log('Task UPDATE - Received responseRequirements:', responseRequirements)
+    console.log('Task UPDATE - Type of responseRequirements:', typeof responseRequirements)
+    console.log('Task UPDATE - Is Array:', Array.isArray(responseRequirements))
 
     // Validate required fields
     if (!title || !description) {
@@ -60,6 +64,7 @@ export async function PUT(request, { params }) {
 
     if (responseRequirements !== undefined) {
       updateData.responseRequirements = responseRequirements || []
+      console.log('Task UPDATE - Setting responseRequirements to:', updateData.responseRequirements)
     }
 
     const task = await prisma.task.update({
