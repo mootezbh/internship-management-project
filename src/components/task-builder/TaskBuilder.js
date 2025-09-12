@@ -371,6 +371,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
       };
       
       console.log('Sending task data:', taskWithContent); // Debug log
+      console.log('Response requirements being sent:', taskInfo.responseRequirements); // Debug specific field
       await onSave(taskWithContent);
     } catch (error) {
       console.error('Error saving task:', error);
