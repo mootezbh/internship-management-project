@@ -338,8 +338,41 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
   };
 
   const SubmissionSection = () => {
+    // Show submission section if responseRequirements exist, or if they're missing (for backward compatibility)
     if (!task.responseRequirements || task.responseRequirements.length === 0) {
-      return null;
+      // For tasks without responseRequirements, show a default GitHub submission for backward compatibility
+      return (
+        <Card className="mt-6 border-slate-200 dark:border-slate-700">
+          <CardHeader>
+            <CardTitle className="text-lg text-slate-900 dark:text-white flex items-center">
+              <Send className="h-5 w-5 mr-2" />
+              Submit Your Work
+            </CardTitle>
+            <p className="text-sm text-slate-600 dark:text-slate-400">
+              No specific submission requirements set. You can mark this task as complete.
+            </p>
+          </CardHeader>
+          <CardContent>
+            <Button
+              onClick={handleTaskSubmit}
+              disabled={isSubmitting}
+              className="w-full"
+            >
+              {isSubmitting ? (
+                <>
+                  <Circle className="h-4 w-4 mr-2 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                <>
+                  <CheckCircle className="h-4 w-4 mr-2" />
+                  Mark as Complete
+                </>
+              )}
+            </Button>
+          </CardContent>
+        </Card>
+      );
     }
 
     const getSubmissionComponent = (type) => {

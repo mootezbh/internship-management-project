@@ -509,7 +509,8 @@ export default function LearningPathPage() {
                                 <TaskRenderer 
                                   task={{
                                     ...task,
-                                    content: taskContent
+                                    content: taskContent,
+                                    responseRequirements: task.responseRequirements || []
                                   }}
                                   onComplete={(taskId, progressData) => {
                                     console.log('Task content completed:', taskId, progressData);
@@ -532,71 +533,7 @@ export default function LearningPathPage() {
                               );
                             }
                           })()}
-                        </div>                        {/* Submission Status */}
-                        {submission && (
-                          <div className="mb-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-600">
-                            <div className="flex items-center justify-between mb-2">
-                              <h4 className="font-medium text-slate-900 dark:text-white">Your Submission</h4>
-                              {getStatusBadge(status)}
-                            </div>
-                            <div className="flex items-center gap-2 text-sm">
-                              <Github className="h-4 w-4 text-slate-500 dark:text-slate-400" />
-                              <a 
-                                href={submission.githubUrl} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="text-blue-600 dark:text-blue-400 hover:underline"
-                              >
-                                {submission.githubUrl}
-                              </a>
-                            </div>
-                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                              Submitted on {formatDate(submission.submittedAt)}
-                            </p>
-                            {submission.feedback && (
-                              <div className="mt-3 p-3 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded">
-                                <h5 className="font-medium text-yellow-800 dark:text-yellow-200 mb-1">Feedback</h5>
-                                <p className="text-sm text-yellow-700 dark:text-yellow-300">{submission.feedback}</p>
-                              </div>
-                            )}
-                          </div>
-                        )}
-
-                        {/* Submission Form */}
-                        {isAvailable && !submission && (
-                          <div className="border border-blue-200 dark:border-blue-700 rounded-lg p-4 bg-blue-50 dark:bg-blue-900/30">
-                            <h4 className="font-medium mb-3 text-blue-900 dark:text-blue-100">Submit Your Work</h4>
-                            <div className="space-y-3">
-                              <div>
-                                <Label htmlFor={`github-${task.id}`} className="text-sm font-medium text-slate-900 dark:text-white">
-                                  GitHub Repository URL
-                                </Label>
-                                <Input
-                                  id={`github-${task.id}`}
-                                  type="url"
-                                  placeholder="https://github.com/username/repository"
-                                  value={formData.githubUrl || ''}
-                                  onChange={(e) => handleSubmissionChange(task.id, 'githubUrl', e.target.value)}
-                                  className="mt-1 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600"
-                                />
-                              </div>
-                              <Button 
-                                onClick={() => handleSubmitTask(task.id)}
-                                disabled={submitting[task.id] || !formData.githubUrl?.trim()}
-                                className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
-                              >
-                                {submitting[task.id] ? (
-                                  'Submitting...'
-                                ) : (
-                                  <>
-                                    <Send className="h-4 w-4 mr-2" />
-                                    Submit Task
-                                  </>
-                                )}
-                              </Button>
-                            </div>
-                          </div>
-                        )}
+                        </div>
 
                         {/* Resubmission for requires changes */}
                         {submission && submission.status === 'REQUIRES_CHANGES' && (

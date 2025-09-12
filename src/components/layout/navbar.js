@@ -1,6 +1,6 @@
 'use client'
 
-import { SignedIn, SignedOut, SignInButton, SignUpButton } from '@clerk/nextjs'
+import { SignedIn, SignedOut, SignInButton, SignUpButton, useUser } from '@clerk/nextjs'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
@@ -21,6 +21,7 @@ import {
 
 export function Navbar() {
   const pathname = usePathname()
+  const { user, isLoaded } = useUser()
   const [isAdmin, setIsAdmin] = useState(false)
   const [userRole, setUserRole] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -38,20 +39,55 @@ export function Navbar() {
   // Check if user is admin
   useEffect(() => {
     const checkAdminStatus = async () => {
+      setIsLoading(true)
+      
+      // Reset admin status when user changes
+      setIsAdmin(false)
+      setUserRole(null)
+      
+      // Only check if user is loaded and exists
+      if (!isLoaded || !user) {
+        setIsLoading(false)
+        return
+      }
+
       try {
-        const response = await fetch('/api/admin/check')
+        const response = await fetch('/api/admin/check', {
+          // Prevent caching to ensure fresh data
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache',
+          }
+        })
         if (response.ok) {
           const data = await response.json()
           setIsAdmin(data.isAdmin)
           setUserRole(data.role)
+        } else {
+          // If response is not ok, user is not admin
+          setIsAdmin(false)
+          setUserRole(null)
         }
-      } catch (error) {} finally {
+      } catch (error) {
+        console.error('Error checking admin status:', error)
+        setIsAdmin(false)
+        setUserRole(null)
+      } finally {
         setIsLoading(false)
       }
     }
 
     checkAdminStatus()
-  }, [])
+  }, [user?.id, isLoaded]) // Re-run when user ID specifically changes
+
+  // Reset state when user signs out
+  useEffect(() => {
+    if (!user && isLoaded) {
+      setIsAdmin(false)
+      setUserRole(null)
+      setIsLoading(false)
+    }
+  }, [user, isLoaded])
 
   // Navigation items based on role
   const getNavigationItems = () => {
