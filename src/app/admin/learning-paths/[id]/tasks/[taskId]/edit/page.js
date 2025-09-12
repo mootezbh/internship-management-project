@@ -54,6 +54,24 @@ export default function EditTaskPage() {
 
   const handleSaveTask = async (taskData) => {
     try {
+      // Determine content type from content structure
+      let contentType = 'TEXT'; // default
+      let contentToSave = taskData.content || '';
+      
+      if (taskData.content && Array.isArray(taskData.content)) {
+        // JSON content from TaskBuilder - determine type from first content block
+        const firstBlock = taskData.content[0];
+        if (firstBlock && firstBlock.type) {
+          contentType = firstBlock.type;
+        }
+        contentToSave = JSON.stringify(taskData.content);
+      } else if (typeof taskData.content === 'string') {
+        // Simple string content - could be text, URL, etc.
+        // Keep the existing contentType or let admin specify it
+        contentType = task.contentType || 'TEXT';
+        contentToSave = taskData.content;
+      }
+
       const response = await fetch(`/api/admin/learning-paths/${pathId}/tasks/${taskId}`, {
         method: 'PUT',
         headers: {
@@ -62,8 +80,8 @@ export default function EditTaskPage() {
         body: JSON.stringify({
           title: taskData.title,
           description: taskData.description,
-          content: JSON.stringify(taskData.content),
-          contentType: 'BUILDER',
+          content: contentToSave,
+          contentType: contentType,
           order: taskData.order,
           deadlineOffset: taskData.deadlineOffset
         })
@@ -102,34 +120,25 @@ export default function EditTaskPage() {
     )
   }
 
-  // Parse existing content if it's a builder task
+  // Parse existing content for TaskBuilder
   let initialContent = []
-  if (task.contentType === 'BUILDER' && task.content) {
+  if (task.content) {
     try {
+      // Try to parse as JSON (structured content)
       initialContent = JSON.parse(task.content)
     } catch (error) {
       console.error('Error parsing task content:', error)
       // If parsing fails, create a single content block from the existing content
       initialContent = [{
         id: `content_${Date.now()}`,
-        type: 'TEXT',
+        type: task.contentType || 'TEXT',
         title: 'Existing Content',
-        content: task.content,
+        content: (task.contentType === 'VIDEO' || task.contentType === 'IMAGE' || task.contentType === 'FILE' || task.contentType === 'URL') ? '' : task.content,
+        url: (task.contentType === 'VIDEO' || task.contentType === 'IMAGE' || task.contentType === 'FILE' || task.contentType === 'URL') ? task.content : '',
         order: 0,
         required: false
       }]
     }
-  } else if (task.content) {
-    // Convert old-style content to builder format
-    initialContent = [{
-      id: `content_${Date.now()}`,
-      type: task.contentType === 'VIDEO' ? 'VIDEO' : 'TEXT',
-      title: 'Existing Content',
-      content: task.contentType === 'VIDEO' ? '' : task.content,
-      url: task.contentType === 'VIDEO' ? task.content : '',
-      order: 0,
-      required: false
-    }]
   }
 
   return (

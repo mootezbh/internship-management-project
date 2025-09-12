@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import NextImage from 'next/image';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { UploadButton } from "@uploadthing/react";
 import { 
   Type, 
   AlignLeft, 
@@ -17,7 +18,9 @@ import {
   Eye,
   GripVertical,
   Save,
-  ArrowLeft
+  ArrowLeft,
+  CheckCircle,
+  AlertCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -35,7 +38,23 @@ const ContentEditor = React.memo(({
   onUrlChange, 
   onRequiredChange 
 }) => {
+  const [isUploading, setIsUploading] = React.useState(false);
+
   if (!selectedContent) return null;
+
+  const handleFileUpload = (endpoint) => (res) => {
+    if (res?.[0]?.url) {
+      onUrlChange({ target: { value: res[0].url } });
+      toast.success(`${selectedContent.type === 'IMAGE' ? 'Image' : 'File'} uploaded successfully!`);
+    }
+    setIsUploading(false);
+  };
+
+  const handleUploadError = (error) => {
+    console.error('Upload error:', error);
+    toast.error('Upload failed. Please try again.');
+    setIsUploading(false);
+  };
 
   return (
     <div>
@@ -76,25 +95,189 @@ const ContentEditor = React.memo(({
           </div>
         )}
 
-        {(selectedContent.type === 'VIDEO' || selectedContent.type === 'URL' || selectedContent.type === 'FILE' || selectedContent.type === 'IMAGE') && (
+        {selectedContent.type === 'VIDEO' && (
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-              {selectedContent.type === 'VIDEO' ? 'Video URL' : 
-               selectedContent.type === 'FILE' ? 'File URL' :
-               selectedContent.type === 'IMAGE' ? 'Image URL' : 'URL'}
+              Video URL
             </label>
             <input
               type="url"
               value={selectedContent.url || ''}
               onChange={onUrlChange}
-              placeholder={
-                selectedContent.type === 'VIDEO' ? 'https://youtube.com/watch?v=...' :
-                selectedContent.type === 'FILE' ? 'https://example.com/file.pdf' :
-                selectedContent.type === 'IMAGE' ? 'https://example.com/image.jpg' :
-                'https://example.com'
-              }
+              placeholder="https://youtube.com/watch?v=... or any video URL"
               className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
             />
+            {selectedContent.content && (
+              <div className="mt-2">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Description (optional)
+                </label>
+                <textarea
+                  value={selectedContent.content || ''}
+                  onChange={onContentChange}
+                  placeholder="Add a description for this video..."
+                  rows={2}
+                  className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+                />
+              </div>
+            )}
+          </div>
+        )}
+
+        {selectedContent.type === 'IMAGE' && (
+          <div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              Image
+            </label>
+            
+            {selectedContent.url ? (
+              <div className="space-y-3">
+                <div className="relative">
+                  <NextImage
+                    src={selectedContent.url}
+                    alt="Preview"
+                    width={300}
+                    height={200}
+                    className="rounded-lg border border-slate-200 dark:border-slate-600 object-cover"
+                  />
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => onUrlChange({ target: { value: '' } })}
+                    className="absolute top-2 right-2"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                    Caption (optional)
+                  </label>
+                  <textarea
+                    value={selectedContent.content || ''}
+                    onChange={onContentChange}
+                    placeholder="Add a caption for this image..."
+                    rows={2}
+                    className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <UploadButton
+                  endpoint="taskImage"
+                  onClientUploadComplete={handleFileUpload('taskImage')}
+                  onUploadError={handleUploadError}
+                  onBeforeUploadBegin={() => setIsUploading(true)}
+                  className="ut-button:bg-blue-600 ut-button:hover:bg-blue-700"
+                />
+                <div className="text-xs text-slate-500 dark:text-slate-400">
+                  Or enter an image URL:
+                </div>
+                <input
+                  type="url"
+                  value={selectedContent.url || ''}
+                  onChange={onUrlChange}
+                  placeholder="https://example.com/image.jpg"
+                  className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+                />
+              </div>
+            )}
+          </div>
+        )}
+
+        {selectedContent.type === 'FILE' && (
+          <div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              File
+            </label>
+            
+            {selectedContent.url ? (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between p-3 border border-slate-200 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-800">
+                  <div className="flex items-center space-x-2">
+                    <FileText className="h-5 w-5 text-slate-500" />
+                    <span className="text-sm text-slate-700 dark:text-slate-300">
+                      {selectedContent.url.split('/').pop() || 'Uploaded file'}
+                    </span>
+                    {selectedContent.url.toLowerCase().includes('.pdf') && (
+                      <span className="text-xs bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-2 py-1 rounded">
+                        PDF
+                      </span>
+                    )}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => onUrlChange({ target: { value: '' } })}
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                    Description (optional)
+                  </label>
+                  <textarea
+                    value={selectedContent.content || ''}
+                    onChange={onContentChange}
+                    placeholder="Add instructions or description for this file..."
+                    rows={2}
+                    className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <UploadButton
+                  endpoint="taskFile"
+                  onClientUploadComplete={handleFileUpload('taskFile')}
+                  onUploadError={handleUploadError}
+                  onBeforeUploadBegin={() => setIsUploading(true)}
+                  className="ut-button:bg-green-600 ut-button:hover:bg-green-700"
+                />
+                <div className="text-xs text-slate-500 dark:text-slate-400">
+                  Or enter a file URL:
+                </div>
+                <input
+                  type="url"
+                  value={selectedContent.url || ''}
+                  onChange={onUrlChange}
+                  placeholder="https://example.com/document.pdf"
+                  className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+                />
+              </div>
+            )}
+          </div>
+        )}
+
+        {selectedContent.type === 'URL' && (
+          <div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+              URL
+            </label>
+            <input
+              type="url"
+              value={selectedContent.url || ''}
+              onChange={onUrlChange}
+              placeholder="https://example.com"
+              className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+            />
+            {selectedContent.content && (
+              <div className="mt-2">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Description (optional)
+                </label>
+                <textarea
+                  value={selectedContent.content || ''}
+                  onChange={onContentChange}
+                  placeholder="Add a description for this link..."
+                  rows={2}
+                  className="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
+                />
+              </div>
+            )}
           </div>
         )}
 
@@ -110,6 +293,13 @@ const ContentEditor = React.memo(({
             Required for task completion
           </label>
         </div>
+
+        {isUploading && (
+          <div className="flex items-center space-x-2 text-blue-600">
+            <LoadingSpinner size="sm" />
+            <span className="text-sm">Uploading...</span>
+          </div>
+        )}
       </div>
     </div>
   );

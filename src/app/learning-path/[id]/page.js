@@ -24,7 +24,9 @@ import {
   AlertCircle,
   Lock,
   Send,
-  XCircle
+  XCircle,
+  Image,
+  Link
 } from 'lucide-react'
 import { toast } from "sonner"
 import { PageLoading } from '@/components/ui/loading-spinner'
@@ -68,60 +70,19 @@ export default function LearningPathPage() {
     switch (contentType) {
       case 'VIDEO':
         return <Video className="h-4 w-4" />
-      case 'BUILDER':
-        return <Target className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+      case 'IMAGE':
+        return <Image className="h-4 w-4" />
+      case 'FILE':
+        return <FileText className="h-4 w-4" />
+      case 'URL':
+        return <Link className="h-4 w-4" />
+      case 'CODE':
+        return <Code className="h-4 w-4" />
       case 'TEXT':
+      case 'TEXTAREA':
       default:
         return <FileText className="h-4 w-4" />
     }
-  }
-
-  // Utility function to extract YouTube video ID from URL
-  const getYouTubeVideoId = (url) => {
-    if (!url || typeof url !== 'string') return null
-    
-    // More comprehensive YouTube URL patterns
-    const patterns = [
-      /(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/,
-      /(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
-      /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/,
-      /(?:youtube\.com\/v\/)([a-zA-Z0-9_-]{11})/,
-      /(?:youtube\.com\/.*[?&]v=)([a-zA-Z0-9_-]{11})/
-    ]
-    
-    for (const pattern of patterns) {
-      const match = url.match(pattern)
-      if (match && match[1]) {
-        console.log('YouTube video ID extracted:', match[1], 'from URL:', url)
-        return match[1]
-      }
-    }
-    
-    console.log('No YouTube video ID found in URL:', url)
-    return null
-  }
-
-  // Component to render YouTube embed
-  const YouTubeEmbed = ({ videoId, title = "Task Video" }) => {
-    console.log('YouTubeEmbed component called with videoId:', videoId)
-    
-    if (!videoId) {
-      console.log('No videoId provided to YouTubeEmbed')
-      return null
-    }
-    
-    return (
-      <div className="relative w-full aspect-video mb-4 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800">
-        <iframe
-          src={`https://www.youtube.com/embed/${videoId}`}
-          title={title}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-          className="absolute inset-0 w-full h-full"
-        />
-      </div>
-    )
   }
 
   useEffect(() => {
@@ -505,133 +466,58 @@ export default function LearningPathPage() {
                       </CardHeader>
 
                       <CardContent>
-                        {/* Debug: Log task content type to see which path is taken */}
-                        {console.log('Task rendering decision:', {
-                          taskId: task.id,
-                          title: task.title,
-                          contentType: task.contentType,
-                          isBuilder: task.contentType === 'BUILDER',
-                          content: task.content,
-                          hasContent: !!task.content
-                        })}
-                        
-                        {/* Task Content - Use TaskRenderer for builder tasks */}
-                        {task.contentType === 'BUILDER' ? (
-                          <div className="mb-4">
-                            {(() => {
-                              try {
-                                // Check if this is a simple YouTube URL (not JSON content)
-                                if (task.content && typeof task.content === 'string' && !task.content.trim().startsWith('[') && !task.content.trim().startsWith('{')) {
-                                  const youtubeVideoId = getYouTubeVideoId(task.content);
-                                  console.log('Simple content detected in BUILDER task:', {
-                                    content: task.content,
-                                    youtubeVideoId: youtubeVideoId
-                                  });
-                                  
-                                  if (youtubeVideoId) {
-                                    return (
-                                      <div className="mb-4">
-                                        <YouTubeEmbed 
-                                          videoId={youtubeVideoId} 
-                                          title={task.title}
-                                        />
-                                        <div className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-                                          Video URL: {task.content}
-                                        </div>
-                                      </div>
-                                    );
-                                  } else {
-                                    // Simple text content
-                                    return (
-                                      <div className="mb-4 p-4 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-600">
-                                        <div className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
-                                          {task.content}
-                                        </div>
-                                      </div>
-                                    );
-                                  }
+                        {/* Task Content - Always use TaskRenderer for consistent rendering */}
+                        <div className="mb-4">
+                          {(() => {
+                            try {
+                              // Try to parse content as JSON first (structured tasks)
+                              let taskContent;
+                              if (task.content && typeof task.content === 'string') {
+                                try {
+                                  taskContent = JSON.parse(task.content);
+                                } catch {
+                                  // If parsing fails, treat as simple content and create appropriate content block
+                                  taskContent = [{
+                                    id: `task-${task.id}-content`,
+                                    type: task.contentType || 'TEXT',
+                                    title: 'Task Content',
+                                    content: task.contentType === 'VIDEO' ? '' : task.content,
+                                    url: task.contentType === 'VIDEO' ? task.content : undefined,
+                                    required: true
+                                  }];
                                 }
-                                
-                                // Regular JSON content for TaskRenderer
-                                const taskContent = task.content ? JSON.parse(task.content) : [];
-                                return (
-                                  <TaskRenderer 
-                                    task={{
-                                      ...task,
-                                      content: taskContent
-                                    }}
-                                    onComplete={(taskId, progressData) => {
-                                      // Handle task completion for builder tasks
-                                      console.log('Task content completed:', taskId, progressData);
-                                      // Note: This is for content completion tracking, separate from task submission
-                                    }}
-                                    isCompleted={status === 'completed'}
-                                    userProgress={{
-                                      completedBlocks: [], // Future enhancement: track individual content block completion
-                                    }}
-                                  />
-                                );
-                              } catch (error) {
-                                console.error('Error parsing task content:', error);
-                                return (
-                                  <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/30 rounded-lg border border-red-200 dark:border-red-700">
-                                    <h4 className="font-medium mb-2 text-red-800 dark:text-red-200">Task Content Error</h4>
-                                    <p className="text-sm text-red-700 dark:text-red-300">
-                                      Unable to load rich task content. Please contact support if this persists.
-                                    </p>
-                                    {task.content && (
-                                      <details className="mt-2">
-                                        <summary className="text-xs text-red-600 dark:text-red-400 cursor-pointer">
-                                          Fallback Content
-                                        </summary>
-                                        <div className="mt-2 text-xs text-red-600 dark:text-red-400 whitespace-pre-wrap">
-                                          {task.content}
-                                        </div>
-                                      </details>
-                                    )}
-                                  </div>
-                                );
+                              } else {
+                                taskContent = task.content || [];
                               }
-                            })()}
-                          </div>
-                        ) : (
-                          /* Legacy task content rendering */
-                          console.log('LEGACY RENDERING PATH REACHED for task:', task.id),
-                          task.content && (
-                            <div className="mb-4 p-4 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-600">
-                              <h4 className="font-medium mb-2 flex items-center gap-2 text-slate-900 dark:text-white">
-                                {getContentTypeIcon(task.contentType)}
-                                Task Instructions
-                              </h4>
-                              {/* Debug logging */}
-                              {console.log('Task content rendering:', {
-                                taskId: task.id,
-                                contentType: task.contentType,
-                                content: task.content,
-                                hasContent: !!task.content,
-                                isVideoType: task.contentType === 'VIDEO',
-                                youtubeVideoId: getYouTubeVideoId(task.content)
-                              })}
-                              {/* Render YouTube video if content is VIDEO type and contains YouTube URL */}
-                              {task.contentType === 'VIDEO' && getYouTubeVideoId(task.content) ? (
-                                <div className="mb-4">
-                                  <YouTubeEmbed 
-                                    videoId={getYouTubeVideoId(task.content)} 
-                                    title={task.title}
-                                  />
-                                  {/* Show original URL below video for reference */}
-                                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-                                    Video URL: {task.content}
-                                  </div>
+                              
+                              return (
+                                <TaskRenderer 
+                                  task={{
+                                    ...task,
+                                    content: taskContent
+                                  }}
+                                  onComplete={(taskId, progressData) => {
+                                    console.log('Task content completed:', taskId, progressData);
+                                  }}
+                                  isCompleted={status === 'completed'}
+                                  userProgress={{
+                                    completedBlocks: [],
+                                  }}
+                                />
+                              );
+                            } catch (error) {
+                              console.error('Error rendering task content:', error);
+                              return (
+                                <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/30 rounded-lg border border-red-200 dark:border-red-700">
+                                  <h4 className="font-medium mb-2 text-red-800 dark:text-red-200">Task Content Error</h4>
+                                  <p className="text-sm text-red-700 dark:text-red-300">
+                                    Unable to load task content. Please contact support if this persists.
+                                  </p>
                                 </div>
-                              ) : (
-                                <div className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
-                                  {task.content}
-                                </div>
-                              )}
-                            </div>
-                          )
-                        )}                        {/* Submission Status */}
+                              );
+                            }
+                          })()}
+                        </div>                        {/* Submission Status */}
                         {submission && (
                           <div className="mb-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-600">
                             <div className="flex items-center justify-between mb-2">

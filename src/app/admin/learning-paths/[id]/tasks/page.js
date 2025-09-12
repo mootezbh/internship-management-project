@@ -169,11 +169,18 @@ export default function ManageTasksPage() {
                                 {getContentTypeIcon(task.contentType)}
                                 <Badge variant={
                                   task.contentType === 'VIDEO' ? 'default' : 
-                                  task.contentType === 'BUILDER' ? 'destructive' : 
+                                  task.contentType === 'IMAGE' ? 'secondary' :
+                                  task.contentType === 'FILE' ? 'outline' :
+                                  task.contentType === 'URL' ? 'secondary' :
+                                  task.contentType === 'CODE' ? 'destructive' :
                                   'secondary'
                                 } className="text-xs">
                                   {task.contentType === 'VIDEO' ? 'Video' :
-                                   task.contentType === 'BUILDER' ? 'Builder' :
+                                   task.contentType === 'IMAGE' ? 'Image' :
+                                   task.contentType === 'FILE' ? 'File' :
+                                   task.contentType === 'URL' ? 'Link' :
+                                   task.contentType === 'CODE' ? 'Code' :
+                                   task.contentType === 'TEXTAREA' ? 'Long Text' :
                                    'Text'}
                                 </Badge>
                               </div>
@@ -182,26 +189,30 @@ export default function ManageTasksPage() {
                             {/* Description */}
                             <p className="text-sm text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">{task.description}</p>
                             
-                            {/* Content preview or builder indicator */}
-                            {task.content && task.contentType !== 'BUILDER' && (
+                            {/* Content preview for all content types */}
+                            {task.content && (
                               <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3 mb-4">
-                                <p className="text-xs text-slate-500 dark:text-slate-500 font-medium mb-1">Content Preview:</p>
-                                <p className="text-sm text-slate-700 dark:text-slate-300">
-                                  {task.content.length > 150 ? task.content.substring(0, 150) + '...' : task.content}
+                                <p className="text-xs text-slate-500 dark:text-slate-500 font-medium mb-1">
+                                  {task.contentType === 'VIDEO' ? 'Video URL:' :
+                                   task.contentType === 'IMAGE' ? 'Image URL:' :
+                                   task.contentType === 'FILE' ? 'File URL:' :
+                                   task.contentType === 'URL' ? 'Link URL:' :
+                                   'Content Preview:'}
                                 </p>
-                              </div>
-                            )}
-                            
-                            {task.contentType === 'BUILDER' && (
-                              <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg p-3 mb-4 border border-purple-200 dark:border-purple-800">
-                                <div className="flex items-center gap-2">
-                                  <Target className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                                  <p className="text-sm font-medium text-purple-800 dark:text-purple-300">
-                                    Interactive Task Builder Content
-                                  </p>
-                                </div>
-                                <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">
-                                  Rich multimedia content with drag-and-drop elements
+                                <p className="text-sm text-slate-700 dark:text-slate-300">
+                                  {(() => {
+                                    try {
+                                      // Try to parse as JSON first (structured content)
+                                      const parsed = JSON.parse(task.content);
+                                      if (Array.isArray(parsed) && parsed.length > 0) {
+                                        return `Rich content with ${parsed.length} block(s)`;
+                                      }
+                                      return task.content.length > 150 ? task.content.substring(0, 150) + '...' : task.content;
+                                    } catch {
+                                      // Simple string content
+                                      return task.content.length > 150 ? task.content.substring(0, 150) + '...' : task.content;
+                                    }
+                                  })()}
                                 </p>
                               </div>
                             )}

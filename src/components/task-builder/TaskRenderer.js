@@ -9,7 +9,8 @@ import {
   Code, 
   CheckCircle,
   Circle,
-  Play
+  Play,
+  FileText
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -60,32 +61,68 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
           return (
             <div className="space-y-3">
               {content.url && (
-                <div className="aspect-video bg-slate-100 dark:bg-slate-800 rounded-lg flex items-center justify-center">
-                  {content.url.includes('youtube.com') || content.url.includes('youtu.be') ? (
-                    <iframe
-                      src={content.url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/')}
-                      className="w-full h-full rounded-lg"
-                      allowFullScreen
-                      title={content.title}
-                    />
-                  ) : (
-                    <div className="text-center">
-                      <Play className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                      <Button asChild variant="outline">
-                        <a 
-                          href={content.url} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="flex items-center space-x-2"
-                        >
-                          <Video className="h-4 w-4" />
-                          <span>Watch Video</span>
-                          <ExternalLink className="h-4 w-4" />
-                        </a>
-                      </Button>
-                    </div>
-                  )}
+                <div className="aspect-video bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden">
+                  {(() => {
+                    // Extract YouTube video ID from various URL formats
+                    const getYouTubeVideoId = (url) => {
+                      const patterns = [
+                        /(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/,
+                        /(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+                        /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+                        /(?:youtube\.com\/v\/)([a-zA-Z0-9_-]{11})/,
+                        /(?:youtube\.com\/.*[?&]v=)([a-zA-Z0-9_-]{11})/
+                      ];
+                      
+                      for (const pattern of patterns) {
+                        const match = url.match(pattern);
+                        if (match && match[1]) return match[1];
+                      }
+                      return null;
+                    };
+                    
+                    const youtubeVideoId = getYouTubeVideoId(content.url);
+                    
+                    if (youtubeVideoId) {
+                      // Render YouTube embed
+                      return (
+                        <iframe
+                          src={`https://www.youtube.com/embed/${youtubeVideoId}`}
+                          className="w-full h-full"
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                          title={content.title}
+                        />
+                      );
+                    } else {
+                      // Non-YouTube video or general video link
+                      return (
+                        <div className="flex items-center justify-center h-full">
+                          <div className="text-center">
+                            <Play className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                            <Button asChild variant="outline">
+                              <a 
+                                href={content.url} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="flex items-center space-x-2"
+                              >
+                                <Video className="h-4 w-4" />
+                                <span>Watch Video</span>
+                                <ExternalLink className="h-4 w-4" />
+                              </a>
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    }
+                  })()}
                 </div>
+              )}
+              {content.content && (
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  {content.content}
+                </p>
               )}
             </div>
           );
@@ -94,21 +131,63 @@ export default function TaskRenderer({ task, onComplete, isCompleted = false, us
           return (
             <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-6 text-center">
               <Download className="h-8 w-8 text-slate-400 mx-auto mb-3" />
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-3">
-                {content.content || 'Download the attached file to continue'}
-              </p>
-              {content.url && (
-                <Button asChild variant="outline">
-                  <a 
-                    href={content.url} 
-                    download
-                    className="flex items-center space-x-2"
-                  >
-                    <Download className="h-4 w-4" />
-                    <span>Download File</span>
-                  </a>
-                </Button>
-              )}
+              <div className="space-y-3">
+                {content.content && (
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    {content.content}
+                  </p>
+                )}
+                {content.url && (
+                  <div className="space-y-2">
+                    {(() => {
+                      const fileExtension = content.url.split('.').pop()?.toLowerCase();
+                      const fileName = content.url.split('/').pop() || 'Download File';
+                      
+                      if (fileExtension === 'pdf') {
+                        return (
+                          <div className="space-y-2">
+                            <Button asChild variant="outline" className="w-full">
+                              <a 
+                                href={content.url} 
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center justify-center space-x-2"
+                              >
+                                <FileText className="h-4 w-4" />
+                                <span>View PDF</span>
+                                <ExternalLink className="h-4 w-4" />
+                              </a>
+                            </Button>
+                            <Button asChild variant="ghost" size="sm">
+                              <a 
+                                href={content.url} 
+                                download
+                                className="flex items-center justify-center space-x-2"
+                              >
+                                <Download className="h-4 w-4" />
+                                <span>Download PDF</span>
+                              </a>
+                            </Button>
+                          </div>
+                        );
+                      } else {
+                        return (
+                          <Button asChild variant="outline">
+                            <a 
+                              href={content.url} 
+                              download
+                              className="flex items-center space-x-2"
+                            >
+                              <Download className="h-4 w-4" />
+                              <span>Download {fileName}</span>
+                            </a>
+                          </Button>
+                        );
+                      }
+                    })()}
+                  </div>
+                )}
+              </div>
             </div>
           );
 

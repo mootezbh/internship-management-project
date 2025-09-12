@@ -30,8 +30,12 @@ enum SubmissionStatus {
 
 enum TaskContentType {
   TEXT
+  TEXTAREA
   VIDEO
-  BUILDER
+  IMAGE
+  FILE
+  URL
+  CODE
 }
 
 enum FormFieldType {
