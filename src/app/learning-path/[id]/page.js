@@ -63,6 +63,46 @@ export default function LearningPathPage() {
   const [submissionForm, setSubmissionForm] = useState({})
   const [submitting, setSubmitting] = useState({})
 
+  // Utility function to get content type icon
+  const getContentTypeIcon = (contentType) => {
+    switch (contentType) {
+      case 'VIDEO':
+        return <Video className="h-4 w-4" />
+      case 'BUILDER':
+        return <Target className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+      case 'TEXT':
+      default:
+        return <FileText className="h-4 w-4" />
+    }
+  }
+
+  // Utility function to extract YouTube video ID from URL
+  const getYouTubeVideoId = (url) => {
+    if (!url) return null
+    
+    const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i
+    const match = url.match(regex)
+    return match ? match[1] : null
+  }
+
+  // Component to render YouTube embed
+  const YouTubeEmbed = ({ videoId, title = "Task Video" }) => {
+    if (!videoId) return null
+    
+    return (
+      <div className="relative w-full aspect-video mb-4 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800">
+        <iframe
+          src={`https://www.youtube.com/embed/${videoId}`}
+          title={title}
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          className="absolute inset-0 w-full h-full"
+        />
+      </div>
+    )
+  }
+
   useEffect(() => {
     if (!user || !internshipId) return
 
@@ -118,21 +158,6 @@ export default function LearningPathPage() {
 
     fetchLearningPathData()
   }, [user, internshipId, router])
-
-  const getContentTypeIcon = (contentType) => {
-    switch (contentType) {
-      case 'TEXT':
-        return <FileText className="h-4 w-4" />
-      case 'VIDEO':
-        return <Video className="h-4 w-4" />
-      case 'CODE':
-        return <Code className="h-4 w-4" />
-      case 'BUILDER':
-        return <Target className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-      default:
-        return <FileText className="h-4 w-4" />
-    }
-  }
 
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString('en-US', {
@@ -513,14 +538,26 @@ export default function LearningPathPage() {
                                 {getContentTypeIcon(task.contentType)}
                                 Task Instructions
                               </h4>
-                              <div className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
-                                {task.content}
-                              </div>
+                              {/* Render YouTube video if content is VIDEO type and contains YouTube URL */}
+                              {task.contentType === 'VIDEO' && getYouTubeVideoId(task.content) ? (
+                                <div className="mb-4">
+                                  <YouTubeEmbed 
+                                    videoId={getYouTubeVideoId(task.content)} 
+                                    title={task.title}
+                                  />
+                                  {/* Show original URL below video for reference */}
+                                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                                    Video URL: {task.content}
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
+                                  {task.content}
+                                </div>
+                              )}
                             </div>
                           )
-                        )}
-
-                        {/* Submission Status */}
+                        )}                        {/* Submission Status */}
                         {submission && (
                           <div className="mb-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-600">
                             <div className="flex items-center justify-between mb-2">

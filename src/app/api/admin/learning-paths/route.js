@@ -1,8 +1,6 @@
 import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { prisma } from '@/lib/db'
 
 // GET /api/admin/learning-paths - Get all learning paths
 export async function GET(request) {
@@ -58,7 +56,7 @@ export async function POST(request) {
       where: { clerkId: userId }
     })
 
-    if (!adminUser || adminUser.role !== 'ADMIN') {
+    if (!adminUser || (adminUser.role !== 'ADMIN' && adminUser.role !== 'SUPER_ADMIN')) {
       return NextResponse.json({ error: 'Admin access required' }, { status: 403 })
     }
 
