@@ -85,6 +85,67 @@ export default function LearningPathPage() {
     }
   }
 
+  // Handle task submission with new response requirements
+  const handleTaskSubmission = async (taskId, submissionData) => {
+    setSubmitting(prev => ({ ...prev, [taskId]: true }));
+    
+    try {
+      // Prepare submission data based on response requirements
+      const task = tasks.find(t => t.id === taskId);
+      const responseData = {};
+      
+      // Process submissions based on response requirements
+      if (task?.responseRequirements) {
+        for (const requirement of task.responseRequirements) {
+          const value = submissionData.submissions[requirement];
+          if (value) {
+            if (requirement === 'github' || requirement === 'text') {
+              // Text-based submissions
+              responseData[requirement] = value;
+            } else if (requirement === 'image' || requirement === 'video' || requirement === 'pdf') {
+              // File-based submissions - would need file upload handling
+              // For now, we'll just store the file name or a placeholder
+              responseData[requirement] = value.name || 'File uploaded';
+            }
+          }
+        }
+      }
+
+      // Create submission
+      const response = await fetch('/api/submissions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          taskId,
+          submissionData: responseData,
+          githubUrl: responseData.github || '', // For backward compatibility
+        }),
+      });
+
+      if (response.ok) {
+        const newSubmission = await response.json();
+        
+        // Update submissions state
+        setSubmissions(prev => ({
+          ...prev,
+          [taskId]: newSubmission.submission
+        }));
+        
+        toast.success('Task submitted successfully!');
+      } else {
+        const error = await response.json();
+        toast.error(error.error || 'Failed to submit task');
+      }
+    } catch (error) {
+      console.error('Error submitting task:', error);
+      toast.error('Failed to submit task');
+    } finally {
+      setSubmitting(prev => ({ ...prev, [taskId]: false }));
+    }
+  };
+
   useEffect(() => {
     if (!user || !internshipId) return
 
@@ -513,7 +574,10 @@ export default function LearningPathPage() {
                                     responseRequirements: task.responseRequirements || []
                                   }}
                                   onComplete={(taskId, progressData) => {
-                                    console.log('Task content completed:', taskId, progressData);
+                                    console.log('Task submission:', taskId, progressData);
+                                    if (progressData.isSubmitted) {
+                                      handleTaskSubmission(taskId, progressData);
+                                    }
                                   }}
                                   isCompleted={status === 'completed'}
                                   userProgress={{

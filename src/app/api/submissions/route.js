@@ -59,7 +59,7 @@ export async function POST(request) {
     }
 
     const body = await request.json()
-    const { taskId, githubUrl } = body// Check if user exists in our database
+    const { taskId, githubUrl, submissionData } = body// Check if user exists in our database
     const user = await prisma.user.findUnique({
       where: { clerkId: userId }
     })
@@ -117,10 +117,10 @@ export async function POST(request) {
         const updatedSubmission = await prisma.submission.update({
           where: { id: existingSubmission.id },
           data: {
-            githubUrl: githubUrl,
+            githubUrl: submissionData?.github || githubUrl || '',
             status: 'PENDING',
             submittedAt: new Date(),
-            feedback: null, // Clear previous feedback
+            feedback: submissionData ? JSON.stringify(submissionData) : null, // Store submission data as JSON
             reviewedAt: null,
             adminComment: null // Clear admin comment
           },
@@ -144,8 +144,9 @@ export async function POST(request) {
       data: {
         userId: user.id,
         taskId: taskId,
-        githubUrl: githubUrl,
-        status: 'PENDING'
+        githubUrl: submissionData?.github || githubUrl || '',
+        status: 'PENDING',
+        feedback: submissionData ? JSON.stringify(submissionData) : null // Store submission data as JSON
       },
       include: {
         task: {
