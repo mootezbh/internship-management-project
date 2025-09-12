@@ -22,6 +22,7 @@ export async function GET(request, { params }) {
                 order: true,
                 description: true,
                 content: true,
+                responseRequirements: true,
                 deadlineOffset: true,
                 createdAt: true,
                 updatedAt: true
