@@ -66,7 +66,8 @@ export default function CreateTaskPage() {
         description: taskData.description.trim(),
         content: contentToSave,
         order: parseInt(taskData.order) || 1,
-        deadlineOffset: parseInt(taskData.deadlineOffset) || 1
+        deadlineOffset: parseInt(taskData.deadlineOffset) || 1,
+        responseRequirements: taskData.responseRequirements || []
       };
 
       console.log('Sending payload:', payload); // Debug log

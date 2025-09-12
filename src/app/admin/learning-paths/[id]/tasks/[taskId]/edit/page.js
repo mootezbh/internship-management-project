@@ -75,7 +75,8 @@ export default function EditTaskPage() {
           description: taskData.description,
           content: contentToSave,
           order: taskData.order,
-          deadlineOffset: taskData.deadlineOffset
+          deadlineOffset: taskData.deadlineOffset,
+          responseRequirements: taskData.responseRequirements || []
         })
       })
 
