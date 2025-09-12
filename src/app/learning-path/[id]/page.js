@@ -78,16 +78,37 @@ export default function LearningPathPage() {
 
   // Utility function to extract YouTube video ID from URL
   const getYouTubeVideoId = (url) => {
-    if (!url) return null
+    if (!url || typeof url !== 'string') return null
     
-    const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i
-    const match = url.match(regex)
-    return match ? match[1] : null
+    // More comprehensive YouTube URL patterns
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/,
+      /(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+      /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+      /(?:youtube\.com\/v\/)([a-zA-Z0-9_-]{11})/,
+      /(?:youtube\.com\/.*[?&]v=)([a-zA-Z0-9_-]{11})/
+    ]
+    
+    for (const pattern of patterns) {
+      const match = url.match(pattern)
+      if (match && match[1]) {
+        console.log('YouTube video ID extracted:', match[1], 'from URL:', url)
+        return match[1]
+      }
+    }
+    
+    console.log('No YouTube video ID found in URL:', url)
+    return null
   }
 
   // Component to render YouTube embed
   const YouTubeEmbed = ({ videoId, title = "Task Video" }) => {
-    if (!videoId) return null
+    console.log('YouTubeEmbed component called with videoId:', videoId)
+    
+    if (!videoId) {
+      console.log('No videoId provided to YouTubeEmbed')
+      return null
+    }
     
     return (
       <div className="relative w-full aspect-video mb-4 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800">
@@ -538,6 +559,15 @@ export default function LearningPathPage() {
                                 {getContentTypeIcon(task.contentType)}
                                 Task Instructions
                               </h4>
+                              {/* Debug logging */}
+                              {console.log('Task content rendering:', {
+                                taskId: task.id,
+                                contentType: task.contentType,
+                                content: task.content,
+                                hasContent: !!task.content,
+                                isVideoType: task.contentType === 'VIDEO',
+                                youtubeVideoId: getYouTubeVideoId(task.content)
+                              })}
                               {/* Render YouTube video if content is VIDEO type and contains YouTube URL */}
                               {task.contentType === 'VIDEO' && getYouTubeVideoId(task.content) ? (
                                 <div className="mb-4">
