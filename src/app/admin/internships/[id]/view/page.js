@@ -56,15 +56,6 @@ export default function ViewInternshipPage() {
     ]);
   }, [fetchInternship, fetchApplications]);
 
-  const formatDate = (dateString) => {
-    if (!dateString) return 'Not set';
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
   const getStatusColor = (status) => {
     switch (status) {
       case 'ACCEPTED':
@@ -276,12 +267,6 @@ export default function ViewInternshipPage() {
                   <span className="text-slate-600 dark:text-slate-400">Duration:</span>
                   <span className="font-semibold text-slate-900 dark:text-white">
                     {internship.duration} weeks
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-600 dark:text-slate-400">End Date:</span>
-                  <span className="font-semibold text-slate-900 dark:text-white">
-                    {formatDate(internship.endDate)}
                   </span>
                 </div>
               </CardContent>

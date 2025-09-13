@@ -26,7 +26,6 @@ export default function EditInternshipPage() {
     capacity: '',
     location: '',
     field: '',
-    endDate: '',
     learningPathId: ''
   });
 
@@ -53,7 +52,6 @@ export default function EditInternshipPage() {
             capacity: internship.capacity?.toString() || '',
             location: internship.location || '',
             field: internship.field || '',
-            endDate: formatDate(internship.endDate),
             learningPathId: internship.learningPathId || ''
           });
         } else {
@@ -242,22 +240,6 @@ export default function EditInternshipPage() {
                     className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   />
                 </div>
-              </div>
-              {/* End Date */}
-              <div className="space-y-2">
-                <Label htmlFor="endDate" className="text-slate-900 dark:text-white flex items-center">
-                  <Calendar className="h-4 w-4 mr-2 text-red-600 dark:text-red-400" />
-                  End Date *
-                </Label>
-                <Input
-                  id="endDate"
-                  name="endDate"
-                  type="date"
-                  value={formData.endDate}
-                  onChange={handleInputChange}
-                  required
-                  className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                />
               </div>
               
               {/* Learning Path */}

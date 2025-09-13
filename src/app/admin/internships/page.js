@@ -55,6 +55,8 @@ export default function AdminInternshipsPage() {
   const [internships, setInternships] = useState([])
   const [filteredInternships, setFilteredInternships] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
+  const [deleteInternshipId, setDeleteInternshipId] = useState(null)
 
   useEffect(() => {
     if (!user) return
@@ -107,12 +109,15 @@ export default function AdminInternshipsPage() {
   }, [internships, searchTerm])
 
   const handleDeleteInternship = async (internshipId) => {
-    if (!confirm('Are you sure you want to delete this internship? This action cannot be undone.')) {
-      return
-    }
+    setDeleteInternshipId(internshipId)
+    setDeleteConfirmOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    if (!deleteInternshipId) return
 
     try {
-      const response = await fetch(`/api/admin/internships/${internshipId}`, {
+      const response = await fetch(`/api/admin/internships/${deleteInternshipId}`, {
         method: 'DELETE'
       })
 
@@ -128,9 +133,14 @@ export default function AdminInternshipsPage() {
           setFilteredInternships(internshipsArray)
         }
       } else {
-        toast.error('Failed to delete internship')
+        const error = await response.json()
+        toast.error(error.error || 'Failed to delete internship')
       }
-    } catch (error) {toast.error('Error deleting internship')
+    } catch (error) {
+      toast.error('Error deleting internship')
+    } finally {
+      setDeleteConfirmOpen(false)
+      setDeleteInternshipId(null)
     }
   }
 
@@ -342,6 +352,39 @@ export default function AdminInternshipsPage() {
       <SignedOut>
         <RedirectToSignIn />
       </SignedOut>
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+              Delete Internship
+            </h3>
+            <p className="text-slate-600 dark:text-slate-300 mb-6">
+              Are you sure you want to delete this internship? This action cannot be undone and will remove all associated data.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setDeleteConfirmOpen(false)
+                  setDeleteInternshipId(null)
+                }}
+                className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={confirmDelete}
+                className="bg-red-600 hover:bg-red-700 text-white"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }

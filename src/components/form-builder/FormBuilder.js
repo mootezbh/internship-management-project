@@ -64,23 +64,41 @@ export default function FormBuilder({ initialFields = [], onSave }) {
       order: fields.length
     };
     
-    setFields(prev => [...prev, newField]);
+    const updatedFields = [...fields, newField];
+    setFields(updatedFields);
     setSelectedField(newField);
+    
+    // Notify parent component of changes
+    if (onSave) {
+      onSave(updatedFields);
+    }
   };
 
   const removeField = (fieldId) => {
-    setFields(prev => prev.filter(field => field.id !== fieldId));
+    const updatedFields = fields.filter(field => field.id !== fieldId);
+    setFields(updatedFields);
     if (selectedField?.id === fieldId) {
       setSelectedField(null);
+    }
+    
+    // Notify parent component of changes
+    if (onSave) {
+      onSave(updatedFields);
     }
   };
 
   const updateField = (fieldId, updates) => {
-    setFields(prev => prev.map(field => 
+    const updatedFields = fields.map(field => 
       field.id === fieldId ? { ...field, ...updates } : field
-    ));
+    );
+    setFields(updatedFields);
     if (selectedField?.id === fieldId) {
       setSelectedField(prev => ({ ...prev, ...updates }));
+    }
+    
+    // Notify parent component of changes
+    if (onSave) {
+      onSave(updatedFields);
     }
   };
 
@@ -98,6 +116,11 @@ export default function FormBuilder({ initialFields = [], onSave }) {
     }));
 
     setFields(updatedFields);
+    
+    // Notify parent component of changes
+    if (onSave) {
+      onSave(updatedFields);
+    }
   };
 
   const addOption = (fieldId) => {

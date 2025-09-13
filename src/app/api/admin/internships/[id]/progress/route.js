@@ -186,7 +186,6 @@ export async function GET(request, { params }) {
         id: internship.id,
         title: internship.title,
         description: internship.description,
-        endDate: internship.endDate,
         duration: internship.duration,
         learningPath: internship.learningPath
       },

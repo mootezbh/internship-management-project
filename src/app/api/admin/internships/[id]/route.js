@@ -122,7 +122,6 @@ export async function PUT(request, { params }) {
       requirements,
       benefits,
       applicationDeadline,
-      endDate,
       isActive,
       learningPathId,
       applicationFormFields
@@ -160,7 +159,6 @@ export async function PUT(request, { params }) {
         requirements,
         benefits,
         applicationDeadline: applicationDeadline ? new Date(applicationDeadline) : undefined,
-        endDate: endDate ? new Date(endDate) : undefined,
         isActive,
         learningPathId,
         applicationFormFields

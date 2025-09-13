@@ -95,21 +95,25 @@ export default function SetupApplicationFormPage() {
 
   const saveFormConfiguration = async () => {
     setIsSaving(true)
+    console.log('Saving form with fields:', formFields);
     try {
+      const fieldsToSave = formFields.map(field => ({
+        label: field.label,
+        type: field.type,
+        placeholder: field.placeholder || '',
+        helpText: field.helpText || '',
+        required: field.required || false,
+        options: field.options || []
+      }));
+      console.log('Fields being sent to API:', fieldsToSave);
+      
       const response = await fetch(`/api/admin/internships/${internshipId}/application-form`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          fields: formFields.map(field => ({
-            label: field.label,
-            type: field.type,
-            placeholder: field.placeholder || '',
-            helpText: field.helpText || '',
-            required: field.required || false,
-            options: field.options || []
-          })),
+          fields: fieldsToSave,
           title: `Application Form - ${internship.title}`,
           description: `Please fill out this form to apply for the ${internship.title} internship.`
         })
@@ -210,7 +214,10 @@ export default function SetupApplicationFormPage() {
             <div className="mb-6">
               <FormBuilder
                 initialFields={formFields}
-                onSave={fields => setFormFields(fields)}
+                onSave={(fields) => {
+                  console.log('FormBuilder onSave called with:', fields);
+                  setFormFields(fields);
+                }}
               />
             </div>
           </CardContent>
