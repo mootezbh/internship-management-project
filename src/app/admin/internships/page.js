@@ -259,12 +259,6 @@ export default function AdminInternshipsPage() {
                                 Learning Path: {internship.learningPath.title} ({internship.learningPath.tasks?.length || 0} tasks)
                               </div>
                             )}
-                            {internship?.startDate && (
-                              <div className="flex items-center">
-                                <Calendar className="h-4 w-4 mr-1" />
-                                Starts: {new Date(internship.startDate).toLocaleDateString()}
-                              </div>
-                            )}
                           </div>
                         </div>
                         

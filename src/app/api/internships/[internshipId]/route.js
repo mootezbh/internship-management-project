@@ -13,6 +13,15 @@ export async function GET(request, { params }) {
     const internship = await prisma.internship.findUnique({
       where: { id: internshipId },
       include: {
+        applications: {
+          where: { status: 'ACCEPTED' },
+          select: {
+            userId: true,
+            status: true,
+            reviewedAt: true,
+            appliedAt: true
+          }
+        },
         learningPath: {
           include: {
             tasks: {

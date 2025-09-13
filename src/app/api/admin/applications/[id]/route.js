@@ -42,10 +42,11 @@ export async function GET(request, { params }) {
           select: {
             id: true,
             title: true,
-            field: true,
             description: true,
-            startDate: true,
-            endDate: true
+            duration: true,
+            capacity: true,
+            location: true,
+            field: true
           }
         },
         responses: {
@@ -127,10 +128,11 @@ export async function PATCH(request, { params }) {
           select: {
             id: true,
             title: true,
-            field: true,
-            location: true,
+            description: true,
             duration: true,
-            capacity: true
+            capacity: true,
+            location: true,
+            field: true
           }
         }
       }
@@ -192,10 +194,11 @@ export async function PUT(request, { params }) {
           select: {
             id: true,
             title: true,
-            field: true,
-            location: true,
+            description: true,
             duration: true,
-            capacity: true
+            capacity: true,
+            location: true,
+            field: true
           }
         }
       }

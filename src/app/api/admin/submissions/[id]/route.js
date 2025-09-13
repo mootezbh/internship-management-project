@@ -39,7 +39,13 @@ export async function GET(request, { params }) {
           select: {
             id: true,
             name: true,
-            email: true
+            email: true,
+            phone: true,
+            bio: true,
+            profilePictureUrl: true,
+            university: true,
+            degree: true,
+            major: true
           }
         },
         task: {
@@ -81,9 +87,11 @@ export async function GET(request, { params }) {
           select: {
             id: true,
             title: true,
-            company: true,
-            startDate: true,
-            duration: true
+            description: true,
+            duration: true,
+            capacity: true,
+            location: true,
+            field: true
           }
         }
       }

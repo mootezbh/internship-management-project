@@ -279,12 +279,6 @@ export default function ViewInternshipPage() {
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-600 dark:text-slate-400">Start Date:</span>
-                  <span className="font-semibold text-slate-900 dark:text-white">
-                    {formatDate(internship.startDate)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
                   <span className="text-slate-600 dark:text-slate-400">End Date:</span>
                   <span className="font-semibold text-slate-900 dark:text-white">
                     {formatDate(internship.endDate)}

@@ -55,9 +55,13 @@ export async function POST(request) {
       include: {
         internship: {
           select: {
+            id: true,
             title: true,
-            field: true,
-            location: true
+            description: true,
+            duration: true,
+            capacity: true,
+            location: true,
+            field: true
           }
         }
       }
@@ -97,11 +101,11 @@ export async function GET(request) {
           select: {
             id: true,
             title: true,
-            location: true,
+            description: true,
             duration: true,
-            field: true,
-            startDate: true,
-            endDate: true
+            capacity: true,
+            location: true,
+            field: true
           }
         }
       },

@@ -83,13 +83,14 @@ export async function GET(request, { params }) {
       const internSubmissions = submissions.filter(sub => sub.userId === intern.id)
       const internDeadlineAdjustments = deadlineAdjustments.filter(adj => adj.userId === intern.id)
 
-      // Calculate task statuses and deadlines
+            // Calculate task statuses and deadlines
       const tasksWithStatus = internTasks.map(task => {
         const submission = internSubmissions.find(sub => sub.taskId === task.id)
         const deadlineAdjustment = internDeadlineAdjustments.find(adj => adj.taskId === task.id)
         
-        const startDate = new Date(internship.startDate || new Date())
-        const deadline = new Date(startDate)
+        // Use application acceptance date instead of internship start date
+        const acceptanceDate = new Date(application.reviewedAt || application.appliedAt)
+        const deadline = new Date(acceptanceDate)
         
         // Use adjusted deadline if it exists, otherwise use default
         const deadlineOffset = deadlineAdjustment ? deadlineAdjustment.newDeadlineOffset : task.deadlineOffset
@@ -147,15 +148,15 @@ export async function GET(request, { params }) {
       if (overdueTasks > 0) {
         overallStatus = 'behind'
       } else if (progressPercentage < 70 && internTasks.length > 0) {
-        // If less than 70% complete and has tasks, mark as at-risk
+        // If less than 70% complete and has tasks, check for overdue tasks
         const currentDate = new Date()
-        const startDate = new Date(internship.startDate || new Date())
-        const endDate = new Date(internship.endDate || new Date())
-        const totalDuration = endDate.getTime() - startDate.getTime()
-        const elapsed = currentDate.getTime() - startDate.getTime()
-        const timeProgress = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100))
+        const acceptanceDate = new Date(application.reviewedAt || application.appliedAt)
+        const daysSinceAcceptance = Math.floor((currentDate.getTime() - acceptanceDate.getTime()) / (1000 * 60 * 60 * 24))
         
-        if (timeProgress > progressPercentage + 20) {
+        // If it's been more than expected time for current progress, mark as at-risk
+        const expectedDaysForProgress = Math.ceil((progressPercentage / 100) * (internship.duration * 7)) // Convert weeks to days
+        
+        if (daysSinceAcceptance > expectedDaysForProgress + 7) { // 7 days grace period
           overallStatus = 'at-risk'
         }
       }
@@ -185,8 +186,8 @@ export async function GET(request, { params }) {
         id: internship.id,
         title: internship.title,
         description: internship.description,
-        startDate: internship.startDate,
         endDate: internship.endDate,
+        duration: internship.duration,
         learningPath: internship.learningPath
       },
       interns,

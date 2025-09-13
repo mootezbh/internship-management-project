@@ -86,17 +86,15 @@ export async function POST(request) {
     }
 
     const body = await request.json()
-    const { 
-      title, 
-      description, 
-      location, 
-      duration, 
-      capacity, 
+    const {
+      title,
+      description,
+      duration,
+      capacity,
+      location,
       field,
-      startDate,
-      endDate,
       learningPathId
-    } = body
+    } = await request.json()
 
     // Validate required fields
     if (!title || !description || !duration || !capacity || !field) {
@@ -112,8 +110,6 @@ export async function POST(request) {
         duration: parseInt(duration),
         capacity: parseInt(capacity),
         field,
-        ...(startDate && { startDate: new Date(startDate) }),
-        ...(endDate && { endDate: new Date(endDate) }),
         ...(learningPathId && { learningPathId })
       }
     })

@@ -420,12 +420,6 @@ export default function InternshipManagementPage() {
                               <Timer className="h-3 w-3" />
                               <span>{internship.duration} weeks</span>
                             </div>
-                            {internship.startDate && (
-                              <div className="flex items-center space-x-1">
-                                <CalendarIcon className="h-3 w-3" />
-                                <span>Starts {new Date(internship.startDate).toLocaleDateString()}</span>
-                              </div>
-                            )}
                           </div>
                         </CardContent>
                       </Card>

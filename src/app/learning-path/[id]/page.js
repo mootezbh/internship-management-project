@@ -222,9 +222,15 @@ export default function LearningPathPage() {
   }
 
   const getTaskDeadline = (task) => {
-    if (!internship?.startDate) return null
-    const startDate = new Date(internship.startDate)
-    const deadline = new Date(startDate)
+    // Find user's application acceptance date
+    const userApplication = internship?.applications?.find(app => 
+      app.userId === user?.id && app.status === 'ACCEPTED'
+    )
+    
+    if (!userApplication?.reviewedAt) return null
+    
+    const acceptanceDate = new Date(userApplication.reviewedAt)
+    const deadline = new Date(acceptanceDate)
     deadline.setDate(deadline.getDate() + task.deadlineOffset)
     return deadline
   }

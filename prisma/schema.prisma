@@ -100,8 +100,6 @@ model Internship {
   capacity    Int              // Maximum number of interns
   location    String?          // Remote, On-site, Hybrid, or specific location
   field       String?          // Technology, Marketing, Design, etc.
-  startDate   DateTime?
-  endDate     DateTime?
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 

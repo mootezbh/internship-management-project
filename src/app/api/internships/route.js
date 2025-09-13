@@ -96,10 +96,8 @@ export async function POST(request) {
       capacity,
       location,
       field,
-      startDate,
-      endDate,
       learningPathId
-    } = body
+    } = await request.json()
 
     const internship = await prisma.internship.create({
       data: {
@@ -109,9 +107,7 @@ export async function POST(request) {
         capacity: parseInt(capacity),
         location,
         field,
-        startDate: startDate ? new Date(startDate) : null,
-        endDate: endDate ? new Date(endDate) : null,
-        learningPathId
+        learningPathId: learningPathId || null,
       },
       include: {
         learningPath: true

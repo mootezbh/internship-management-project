@@ -48,11 +48,10 @@ export async function GET(request) {
             id: true,
             title: true,
             field: true,
+            description: true,
             location: true,
-            duration: true,
             capacity: true,
-            startDate: true,
-            endDate: true
+            duration: true
           }
         },
         responses: {

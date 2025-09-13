@@ -294,13 +294,6 @@ export default function InternshipsPage() {
                           {internship.spotsRemaining} of {internship.capacity} spots available
                         </div>
                         
-                        {internship.startDate && (
-                          <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
-                            <Calendar className="h-4 w-4 mr-2" />
-                            Starts {formatDate(internship.startDate)}
-                          </div>
-                        )}
-                        
                         {internship.tasksCount > 0 && (
                           <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
                             <BookOpen className="h-4 w-4 mr-2" />

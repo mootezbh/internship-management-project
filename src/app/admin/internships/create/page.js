@@ -23,8 +23,6 @@ export default function CreateInternshipPage() {
     capacity: '',
     location: '',
     field: '',
-    startDate: '',
-    endDate: '',
     learningPathId: ''
   });
 
@@ -83,8 +81,6 @@ export default function CreateInternshipPage() {
           ...formData,
           capacity: capacityNumber,
           duration: durationNumber,
-          startDate: formData.startDate || null,
-          endDate: formData.endDate || null,
           learningPathId: formData.learningPathId || null
         }),
       });
@@ -241,46 +237,6 @@ export default function CreateInternshipPage() {
                     placeholder="Duration in weeks"
                     min="1"
                     required
-                    className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Dates */}
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center text-slate-900 dark:text-white">
-                <Calendar className="w-5 h-5 mr-2" />
-                Timeline
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="startDate" className="text-slate-700 dark:text-slate-300">
-                    Start Date
-                  </Label>
-                  <Input
-                    id="startDate"
-                    name="startDate"
-                    type="date"
-                    value={formData.startDate}
-                    onChange={handleInputChange}
-                    className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="endDate" className="text-slate-700 dark:text-slate-300">
-                    End Date
-                  </Label>
-                  <Input
-                    id="endDate"
-                    name="endDate"
-                    type="date"
-                    value={formData.endDate}
-                    onChange={handleInputChange}
                     className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                   />
                 </div>

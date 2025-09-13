@@ -48,8 +48,10 @@ export async function GET(request, { params }) {
                       id: true,
                       title: true,
                       field: true,
-                      startDate: true,
-                      endDate: true
+                      description: true,
+                      location: true,
+                      capacity: true,
+                      duration: true
                     }
                   }
                 },

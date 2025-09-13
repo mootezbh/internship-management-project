@@ -32,9 +32,9 @@ export async function GET(request, { params }) {
             id: true,
             title: true,
             field: true,
+            description: true,
             location: true,
-            startDate: true,
-            endDate: true,
+            capacity: true,
             duration: true
           }
         },
