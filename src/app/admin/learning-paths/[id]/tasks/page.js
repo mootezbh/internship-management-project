@@ -17,6 +17,8 @@ export default function ManageTasksPage() {
   
   const [isLoading, setIsLoading] = useState(true)
   const [learningPath, setLearningPath] = useState(null)
+  const [deleteDialog, setDeleteDialog] = useState({ open: false, taskId: null, taskTitle: '' })
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const fetchLearningPath = useCallback(async () => {
     try {
@@ -42,6 +44,39 @@ export default function ManageTasksPage() {
 
   const handleBackToLearningPaths = () => {
     router.push('/admin/learning-paths')
+  }
+
+  const openDeleteDialog = (taskId, taskTitle) => {
+    setDeleteDialog({ open: true, taskId, taskTitle })
+  }
+
+  const closeDeleteDialog = () => {
+    setDeleteDialog({ open: false, taskId: null, taskTitle: '' })
+  }
+
+  const handleDeleteTask = async () => {
+    if (!deleteDialog.taskId) return
+    
+    setIsDeleting(true)
+    try {
+      const response = await fetch(`/api/admin/learning-paths/${pathId}/tasks/${deleteDialog.taskId}`, {
+        method: 'DELETE'
+      })
+
+      if (response.ok) {
+        toast.success('Task deleted successfully!')
+        closeDeleteDialog()
+        await fetchLearningPath()
+      } else {
+        const error = await response.json()
+        toast.error(error.error || 'Failed to delete task')
+      }
+    } catch (error) {
+      console.error('Error deleting task:', error)
+      toast.error('Failed to delete task')
+    } finally {
+      setIsDeleting(false)
+    }
   }
 
   // Helper function for content type icon
@@ -251,7 +286,7 @@ export default function ManageTasksPage() {
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => handleDeleteTask(task.id)}
+                              onClick={() => openDeleteDialog(task.id, task.title)}
                               className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 border-red-300 dark:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
                             >
                               <Trash2 className="h-4 w-4" />
@@ -274,29 +309,43 @@ export default function ManageTasksPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {deleteDialog.open && (
+        <div className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-lg max-w-md w-full border border-slate-200 dark:border-slate-700 shadow-2xl">
+            <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Delete Task</h3>
+            </div>
+            <div className="px-6 py-4">
+              <p className="text-slate-600 dark:text-slate-400 mb-4">
+                Are you sure you want to delete the task "{deleteDialog.taskTitle}"? This action cannot be undone.
+              </p>
+              <p className="text-sm text-amber-600 dark:text-amber-400 mb-4">
+                Note: Tasks with existing submissions cannot be deleted.
+              </p>
+            </div>
+            <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-700 flex space-x-3">
+              <Button
+                variant="outline"
+                onClick={closeDeleteDialog}
+                disabled={isDeleting}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleDeleteTask}
+                disabled={isDeleting}
+                className="flex-1"
+              >
+                {isDeleting ? 'Deleting...' : 'Delete Task'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
-
-  const handleDeleteTask = async (taskId) => {
-    if (!confirm('Are you sure you want to delete this task?')) {
-      return
-    }
-    
-    try {
-      const response = await fetch(`/api/admin/learning-paths/${pathId}/tasks/${taskId}`, {
-        method: 'DELETE'
-      })
-
-      if (response.ok) {
-        toast.success('Task deleted successfully!')
-        await fetchLearningPath()
-      } else {
-        const error = await response.json()
-        toast.error(error.error || 'Failed to delete task')
-      }
-    } catch (error) {
-      console.error('Error deleting task:', error)
-      toast.error('Failed to delete task')
-    }
-  }
 }
