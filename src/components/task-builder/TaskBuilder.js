@@ -738,7 +738,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
-                    Deadline (days)
+                    Days to Complete (after previous task)
                   </label>
                   <input
                     type="number"
@@ -748,6 +748,9 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
                     placeholder="7"
                     className="w-full p-2 text-sm border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                   />
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    Number of days to add to the previous task's deadline. For the first task, this is days from internship start.
+                  </p>
                 </div>
               </div>
               

@@ -120,7 +120,7 @@ const DialogTitle = ({ children }) => <h2 className="text-xl font-semibold text-
 const DialogContent = ({ children }) => <div className="px-6 py-4">{children}</div>
 
 // Intern Progress Card Component
-const InternProgressCard = ({ intern, onViewDetails, onAdjustDeadline, onReviewSubmission }) => {
+const InternProgressCard = ({ intern, onViewDetails, onReviewSubmission }) => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'completed': return 'text-green-600'
@@ -234,19 +234,10 @@ const InternProgressCard = ({ intern, onViewDetails, onAdjustDeadline, onReviewS
               variant="outline"
               size="sm"
               onClick={() => onViewDetails(intern)}
-              className="flex-1 text-xs"
+              className="w-full text-xs"
             >
               <Eye className="h-3 w-3 mr-1" />
               View Details
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onAdjustDeadline(intern)}
-              className="flex-1 text-xs"
-            >
-              <Edit3 className="h-3 w-3 mr-1" />
-              Adjust Deadlines
             </Button>
           </div>
         </div>
@@ -339,24 +330,6 @@ export default function InternshipManagementPage() {
   const handleViewDetails = (intern) => {
     setSelectedIntern(intern)
     setShowInternDetails(true)
-  }
-
-  const handleAdjustDeadline = (intern) => {
-    setSelectedIntern(intern)
-    // Find the current task or default to first task
-    const currentTask = intern.tasks?.find(task => task.status === 'in-progress') || 
-                       intern.tasks?.find(task => task.status === 'pending') ||
-                       intern.tasks?.[0]
-    
-    if (currentTask) {
-      setSelectedTask(currentTask)
-      setDeadlineForm({
-        taskId: currentTask.id,
-        newDeadlineOffset: currentTask.deadlineOffset?.toString() || '7',
-        reason: ''
-      })
-    }
-    setShowDeadlineDialog(true)
   }
 
   const handleReviewSubmission = (submission) => {
@@ -605,7 +578,6 @@ export default function InternshipManagementPage() {
                       key={intern.id}
                       intern={intern}
                       onViewDetails={handleViewDetails}
-                      onAdjustDeadline={handleAdjustDeadline}
                       onReviewSubmission={handleReviewSubmission}
                     />
                   ))}

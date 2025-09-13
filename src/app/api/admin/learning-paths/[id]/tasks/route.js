@@ -45,15 +45,37 @@ export async function POST(request, { params }) {
       return NextResponse.json({ error: 'Learning path ID is required' }, { status: 400 })
     }
 
-    // Check if learning path exists
+    // Check if learning path exists and get existing tasks to calculate cumulative deadline
     const learningPath = await prisma.learningPath.findUnique({
-      where: { id: params.id }
+      where: { id: params.id },
+      include: {
+        tasks: {
+          orderBy: { order: 'desc' },
+          take: 1 // Get the last task to calculate cumulative deadline
+        }
+      }
     })
 
     if (!learningPath) {
       console.log('Learning path not found:', params.id)
       return NextResponse.json({ error: 'Learning path not found' }, { status: 404 })
     }
+
+    // Calculate cumulative deadline offset based on the last task
+    const lastTask = learningPath.tasks[0] // Since we ordered by desc and took 1
+    const adminInputDays = parseInt(deadlineOffset) || 1
+    
+    // If there's a previous task, add the admin input to its cumulative deadline
+    // Otherwise, this is the first task, so use the admin input directly
+    const cumulativeDeadlineOffset = lastTask 
+      ? lastTask.deadlineOffset + adminInputDays 
+      : adminInputDays
+
+    console.log('Deadline calculation:', {
+      lastTaskDeadlineOffset: lastTask?.deadlineOffset || 0,
+      adminInputDays,
+      cumulativeDeadlineOffset
+    })
 
     // Process content - handle both string and object/array content
     let processedContent = '';
@@ -71,7 +93,7 @@ export async function POST(request, { params }) {
       description: String(description).trim(),
       content: processedContent,
       responseRequirements: responseRequirements || [],
-      deadlineOffset: parseInt(deadlineOffset) || 1,
+      deadlineOffset: cumulativeDeadlineOffset, // Use calculated cumulative offset
       order: parseInt(order) || 1,
       learningPathId: params.id
     }
