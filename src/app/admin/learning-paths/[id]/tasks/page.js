@@ -319,7 +319,7 @@ export default function ManageTasksPage() {
             </div>
             <div className="px-6 py-4">
               <p className="text-slate-600 dark:text-slate-400 mb-4">
-                Are you sure you want to delete the task "{deleteDialog.taskTitle}"? This action cannot be undone.
+                Are you sure you want to delete the task &quot;{deleteDialog.taskTitle}&quot;? This action cannot be undone.
               </p>
               <p className="text-sm text-amber-600 dark:text-amber-400 mb-4">
                 Note: Tasks with existing submissions cannot be deleted.
