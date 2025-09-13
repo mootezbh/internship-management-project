@@ -48,6 +48,8 @@ export default function AdminLearningPathsPage() {
   const [learningPaths, setLearningPaths] = useState([])
   const [filteredPaths, setFilteredPaths] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
+  const [deletePathId, setDeletePathId] = useState(null)
 
   useEffect(() => {
     if (!user) return
@@ -108,12 +110,15 @@ export default function AdminLearningPathsPage() {
   }
 
   const handleDeletePath = async (pathId) => {
-    if (!confirm('Are you sure you want to delete this learning path? This will also delete all its tasks and cannot be undone.')) {
-      return
-    }
+    setDeletePathId(pathId)
+    setDeleteConfirmOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    if (!deletePathId) return
     
     try {
-      const response = await fetch(`/api/admin/learning-paths/${pathId}`, {
+      const response = await fetch(`/api/admin/learning-paths/${deletePathId}`, {
         method: 'DELETE'
       })
 
@@ -127,6 +132,9 @@ export default function AdminLearningPathsPage() {
     } catch (error) {
       console.error('Error deleting learning path:', error)
       toast.error('Failed to delete learning path')
+    } finally {
+      setDeleteConfirmOpen(false)
+      setDeletePathId(null)
     }
   }
 
@@ -363,6 +371,35 @@ export default function AdminLearningPathsPage() {
       {/* ...existing code... */}
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+              Confirm Delete
+            </h3>
+            <p className="text-slate-600 dark:text-slate-400 mb-6">
+              Are you sure you want to delete this learning path? This action cannot be undone.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <Button
+                variant="outline"
+                onClick={() => setDeleteConfirmOpen(false)}
+                className="border-slate-300 dark:border-slate-600"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={confirmDelete}
+                className="bg-red-600 hover:bg-red-700 text-white"
+              >
+                Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </SignedIn>
   )
 }
