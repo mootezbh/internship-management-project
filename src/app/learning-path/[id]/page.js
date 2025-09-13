@@ -25,7 +25,7 @@ import {
   Lock,
   Send,
   XCircle,
-  Image,
+  Image as ImageIcon,
   Upload,
   Link,
   ExternalLink,
@@ -79,7 +79,7 @@ export default function LearningPathPage() {
       if (Array.isArray(parsed) && parsed.length > 0) {
         const types = parsed.map(block => block.type);
         if (types.includes('VIDEO')) return <Video className="h-4 w-4" />;
-        if (types.includes('IMAGE')) return <Image className="h-4 w-4" />;
+        if (types.includes('IMAGE')) return <ImageIcon className="h-4 w-4" />;
         if (types.includes('FILE')) return <Upload className="h-4 w-4" />;
         if (types.includes('URL')) return <Link className="h-4 w-4" />;
         if (types.includes('CODE')) return <Code className="h-4 w-4" />;

@@ -10,7 +10,7 @@ import {
   Video, 
   Upload,
   Link, 
-  Image, 
+  Image as ImageIcon, 
   FileText, 
   Plus, 
   Trash2, 
@@ -299,7 +299,7 @@ const CONTENT_TYPES = [
   { type: 'VIDEO', label: 'Video', icon: Video, description: 'Embed video tutorials or explanations' },
   { type: 'FILE', label: 'File Attachment', icon: Upload, description: 'Attach files, documents, or resources' },
   { type: 'URL', label: 'Website Link', icon: Link, description: 'Link to external resources or references' },
-  { type: 'IMAGE', label: 'Image', icon: Image, description: 'Add images, diagrams, or screenshots' },
+  { type: 'IMAGE', label: 'Image', icon: ImageIcon, description: 'Add images, diagrams, or screenshots' },
   { type: 'CODE', label: 'Code Block', icon: FileText, description: 'Add code examples or snippets' },
 ];
 
@@ -749,7 +749,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
                     className="w-full p-2 text-sm border border-slate-300 dark:border-slate-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                   />
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    Number of days to add to the previous task's deadline. For the first task, this is days from internship start.
+                    Number of days to add to the previous task&apos;s deadline. For the first task, this is days from internship start.
                   </p>
                 </div>
               </div>
@@ -850,7 +850,7 @@ function TaskBuilder({ initialContent = [], onSave, taskData = {}, learningPathT
                         Drag to reorder
                       </div>
                       <div className="text-sm text-slate-500 dark:text-slate-400 flex items-center">
-                        <Image className="w-4 h-4 mr-2" />
+                        <ImageIcon className="w-4 h-4 mr-2" />
                         Add images
                       </div>
                       <div className="text-sm text-slate-500 dark:text-slate-400 flex items-center">
